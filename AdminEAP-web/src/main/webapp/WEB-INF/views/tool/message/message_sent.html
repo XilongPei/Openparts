@@ -1,0 +1,91 @@
+<!--收件箱-->
+<div class="dataTables_filter " id="searchDiv" style="display: none">
+    <!--查询条件-->
+    <!-- <div class="has-feedback">
+         <input type="text" class="form-control input-sm" placeholder="Search Mail">
+         <span class="glyphicon glyphicon-search form-control-feedback"></span>
+     </div>-->
+    <input type="hidden" value="${user.id}" name="sendUserID">
+    <div class="has-feedback form-group">
+        <input type="search" placeholder="请输入标题" title="主题" name="sendSubject"
+               class="form-control input-sm" id="sendSubject" operator="like" likeOption="true">
+        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+    </div>
+    <button type="button" class="btn btn-primary" data-callback="enableOrDisableButtons()" data-btn-type="search"
+            title="查询"><i class="fa fa-refresh"></i> &nbsp;查询
+    </button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default" data-btn-type="remove" disabled title="删除邮件"><i
+                class="fa fa-trash-o"></i>&nbsp;删除
+        </button>
+        <button type="button" class="btn btn-default" data-btn-type="edit" disabled title="编辑邮件"><i
+                class="fa fa-edit"></i>&nbsp;编辑
+        </button>
+    </div>
+    </button>
+</div>
+<div class="box-body">
+    <table id="message_sent_table" style="border-top:1px solid #f4f4f4;"
+           class="table table-border table-striped table-hover">
+    </table>
+</div>
+<script>
+    var sentTable;
+    $(function () {
+        var config = {
+            rowClick: function (row, isSelected) {
+                enableOrDisableButtons();
+            }
+        }
+        sentTable = new CommonTable("message_sent_table", "message_sent", "searchDiv", config);
+        $("[data-btn-type]").click(function () {
+            var btnType = $(this).data("btn-type");
+            var rowId = sentTable.getSelectedRowId();
+            switch (btnType) {
+                case "remove":
+                    modals.confirm("是否删除该消息", function () {
+                        ajaxPost(basePath + "/message/delete/" + rowId, null, function (result) {
+                            if (result.success) {
+                                sentTable.reloadData();
+                                updateMsgCount();
+                            } else {
+                                modals.error(result.message);
+                            }
+                        });
+                    })
+                    break;
+                case "edit":
+                    loadPage(basePath+"/message/edit?id="+rowId,"#contentBody");
+                    //改变标题
+                    $(".content-header small").text("编辑消息");
+                default:
+                    break;
+            }
+        })
+    })
+
+    function showDetail(rid){
+        loadPage(basePath+"/message/detail?id="+rid,"#contentBody");
+        $(".content-header small").text("查看消息");
+    }
+
+
+    function enableOrDisableButtons() {
+        var rowId = sentTable.getSelectedRowId();
+        if (rowId) {
+            var rowData = sentTable.getSelectedRowData();
+            //草稿状态才可编辑删除
+            if (rowData.messageStatus == 0) {
+                $("[data-btn-type='remove']").removeAttr("disabled");
+                $("[data-btn-type='edit']").removeAttr("disabled");
+            } else {
+                $("[data-btn-type='remove']").attr("disabled", "disabled");
+                $("[data-btn-type='edit']").attr("disabled", "disabled");
+            }
+        } else {
+            $("[data-btn-type='remove']").attr("disabled", "disabled");
+            $("[data-btn-type='edit']").attr("disabled", "disabled");
+        }
+    }
+
+</script>

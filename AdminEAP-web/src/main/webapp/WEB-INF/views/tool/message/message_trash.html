@@ -1,0 +1,114 @@
+<!--收件箱-->
+<div class="dataTables_filter " id="searchDiv" style="display: none">
+    <!--查询条件-->
+    <!-- <div class="has-feedback">
+         <input type="text" class="form-control input-sm" placeholder="Search Mail">
+         <span class="glyphicon glyphicon-search form-control-feedback"></span>
+     </div>-->
+    <input type="hidden" name="receiveUserID" value="${user.id}">
+    <div class="has-feedback form-group">
+        <input type="search" placeholder="请输入标题" title="主题" name="message.sendSubject"
+               class="form-control input-sm" id="sendSubject" operator="like" likeOption="true">
+        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm" data-callback="enableOrDisableButtons()" data-btn-type="search"
+            title="查询"><i class="fa fa-refresh"></i></button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm" disabled data-btn-type="delete" title="删除邮件"><i
+                class="fa fa-trash-o"></i></button>
+        <button type="button" class="btn btn-default btn-sm" disabled data-btn-type="restore" title="恢复邮件"><i
+                class="fa fa-reply"></i></button>
+
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default btn-sm" disabled data-btn-type="readNo" title="标记为未读"><i
+                class="fa fa-flag-o"></i></button>
+        <button type="button" class="btn btn-default btn-sm" disabled data-btn-type="readYes" title="标记为已读"><i
+                class="fa fa-flag text-yellow"></i></button>
+    </div>
+</div>
+<div class="box-body">
+    <table id="message_trash_table" style="border-top:1px solid #f4f4f4;"
+           class="table table-border table-striped table-hover">
+    </table>
+</div>
+<script>
+    var trashTable;
+    $(function () {
+        var config = {
+            rowClick: function (row, isSelected) {
+                enableOrDisableButtons();
+            }
+        }
+        trashTable = new CommonTable("message_trash_table", "message_trash", "searchDiv", config);
+
+        $("[data-btn-type]").click(function () {
+            var btnType = $(this).data("btn-type");
+            var rId = trashTable.getSelectedRowId();
+            var rowData = trashTable.getSelectedRowData();
+            switch (btnType) {
+                case "delete":
+                    modals.confirm("是否彻底删除该邮件?", function () {
+                        ajaxPost(basePath + "/message/trash/delete/" + rId, null, function () {
+                            trashTable.reloadData();
+                            updateMsgCount();
+                        });
+                    });
+                    break;
+                case "restore":
+                    modals.confirm("是否将该邮件恢复到收件箱?", function () {
+                        ajaxPost(basePath + "/message/trash/restore/" + rId, null, function () {
+                            trashTable.reloadData();
+                            updateMsgCount();
+                        });
+                    });
+                    break;
+                case "readNo":
+                    if (rowData.readYet == 0) {
+                        modals.info("该消息当前为未读状态，不可标记为未读");
+                        return;
+                    }
+                    modals.confirm("是否将该消息标记为未读?", function () {
+                        ajaxPost(basePath + "/message/receiver/readUpdate/" + rId, null, function () {
+                            trashTable.reloadData();
+                        });
+                    });
+                    break;
+                case "readYes":
+                    if (rowData.readYet == 1) {
+                        modals.info("该消息当前为已读状态，不可标记为已读");
+                        return;
+                    }
+                    modals.confirm("是否把该消息标记为已读?", function () {
+                        ajaxPost(basePath + "/message/receiver/readUpdate/" + rId, null, function () {
+                            trashTable.reloadData();
+                        });
+                    });
+                    break;
+                default:
+                    break;
+            }
+        })
+
+    });
+    //点击标题，阅读邮件
+    function readMsg(id) {
+        //更新阅读标记和阅读时间
+        loadPage(basePath + "/message/receiver/read/" + id, "#contentBody");
+        $(".content-header small").text("阅读消息");
+    }
+
+    function enableOrDisableButtons() {
+        var rowId = trashTable.getSelectedRowId();
+        var btnArr = ["delete", "restore", "readYes", "readNo"];
+        if (rowId) {
+            $.each(btnArr, function (index, flag) {
+                $("[data-btn-type='" + flag + "'").removeAttr("disabled");
+            })
+        } else {
+            $.each(btnArr, function (index, flag) {
+                $("[data-btn-type='" + flag + "'").attr("disabled", "disabled");
+            })
+        }
+    }
+</script>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.example.org/query query.xsd ">
+	<!-- 文章列表 -->
+	<query id="markdown_list" key="id" tableName="文章列表" className="com.cnpc.tool.markdown.entity.MarkDown"
+		pageSize="10"  widthType="px" order="updateDateTime desc">
+		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
+		<column key="id" header="id" hidden="true"/>
+		<column key="version" header="version" hidden="true"/>
+		<column key="title" header="文章标题" align="left" operator="like" width="100" allowSort="true" />
+		<column key="keywords" header="关键字" align="left" operator="eq" width="150" />
+	    <column key="operator" id="id" header="操作" align="center" fnRender="fnRenderOperator"/>
+	</query>
+
+	<query id="job_list" key="jobId" tableName="计划中的任务" widthType="px"  allowPaging="false" simpleSearch="false" service="jobService" method="getAllJobs" className="com.cnpc.framework.base.pojo.ScheduleJob">
+		<column key="rowIndex" header="序号" width="70" />
+		<column key="jobId" header="任务id" operator="eq" hidden="true" width="100"/>
+		<column key="jobName" header="任务名" width="100" />
+		<column key="jobGroup" header="任务组"  width="100" />
+		<column key="triggerName" header="trigger名"  width="100" />
+		<column key="triggerGroup" header="trigger组" width="100" />
+		<column key="triggerType" header="trigger类型" width="100"/>
+		<column key="jobStatus" header="任务状态" width="100" />
+		<column key="jobClass" header="执行类名" width="300" align="left"/>
+		<column key="cronExpression" header="cron表达式" width="100" />
+		<column key="startTime" classType="java.util.Date"  header="开始时间" dateFormat="yyyy-mm-dd hh:ii" width="150"/>
+		<column key="endTime" classType="java.util.Date" header="结束时间" dateFormat="yyyy-mm-dd hh:ii" width="150"/>
+		<column key="repeatType"  header="重复类型" width="200"/>
+		<column key="repeatCount" classType="java.lang.Integer" header="重复次数" width="70"/>
+		<column key="repeatIntervalStr"  header="时间间隔" width="100"/>
+		<column key="desc" header="备注" width="300" align="left" />
+	</query>
+</queryContext>

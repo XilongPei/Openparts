@@ -1,0 +1,309 @@
+<style>
+    #groupDiv ul.nav li a span {
+        padding-left: 10px;
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        <li class="fa fa-remove"></li>
+    </button>
+    <h5 class="modal-title"></h5>
+</div>
+
+<div class="modal-body" data-margin="top">
+    <div class="row">
+        <div class="col-md-3">
+            <!--<div class="form-group has-feedback">
+                <input name="name" class="form-control" placeholder="请输入群组名">
+                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+            </div>-->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <!--<h5 class="box-title">我的群组</h5>
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>-->
+                    <div class="has-feedback">
+                        <input name="name" class="form-control" id="groupSelect" placeholder="请输入群组名">
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    </div>
+                </div>
+                <div class="box-body no-padding" id="groupDiv">
+                    <ul class="nav nav-pills nav-stacked">
+                        <#if (groups?size>0)>
+                            <#list groups as group>
+                                <li id="${group.id}"><a href="#">
+                                    <input type="checkbox" data-flag="icheck"><span>${group.name}</span>
+                                    <span class="label label-info pull-right">${group.userNum?default(0)}</span></a>
+                                </li>
+                            </#list>
+                            <#else>
+                                <li id="emptyli"><a href="#">
+                                    <span>未配置群组</span></a>
+                                </li>
+                        </#if>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <!--隐藏域保存选中的用户-->
+                <input type="hidden" name="selectedUserId" id="selectedUserId" style="width: 100%"/>
+                <div class="dataTables_filter" id="searchDiv_receiver_select" style="display: none">
+                    <input placeholder="请输入姓名" name="name" class="form-control" type="search" likeOption="true"/>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" data-btn-type="search">查询</button>
+                        <button type="button" class="btn btn-primary" data-btn-type="select">选择</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="receiver_select_table" class="table table-border table-stripped table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var receiverSelctTable;
+    $(function () {
+        $("[data-flag='icheck']").iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue'
+        });
+
+        receiverSelctTable = new CommonTable("receiver_select_table", "message_receiver_select_list", "searchDiv_receiver_select", null);
+        //回调选中
+        receiverSelctTable.serverCallback = function (settings) {
+            setCheckboxState();
+        };
+
+        //初始化全选按钮
+        //initSelectAllCheckbox();
+        //初始化群组筛选框
+        $("#groupSelect").on("change", function () {
+            var value = $(this).val();
+            //alert($("#groupDiv ul li a").find("span:first").length);
+            $("#groupDiv ul li a").find("span:first").each(function (index, item) {
+                var text = $(item).text();
+                if (!value || value.trim() == "")
+                    $(item).parent().parent().show();
+                else if (text.indexOf(value) > -1)
+                    $(item).parent().parent().show();
+                else
+                    $(item).parent().parent().hide();
+            });
+        });
+
+        //群组筛选框，选中
+        //alert($("#groupDiv ul li a input").length);
+        $("#groupDiv ul li a input").each(function () {
+            $(this).on("ifChanged", function () {
+                var isChecked = $(this).is(":checked");
+                var groupId = $(this).parents("li").attr("id");
+                var userArr = [];
+                ajaxPost(basePath + "/message/receiver/users/" + groupId, null, function (data) {
+                    //alert(data.length);
+                    $.each(data, function (index, curValue) {
+                        var selectedUserIds = $("#selectedUserId").val();
+                        userArr = getSelectedUserArr(selectedUserIds, curValue.userId, isChecked);
+                        $("#selectedUserId").val(userArr.join(","));
+                    });
+                    //初始化后调用下首页
+                    setCheckboxState();
+                });
+            });
+        });
+
+        //数据回填
+        //setTimeout(function(){backfillReceiver()},500);
+        backfillReceiver();
+
+        //选择
+        $("button[data-btn-type='select']").click(function () {
+            submitSelect();
+        });
+
+    });
+
+    //回填选中
+    function backfillReceiver() {
+        var receiverType = $("#receiverType").val();
+        var receiverIds = $("#receiverIds").val();
+        if (!receiverIds || !receiverType) {
+            return false;
+        }
+        if (receiverType == "0") {
+            $("#groupDiv ul li a input").each(function () {
+                var groupId = $(this).parents("li").attr("id");
+                if (receiverIds.indexOf(groupId) > -1) {
+                    $(this).iCheck("check");
+                }
+            })
+        } else {
+            $("#selectedUserId").val(receiverIds);
+        }
+    }
+
+    //初始化全选按钮
+    function initSelectAllCheckbox() {
+        setTimeout(function () {
+            $("#receiver_select_table thead tr th:eq(0)").css("padding-right", "8px");
+            $("#receiver_select_table thead tr th:eq(0)").html("<input type='checkbox' id='selectAllReceiver'>");
+            $("#selectAllReceiver").on("change", function () {
+                var checked = $(this).is(":checked");
+                $(":checkbox.checkbox_receiver").prop("checked", checked);
+            })
+        }, 200);
+
+    }
+
+    function setCheckboxState() {
+        var selectUserIds = $("#selectedUserId").val();
+        if (selectUserIds) {
+            var userIdArr = selectUserIds.split(",");
+            //选中增加的用户
+            $.each(userIdArr, function (index, userId) {
+                if (receiverSelctTable.table.$("#" + userId).length > 0) {
+                    receiverSelctTable.table.$("#" + userId).find(":checkbox.checkbox_receiver").prop("checked", true);
+                }
+            });
+            //删除已经选中的
+            receiverSelctTable.table.$("tr").find(":checkbox.checkbox_receiver:checked").each(function () {
+                var curUserId = $(this).parents("tr").attr("id");
+                //找不到，已经被删除
+                if (selectUserIds.indexOf(curUserId) == -1) {
+                    receiverSelctTable.table.$("#" + curUserId).find(":checkbox.checkbox_receiver").prop("checked", false);
+                }
+            });
+        } else {
+            $(":checkbox.checkbox_receiver").prop("checked", false);
+        }
+    }
+
+    function fnRenderSelectReceiver(value, type, rowObj, oSetting) {
+        return "<input type='checkbox' value='1' class='checkbox_receiver' onchange='selectReceiver(this)'>";
+    }
+
+    //根据选中的checkbox 缓存到selectedUserIds
+    function selectReceiver(obj) {
+        var isChecked = $(obj).is(":checked");
+        var selectedUserIds = $("#selectedUserId").val();
+        var value = $(obj).parents("tr").eq(0).attr("id");
+        var userArr = getSelectedUserArr(selectedUserIds, value, isChecked);
+        $("#selectedUserId").val(userArr.join(","));
+    }
+
+    function submitSelect() {
+        var selectedUserIds = $("#selectedUserId").val();
+        if (!selectedUserIds) {
+            modals.info("请至少选择一个接收人");
+            return;
+        }
+        var groupIds = $("#groupDiv ul li a input:checked").map(function () {
+            return $(this).parents("li").attr("id");
+        }).get().join(",");
+
+        //没有选择群组，且用户数量选择大于5人时候，建议建立群组
+        var userArr = selectedUserIds.split(",");
+        if (!groupIds) {
+            addGroupOrSelectUser(userArr);
+        } else {
+            //选择了群组，校验是否选择的用户和群组里的用户是完全一样
+            ajaxPost(basePath + "/message/receiver/group/exist",
+                    {"groupIds": groupIds, "userIds": $("#selectedUserId").val()},
+                    function (data) {
+                        //数据不一致，建立群组
+                        if (!data.success) {
+                            addGroupOrSelectUser(userArr);
+                        } else {
+                            setGroupId(groupIds);
+                            modals.hideWin("receiverWin");
+                        }
+                    });
+        }
+
+        //ajaxPost(basePath+"/message/receiver/group/{userId")
+    }
+
+    //根据用户数量决定是否建群还是直接选择接收人
+    function addGroupOrSelectUser(userArr) {
+        if (userArr.length > 5) {
+            modals.confirm({
+                text: "是否为选择的" + userArr.length + "个用户建立群组？",
+                callback: function () {
+                    openGroupAddWin();
+                    modals.hideWin("receiverWin");
+                },
+                cancel_call: function () {
+                    setReceiverUserIds();
+                    modals.hideWin("receiverWin");
+                }
+            })
+        } else {
+            //小于5不弹出提示，不建立群组
+            setReceiverUserIds();
+            modals.hideWin("receiverWin");
+        }
+    }
+
+    //打开建组窗口
+    function openGroupAddWin() {
+        modals.openWin({
+            winId: "groupWin",
+            width: "500px",
+            url: basePath + "/message/receiver/group/edit",
+            title: '新建群组'
+        });
+    }
+
+    //创建群组后返回的组Id
+    function setGroupId(groupId) {
+        $("#groupId").val(groupId);
+        $("#receiverType").val("0");
+        $("#receiverIds").val(groupId);
+        ajaxPost(basePath + "/message/receiver/user/group", {"groupIds": groupId}, function (map) {
+            $("#receiverUsers").val(map.name);
+        })
+    }
+    //不建立群组，直接返回接收人
+    function setReceiverUserIds() {
+        $("#groupId").val("");
+        $("#receiverType").val("1");
+        $("#receiverIds").val($("#selectedUserId").val());
+        //显示接收人姓名
+        ajaxPost(basePath + "/message/receiver/user/names", {userIds: $("#selectedUserId").val()}, function (map) {
+            $("#receiverUsers").val(map.name);
+        });
+    }
+
+    function getSelectedUserArr(selectedUserIds, curValue, isChecked) {
+        var userArr = [];
+        if (selectedUserIds)
+            userArr = selectedUserIds.split(",");
+        if (isChecked) {
+            var flag = true;
+            for (var i = 0; i < userArr.length; i++) {
+                if (userArr[i] == curValue) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+                userArr.push(curValue);
+        } else {
+            for (var i = 0; i < userArr.length; i++) {
+                var userIdValue = userArr[i];
+                if (userIdValue == curValue) {
+                    userArr.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        return userArr;
+    }
+
+</script>

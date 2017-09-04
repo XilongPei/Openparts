@@ -1,0 +1,164 @@
+<!-- 以下代码为代码生成器生成，生成时间: 2017-03-01 11:21:59，作者：billjiang/475572229@qq.com-->
+<section class="content-header">
+    <h1>
+        消息管理
+        <small>收件箱</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统工具</a></li>
+        <li class="active">消息管理</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <button data-btn-type="titleBtn" data-flag="new" class="btn btn-primary btn-block margin-bottom">新建消息
+            </button>
+
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">我的文件夹</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding" id="folder">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li class="active" data-btn-type="inbox" data-url="/message/inbox">
+                            <a href="#">
+                                <i class="fa fa-inbox"></i>
+                                <span>收件箱</span>
+                                <span class="label label-primary pull-right">0</span>
+                            </a>
+                        </li>
+                        <li data-btn-type="sent" data-url="/message/sent"><a href="#"><i class="fa fa-envelope-o"></i>
+                            <span>发件箱</span>
+                            <span class="label label-info pull-right">0</span></a></li>
+                        <li data-btn-type="draft" data-url="/message/draft"><a href="#"><i
+                                class="fa fa-file-text-o"></i>
+                            <span>草稿箱</span>
+                            <span class="label label-warning pull-right">0</span></a></li>
+                        <li data-btn-type="trash" data-url="/message/trash"><a href="#"><i class="fa fa-trash-o"></i>
+                            <span>回收站</span>
+                            <span class="label label-danger pull-right">0</span></a></li>
+                        <!--<li data-btn-type="receiver" data-url="/message/receiver"><a href="#"><i class="fa fa-user-o"></i>
+                            <span>收件人管理</span>
+                            <span class="label label-default pull-right">0</span></a></li>-->
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /. box -->
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">消息类型</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#"><i class="fa fa-tv text-danger"></i>系统消息</a></li>
+                        <li><a href="#"><i class="fa fa-envelope-o text-info"></i>邮件</a></li>
+                        <li><a href="#"><i class="fa fa-mobile text-success fa-lg"></i>&nbsp;短信</a></li>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">消息标记</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#"><i class="fa fa-star-o text-yellow"></i> 一般消息</a></li>
+                        <li><a href="#"><i class="fa fa-star text-yellow"></i> 重要消息</a></li>
+                    </ul>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="col-md-9">
+            <div class="box box-primary" id="contentBody">
+
+            </div>
+        </div>
+    </div>
+</section>
+<script src="${basePath}/resources/common/js/base-message.js"></script>
+<script>
+    var messageTable, winId = "messageWin";
+    $(function () {
+
+        //绑定按钮事件
+        $("button[data-btn-type]").click(function () {
+            var action = $(this).data("btn-type");
+            switch (action) {
+                case "titleBtn":
+                    titleBtnClick(this);
+                    break;
+            }
+        });
+
+        //为我的文件夹绑定事件
+        $("#folder ul li").click(function () {
+            //清除其他选中样式
+            $("#folder ul li").removeClass("active");
+            $(this).addClass("active");
+            //改变title
+            $(".content-header small").text($(this).find("a:eq(0)").children().eq(1).html());
+            //加载内容
+            loadPage(basePath + $(this).data("url"), "#contentBody");
+            //
+            //$("[data-btn-type='titleBtn']"),text();
+            $("[data-btn-type='titleBtn']").text("新建消息");
+            $("[data-btn-type='titleBtn']").data("flag", "new");
+            //$(obj).text("新建消息");
+        });
+
+        //初始化选中
+        $("[data-btn-type='inbox']").click();
+
+        updateMsgCount();
+
+    })
+
+    function titleBtnClick(obj) {
+        if ($(obj).data("flag") == "new") {
+            loadPage(basePath + "/message/edit", "#contentBody");
+            $(obj).text("返回收件箱");
+            $(obj).data("flag", "return");
+            //清除选中
+            $("#folder ul li").removeClass("active");
+            $(".content-header small").text("新建消息");
+        } else if ($(obj).data("flag") == "return") {
+            //loadPage(basePath+"/message/inbox","#contentBody");
+            //$(obj).data("flag","new");
+            $("[data-btn-type='inbox']").click();
+        }
+    }
+
+    function updateMsgCount(){
+        ajaxPost(basePath+"/message/count",null,function (map) {
+            $("#folder ul li a").find("span.label").each(function(index,item){
+                var btnType=$(item).parents("li").data("btn-type");
+                $(item).text(map[btnType]);
+            });
+        });
+    }
+</script>

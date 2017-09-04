@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.example.org/query query.xsd ">
+
+    <!--本xml片段为代码生成器生成，时间：2017-06-05 14:55:31-->
+    <query id="module_list" key="id" tableName="业务定义列表" className="com.cnpc.framework.activiti.entity.Module"
+           widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="name" header="业务名称" classType="String" allowSort="true" width="150"/>
+        <column key="code" header="业务编码" classType="String" allowSort="true" width="150"/>
+        <column key="deleted" header="是否启用" width="100" render="1=禁用,0=启用"/>
+        <column key="remark" header="备注" classType="String" allowSort="true" width="150"/>
+    </query>
+
+    <!-- 流程设计：模型 -->
+    <query id="model_list" key="id" tableName="模型列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="repositoryPageService" method="getModelList"
+           className="org.activiti.engine.repository.Model">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="模型ID" operator="eq" width="100"/>
+        <column key="name" header="模型名称" align="left" allowSort="false" width="100"/>
+        <column key="key" header="模型key" width="100"/>
+        <column key="category" header="模型类别" allowSort="false" width="100"/>
+        <column key="version" header="模型版本号" width="100"/>
+        <column key="createTime" classType="java.util.Date" header="创建时间" dateFormat="yyyy-mm-dd hh:ii" width="100"/>
+        <column key="editorSourceValueId" header="xml_ID"/>
+        <column key="editorSourceExtraValueId" header="png_ID"/>
+        <column key="deploymentId" header="部署ID"/>
+        <column key="id" header="操作" width="100" fnRender="fnRenderOperator"/>
+    </query>
+
+    <!--流程定义：解析表-->
+    <query id="processdef_list" key="id" tableName="流程定义列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="repositoryPageService" method="getProcessDefList"
+           className="com.cnpc.framework.activiti.pojo.ProcessDefVo">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="定义ID" operator="eq" width="100"/>
+        <column key="name" header="流程名称" allowSort="false" align="left" width="100"/>
+        <column key="key" header="流程编号" allowSort="false" width="100"/>
+        <column key="category" header="流程命名空间" allowSort="false" width="100" align="left"/>
+        <column key="version" header="流程版本号" width="100"/>
+        <column key="deploymentId" header="部署ID"/>
+        <!--<column key="resourceName" header="资源文件名称" width="100"/>
+        <column key="diagramResourceName" header="图片资源文件名称" width="100"/>-->
+        <column key="description" header="描述信息" width="100"/>
+        <!--<column key="hasStartFormKey" header="是否从key启动" render="false=否,true=是"/>-->
+        <column key="suspensionState" render="1=激活,2=挂起" header="流程状态"/>
+        <column key="id" header="操作" width="100" fnRender="fnRenderOperator"/>
+    </query>
+
+    <!--流程用户指派（选择流程代理人和候选人）-->
+    <query id="id_user_list" key="id" tableName="流程用户列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="identityPageService" method="getUserList"
+           className="org.activiti.engine.identity.User">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="isSelected" header="选择" fnRender="fnRenderSelectUser"/>
+        <column key="id" header="用户ID" operator="eq" width="100"/>
+        <column key="firstName" header="用户名" width="120"/>
+        <column key="lastName" header="登录名" width="120"/>
+        <column key="email" header="邮箱" width="120"/>
+    </query>
+
+    <!--流程候选用户组（选择候选组）-->
+    <query id="id_group_list" key="id" tableName="流程用户组列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="identityPageService" method="getGroupList"
+           className="org.activiti.engine.identity.Group">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="isSelected" header="选择" fnRender="fnRenderSelectUser"/>
+        <column key="id" header="ID" operator="eq" width="100"/>
+        <column key="name" header="用户组名" width="120"/>
+        <column key="type" header="用户组编码" width="120"/>
+    </query>
+
+    <!--用户组管理用户-->
+    <query id="id_membership_list" key="id" tableName="流程用户列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="identityPageService" method="getUserList"
+           className="org.activiti.engine.identity.User">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="用户ID" hidden="true" operator="eq" width="100"/>
+        <column key="firstName" header="用户名" width="120"/>
+        <column key="lastName" header="登录名" width="120"/>
+        <column key="email" header="邮箱" width="120"/>
+    </query>
+
+    <!--流程实例管理 对应act_ru_execution表-->
+    <query id="process_instance_list" key="id" tableName="流程实例列表" widthType="px" allowPaging="true"
+           simpleSearch="false" service="runtimePageService" method="getProcessInstanceList"
+           className="com.cnpc.framework.activiti.pojo.ProcessInstanceVo">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="实例ID" operator="eq" width="100"/>
+        <column key="name" header="实例名称" align="left" allowSort="false" width="100"/>
+        <!--<column key="businessKey" header="业务key" allowSort="false" width="100"/>-->
+        <column key="category" header="业务类别" allowSort="false" width="100"/>
+        <column key="startUserId" header="流程发起人ID" hidden="true" width="100"/>
+        <column key="startUserName" header="发起人" width="100"/>
+        <column key="processDefinitionId" header="流程定义ID" width="100"/>
+        <column key="processDefinitionName" header="流程定义名称" width="100"/>
+        <column key="activityId" header="当前节点ID" width="100"/>
+        <column key="deploymentId" header="部署ID"/>
+        <column key="suspensionState" fnRender="fnRenderSuspensionState" header="流程状态"/>
+        <column key="id" header="操作" width="100" fnRender="fnRenderOperator"/>
+    </query>
+
+    <!--流程待办列表:我的待办-->
+    <query id="task_todo_list" key="id" tableName="我的待办" widthType="px" allowPaging="true"
+           simpleSearch="false" service="taskPageService" method="getTaskToDoList"
+           className="com.cnpc.framework.activiti.pojo.TaskVo">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="任务ID" operator="eq" width="100"/>
+        <column key="name" header="任务名称" allowSort="false" width="100"/>
+        <column key="taskDefinitionKey" header="任务定义key" allowSort="false" width="100"/>
+       <!-- <column key="businessKey" header="业务key" allowSort="false" width="100"/>-->
+       <!-- <column key="category" header="业务类别" allowSort="false" width="100"/>-->
+        <column key="processInstanceId" header="流程实例ID" hidden="false" allowSort="false" width="100"/>
+        <column key="processInstanceName" header="流程名称" align="left"  allowSort="false" width="100"/>
+        <column key="processDefinitionId" header="流程定义ID" allowSort="false" width="100"/>
+        <column key="assigneeName" header="审批人" width="100"/>
+        <column key="startUserId" header="流程发起人ID" hidden="true" width="100"/>
+        <column key="startUserName" header="发起人" width="100"/>
+        <column key="formKey" header="formKey" hidden="true" width="100"/>
+        <column key="createTime" header="创建时间" dateFormat="yyyy-mm-dd hh:ii"/>
+      <!--  <column key="activityId" header="当前节点ID" width="100"/>
+        <column key="deploymentId" header="部署ID"/>-->
+        <column key="suspensionState" fnRender="fnRenderSuspensionState" header="流程状态"/>
+        <column key="id" header="操作" width="100" align="left" fnRender="fnRenderOperator"/>
+    </query>
+
+    <!--流程已办列表:我的已办-->
+    <query id="task_done_list" key="id" tableName="我的已办" widthType="px" allowPaging="true"
+           simpleSearch="false" service="taskPageService" method="getTaskDoneList"
+           className="com.cnpc.framework.activiti.pojo.TaskDoneVo">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="实例ID" operator="eq" width="100"/>
+        <column key="name" header="流程名称" align="left" allowSort="false" width="100"/>
+        <column key="businessKey" header="业务key" allowSort="false" width="100"/>
+        <!--<column key="category" header="业务类别" allowSort="false" width="100"/>-->
+        <column key="startUserId" header="流程发起人ID" hidden="true" width="100"/>
+        <column key="startUserName" header="发起人" width="100"/>
+        <column key="processDefinitionId" header="流程定义ID" width="100"/>
+        <column key="processDefinitionName" header="流程定义名称" width="100"/>
+        <column key="startTime" header="启动时间" dateFormat="yyyy-mm-dd hh:ii"/>
+        <column key="endTime" header="结束时间" dateFormat="yyyy-mm-dd hh:ii"/>
+        <column key="flowState" fnRender="fnRenderFlowState" header="流程状态"/>
+        <column key="id" header="操作" width="100" fnRender="fnRenderOperator" align="left"/>
+    </query>
+
+    <!--流程明细列表-->
+    <query id="monitor_detail_list" key="id" tableName="流程实例列表" widthType="px" allowPaging="false"
+           simpleSearch="false" service="runtimePageService" method="getActivityList"
+           className="com.cnpc.framework.activiti.pojo.ActivityVo">
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="任务ID" operator="eq" width="100"/>
+        <column key="activityName" header="任务名称" allowSort="false" width="100"/>
+        <column key="assigneeName" header="处理人" allowSort="false" width="100"/>
+        <!-- <column key="businessKey" header="业务key" allowSort="false" width="100"/>-->
+        <column key="activityState" header="任务状态"  width="100" fnRender="fnRenderActivityState"/>
+        <column key="endTime" header="处理时间" classType="Date" dateFormat="yyyy-mm-dd hh:ii" allowSort="false" width="100"/>
+        <column key="approved" header="处理结果" width="100" fnRender="fnRenderApproved"/>
+        <column key="suggestion" header="处理意见" width="150"/>
+    </query>
+
+    <!--我的委托(个人委托)-->
+    <query id="delegate_list" key="id" tableName="我的委托列表" widthType="px" allowPaging="true">
+        <sql>
+            <![CDATA[
+                 select d.id id,GROUP_CONCAT(m.id) moduleId,GROUP_CONCAT(m.name) name,
+                d.START_TIME_ startTime,d.END_TIME_ endTime,d.ASSIGNEE_ assignee,d.ATTORNEY_ attorney,
+                ae.name assigneeName,ay.name attorneyName,d.REASON_ reason,d.deleted deleted
+                from tbl_act_delegate_info d
+                left join tbl_act_module m on d.MODULE_ID_ like CONCAT('%',m.id,'%')
+                left join tbl_user ae on ae.id=d.ASSIGNEE_
+                left join tbl_user ay on ay.id=d.ATTORNEY_
+                where 1=1 group by d.id
+            ]]>
+        </sql>
+        <column key="rowIndex" header="序号" width="70"/>
+        <column key="id" header="委托ID" hidden="true" operator="eq" width="100"/>
+        <column key="moduleId" header="业务ID" hidden="true" allowSort="false" width="100"/>
+        <column key="name" header="委托业务"  classType="String" allowSort="false" width="100"/>
+        <column key="assignee" header="委托人ID" hidden="true" classType="String" allowSort="false" width="150"/>
+        <column key="attorney" header="被委托人ID" hidden="true" classType="String" allowSort="false" width="150"/>
+        <column key="assigneeName" header="委托人"  classType="String" allowSort="false" width="150"/>
+        <column key="attorneyName" header="被委托人" classType="String" id="d.ATTORNEY_" allowSort="true" width="150"/>
+        <column key="startTime" header="委托开始时间" classType="Date" id="d.START_TIME_" allowSort="true" dateFormat="yyyy-mm-dd" operator="between" width="150"/>
+        <column key="endTime" header="委托结束时间" classType="Date" id="d.END_TIME_" allowSort="true" dateFormat="yyyy-mm-dd" operator="between" width="150"/>
+        <column key="reason" header="委托原因" width="100" align="left"/>
+        <column key="deleted" header="委托状态" width="100" fnRender="fnRenderDelegateState"/>
+        <column key="id" header="操作" fnRender="fnRenderOperator"/>
+    </query>
+
+
+
+
+
+</queryContext>

@@ -1,0 +1,95 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+      http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <!-- scanner redis properties  -->
+    <!--<context:property-placeholder location="/WEB-INF/property/redis.properties" />-->
+
+    <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+       <!-- <property name="maxActive" value="${redis.maxActive}"/>
+        <property name="maxWait" value="${redis.maxWait}"/>-->
+        <property name="maxWaitMillis" value="${redis.maxWait}" />
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.pass}"/>
+        <property name="database" value="${redis.database}"/>
+        <property name="timeout" value="${redis.timeout}"/>
+        <property name="poolConfig" ref="poolConfig"/>
+    </bean>
+
+
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory"   ref="connectionFactory" />
+    </bean>
+
+
+
+  <!--  <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:util="http://www.springframework.org/schema/util"
+           xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       ">
+
+        &lt;!&ndash;jedis的连接池配置&ndash;&gt;
+        <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+            &lt;!&ndash; 最大空闲连接数量 &ndash;&gt;
+            <property name="maxIdle" value="${redis.maxIdle}"/>
+            &lt;!&ndash; 最小空闲连接数量, 处理间隔时间为 timeBetweenEvictionRunsMillis &ndash;&gt;
+            <property name="minIdle" value="${redis.minIdle}"/>
+            &lt;!&ndash; 池中持有的最大连接数量 &ndash;&gt;
+            <property name="maxTotal" value="${redis.maxTotal}"/>
+            &lt;!&ndash; borrowObject 方法的最大等待时间 &ndash;&gt;
+            <property name="maxWaitMillis" value="${redis.maxWait}"/>
+            &lt;!&ndash; 池中可用资源耗尽时, borrow 方法是否阻塞等待 maxWaitMillis 毫秒 &ndash;&gt;
+            <property name="blockWhenExhausted" value="true"/>
+            &lt;!&ndash; borrowObject 时是否执行检测 &ndash;&gt;
+            <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+            &lt;!&ndash; 是否检测空闲连接链接的有效性, 间隔时间为 timeBetweenEvictionRunsMillis &ndash;&gt;
+            <property name="testWhileIdle" value="true"/>
+            &lt;!&ndash; 空闲对象被清除需要达到的最小空闲时间 &ndash;&gt;
+            <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"/>
+            &lt;!&ndash; 空闲检测线程,sleep 间隔多长时间,去处理与idle相关的事情 &ndash;&gt;
+            <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"/>
+        </bean>
+        &lt;!&ndash; jedis的连接工厂 &ndash;&gt;
+        <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+            <property name="hostName" value="${redis.host}"/>
+            <property name="port" value="${redis.port}"/>
+            <property name="database" value="${redis.database}"/>
+            <property name="password" value="${redis.pass}"/>
+            <property name="timeout" value="2000"/>
+            <property name="poolConfig" ref="poolConfig"/>
+        </bean>
+        &lt;!&ndash;redis实际使用的template&ndash;&gt;
+        <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+            <property name="connectionFactory" ref="connectionFactory"/>
+            <property name="keySerializer">
+                <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+            </property>
+            <property name="valueSerializer">
+                <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
+            </property>
+        </bean>
+        &lt;!&ndash;spring session . 禁用 To disable the automatic configuration  &ndash;&gt;
+        <util:constant
+                static-field="org.springframework.session.data.redis.config.ConfigureRedisAction.NO_OP"/>
+        &lt;!&ndash;spring session 的redis配置&ndash;&gt;
+        <bean class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+            <property name="maxInactiveIntervalInSeconds" value="3600"/>
+        </bean>
+
+    </beans>
+-->
+</beans>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <context:annotation-config/>
+    <!-- 扫描注解配置包-->
+    <context:component-scan base-package="com.cnpc.framework.conf"/>
+
+    <!-- 引入属性文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties,classpath:setting.properties"/>
+
+    <!-- 自动扫描(自动注入) service层类 -->
+    <context:component-scan base-package="com.cnpc.**.service"/>
+
+    <!-- 自动扫描（自动注入） dao层类 -->
+    <context:component-scan base-package="com.cnpc.**.dao"/>
+
+    <!-- 自动扫描（自动注入） aspectj -->
+    <context:component-scan base-package="com.cnpc.framework.aop"/>
+
+    <!--数据库配置与事务-->
+    <import resource="classpath:spring-hibernate.xml"/>
+    <!--自动任务quartz配置-->
+    <import resource="classpath:spring-quartz.xml"/>
+    <!--安全框架shiro配置-->
+    <import resource="classpath:spring-shiro.xml"/>
+    <!--缓存框架redis配置-->
+    <import resource="classpath:spring-redis.xml"/>
+
+
+
+</beans>

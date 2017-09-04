@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        <li class="fa fa-remove"></li>
+    </button>
+    <h5 class="modal-title"></h5>
+</div>
+<form name="group_form" id="group_form">
+    <div class="modal-body" style="height:200px;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="text" name="name" id="groupName" class="form-control" placeholder="群组名称">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="sort" id="groupSort" class="form-control" placeholder="排序">
+                </div>
+                <div class="form-group">
+                    <textarea name="remark" id="groupRemark" placeholder="备注" class="form-control"></textarea>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-btn-type="group-cancel" data-dismiss="modal"><i class="fa fa-remove"></i>&nbsp;取消
+        </button>
+        <button class="btn btn-primary" type="submit" data-btn-type="group-save"><i class="fa fa-save"></i>&nbsp;保存
+        </button>
+    </div>
+</form>
+<script>
+    var group_form;
+    $(function () {
+        group_form = $("#group_form").form();
+        $("#group_form").bootstrapValidator({
+            message: '请输入有效值',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function () {
+                var group=group_form.getFormSimpleData();
+                ajaxPost(basePath+"/message/receiver/group/save",{"group":JSON.stringify(group), "userIds":$("#selectedUserId").val()},function (ret) {
+                    modals.hideWin("groupWin");
+                    setGroupId(ret.id);
+                })
+            },
+            fields: {
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入群组名'
+                        }
+                    }
+                },
+                sort: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入排序'
+                        },
+                        integer: {
+                            message: '请输入整数'
+                        }
+                    }
+                }
+
+            }
+
+        });
+        group_form.initComponent();
+    })
+</script>

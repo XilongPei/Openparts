@@ -1,0 +1,210 @@
+<link rel="stylesheet" href="${basePath}/resources/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+<link rel="stylesheet" href="${basePath}/resources/common/libs/fileinput/css/fileinput.min.css">
+<form id="message_form" name="message_form" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" name="id">
+    <input type="hidden" name="version">
+    <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
+    <input type="hidden" name="deleted" value="0">
+    <input type='hidden' value="${CSRFToken}" id='csrftoken'>
+    <input type="hidden" name="fileIds" id="fileIds">
+    <!--<div class="box-header with-border">
+        <h3 class="box-title">新建消息</h3>
+    </div>-->
+    <div class="box-body">
+        <div class="col-md-12">
+            <input type="hidden" name="receiverType" id="receiverType">
+            <input type="hidden" name="receiverIds" id="receiverIds">
+            <div class="form-group">
+                <div class="input-group">
+                    <input readonly id="receiverUsers" placeholder="接收人" class="form-control">
+                    <div class="input-group-addon">
+                        <a href="#" data-btn-type="receiver_select"><i class="fa fa-users"></i>&nbsp;&nbsp;选择接收人</a>
+                        <!-- <i class="fa fa-users" title="点击此按钮选择接收人"></i>-->
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" id="sendSubject" name="sendSubject" placeholder="标题，请控制在100字以内">
+            </div>
+
+            <div class="form-group">
+                <!-- <label class="col-sm-2 control-label">消息类型<span style="color:red">*</span></label>-->
+                <div class="col-sm-6">
+                    <label class="control-label"> <input type="checkbox" name="messageType" data-flag="icheck"
+                                                         class="square-green" checked value="0">&nbsp;&nbsp;系统消息</label>
+                    &nbsp;
+                    <label class="control-label"> <input type="checkbox" name="messageType" data-flag="icheck"
+                                                         class="square-green" value="1"> &nbsp;&nbsp;邮件 </label>&nbsp;
+                    <label class="control-label"> <input type="checkbox" name="messageType" data-flag="icheck"
+                                                         class="square-green" disabled value="2"> &nbsp;&nbsp;短信
+                    </label>
+                </div>
+                <!-- <label class="col-sm-2 control-label">消息标记<span style="color:red">*</span></label>-->
+                <div class="col-sm-6">
+                    <label class="control-label"> <input type="radio" name="messageFlag" data-flag="icheck"
+                                                         class="square-grey" checked value="0"> &nbsp;&nbsp;一般消息</label>&nbsp;
+                    <label class="control-label"> <input type="radio" name="messageFlag" data-flag="icheck"
+                                                         class="square-yellow" value="1"> &nbsp;&nbsp;重要消息</label>
+                </div>
+            </div>
+            <div class="form-group">
+                    <textarea id="sendContent" class="form-control"
+                              placeholder="请填写正文内容，系统消息和邮件限制在4000字以内，短信限制在70字以内" style="height: 200px">
+                    </textarea>
+            </div>
+            <!--<div class="form-group">
+                <div class="btn btn-default btn-file" id="uploadFile">
+                    <i class="fa fa-paperclip"></i> 上传附件(Max. 10MB)
+                </div>
+            </div>-->
+            <div class="form-group" id="file_container">
+                <input type="file" name="file" class="file" id="attachment">
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <div class="pull-right">
+            <button type="button" class="btn btn-default" data-btn-type="save_draft"><i class="fa fa-pencil"></i> 保存为草稿
+            </button>
+            <button type="submit" class="btn btn-primary" data-btn-type="send"><i class="fa fa-envelope-o"></i> 发送
+            </button>
+        </div>
+        <button type="reset" class="btn btn-default" data-btn-type="cancel_draft"><i class="fa fa-times"></i> 取消
+        </button>
+    </div>
+</form>
+
+<script type="text/javascript"
+        src="${basePath}/resources/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!--用于附件上传回填使用-->
+<script src="${basePath}/resources/common/libs/fileinput/js/fileinput.js"></script>
+<script src="${basePath}/resources/common/libs/fileinput/js/locales/zh.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/js/base-file.js"/>
+<script>
+    var messageform;
+    var id = "${id?default(0)}";
+    $(function () {
+        //初始化表单
+        messageform = $("#message_form").form();
+        $("#sendContent").wysihtml5();
+        //数据校验
+        $("#message_form").bootstrapValidator({
+            message: '请输入有效值',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function () {
+                saveData(4);
+            }
+        });
+        //初始化控件
+        messageform.initComponent();
+        //编辑回填
+        if (id != 0) {
+            var msgId;
+            ajaxPost(basePath+"/message/receiver/get/"+id,null,function (receiver) {
+                msgId=receiver.message.id;
+
+               /* ajaxPost(basePath+"/user/get",{id:receiver.receiveUserID},function (user) {
+                    $("#receiverUsers").val(user.name);
+                })*/
+            });
+            ajaxPost(basePath + "/message/get/" + msgId, null, function (data) {
+                messageform.initFormData(data);
+                //回填内容（含html的内容使用form组件回填有异常，所以手动回填）
+                $("#sendContent").val(data.sendContent);
+                //填报人回填
+                $("#sendSubject").val("转发:"+data.sendSubject);
+
+                $("#receiverType,#receiverIds,#receiverUsers").val("");//用户
+               $("[name='id'],[name='version'],[name='createDateTime']").val("");
+            })
+        }
+
+        //保存为草稿
+        $("[data-btn-type='save_draft']").click(function () {
+            saveData(0);
+        });
+        //取消，返回到收件箱
+        $("[data-btn-type='cancel_draft']").click(function () {
+            $("[data-btn-type='inbox']").click();
+        })
+        //选择接收人receiver_select
+        $("[data-btn-type='receiver_select']").click(function () {
+            modals.openWin({
+                winId: "receiverWin",
+                title: '选择接收人',
+                width: '1000px',
+                url: basePath + "/message/receiver/select",
+                hideFunc: function () {
+                    //主要是本页面wyhtml5含有modal样式影响了模态窗体的显示
+                    $(document.body).removeClass('modal-open');
+                    $(document.body).css("padding-right", "0px");
+                }
+            });
+        });
+
+
+        $("#attachment").file({
+            title: "请上传附件",
+            fileinput: {
+                maxFileSize: 10240,
+                //theme: "explorer",
+                maxFileCount: 3
+            },
+            //如果已经有部分文件(编辑)，在此传文件ids
+            //fileIds:'8a8a84995aabe7aa015aac5d222b0018,8a8a84995aabe7aa015aac5d22340019',
+            fileIdContainer: "[name='fileIds']",
+            //showContainer:'#attachment',
+            //显示文件类型 edit=可编辑  detail=明细 默认为明细
+            //showType:'edit',
+            window: false
+        });
+
+    });
+    //保存消息 0=保存为草稿  1=保存并发送
+    function saveData(status) {
+        var obj = messageform.getFormSimpleData();
+        obj["messageStatus"] = status;
+        obj["sendContent"] = $("#sendContent").val();
+        //console.log(JSON.stringify(params));
+        delete obj["_wysihtml5_mode"];
+        console.log(obj);
+        if (!validateForm())return;
+        var confirmMsg = status == 0 ? "确定保存为草稿？" : "确定保存并发送？";
+        modals.confirm(confirmMsg, function () {
+            ajaxPost(basePath + "/message/save", {message: JSON.stringify(obj)}, function (result) {
+                if (result.success) {
+                    //保存成功跳转到首页
+                    $("[data-btn-type='inbox']").click();
+                }
+            });
+        })
+    }
+
+    function validateForm() {
+        //接收人
+        var errorMsg = "";
+        if (!$("#receiverIds").val()) {
+            errorMsg += "接收人不能为空<br/>";
+        }
+        if (!$("#sendSubject").val()) {
+            errorMsg += "标题不能为空<br/>";
+        }
+        if ($("input[name='messageType']:checked").length == 0) {
+            errorMsg += "请选择消息类型<br/>";
+        }
+        if (!$("#sendContent").val() || $("#sendContent").val().length > 4000) {
+            errorMsg += "正文内容不能为空，且字数不能大于4000";
+        }
+        if (errorMsg.length > 0) {
+            modals.info(errorMsg);
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+</script>

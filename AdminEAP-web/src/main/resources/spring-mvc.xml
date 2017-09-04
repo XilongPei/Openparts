@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+         http://www.springframework.org/schema/mvc   
+         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+         http://www.springframework.org/schema/aop   
+         http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+         http://www.springframework.org/schema/context   
+         http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+    <!--默认使用了MappingJackson2HttpMessageConverter,若要是自定义的生效，则需要将该配置放入到下面-->
+    <mvc:annotation-driven/>
+    <!-- 自动扫描controller包下的所有类，使其认为spring mvc的控制器 -->
+    <context:annotation-config/>
+    <context:component-scan base-package="com.cnpc.**.controller"/>
+    <!-- 配置freeMarker视图解析器 -->
+    <bean id="viewResolverHtml" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+        <property name="contentType" value="text/html; charset=utf-8"/>
+        <property name="suffix" value=".html"/>
+        <property name="order" value="0"/>
+    </bean>
+
+
+    <!-- 配置freeMarker的模板路径 -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath">
+            <value>/WEB-INF/views/</value>
+        </property>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape" value-ref="fmXmlEscape"/>
+            </map>
+        </property>
+        <property name="defaultEncoding">
+            <value>utf-8</value>
+        </property>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="template_update_delay">5</prop>
+            </props>
+        </property>
+
+    </bean>
+
+    <bean id="fmXmlEscape" class="freemarker.template.utility.XmlEscape"/>
+
+    <!-- 定义注解驱动Controller方法处理适配器 ,注：该适配器必须声明在<mvc:annotation-driven />之前，否则不能正常处理参数类型的转换 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                    <property name="objectMapper">
+                        <bean class="com.cnpc.framework.filter.JsonObjectMapper"></bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 对模型视图名称的解析，即在模型视图名称添加前后缀 -->
+    <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
+    <!--<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 这里的配置我的理解是自动给后面action的方法return的字符串加上前缀和后缀，变成一个
+        可用的url地址 <property name="prefix" value="/WEB-INF/views/" /> </bean> -->
+    <mvc:view-controller path="/" view-name="forward:/login"/>
+    <!--&lt;!&ndash; 静态资源映射 &ndash;&gt; -->
+
+    <mvc:resources location="/resources/" mapping="/resources/**"/>
+    <mvc:resources location="/uploadPath/" mapping="/uploadPath/**"/>
+    <!-- 当上面要访问的静态资源不包括在上面的配置中时，则根据此配置来访问 -->
+    <mvc:default-servlet-handler/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <property name="maxUploadSize">
+            <value>32505856</value><!-- 上传文件大小限制为31M，31*1024*1024 -->
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+    </bean>
+    <!-- 开启AOP监听 只对当前配置文件有效 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+    <mvc:interceptors>
+        <!-- csrf攻击防御 -->
+        <mvc:interceptor>
+            <!-- 需拦截的地址 -->
+            <mvc:mapping path="/**"/>
+            <!-- 需排除拦截的地址 -->
+            <mvc:exclude-mapping path="/resources/**"/>
+            <mvc:exclude-mapping path="/uploadPath/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/logout"/>
+            <bean class="com.cnpc.framework.interceptor.CSRFInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+</beans>

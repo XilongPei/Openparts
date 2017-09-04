@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/query"
+	xmlns:tns="http://www.example.org/query" elementFormDefault="qualified">
+	<annotation>
+		<documentation>
+			Query Schema, created by billJiang in 盘锦 2015/1/16  modify in Beijing 2016/7/14
+		</documentation>
+	</annotation>
+	<complexType name="callType">
+		<sequence minOccurs="1"  maxOccurs="unbounded">
+			<element name="call" minOccurs="1" maxOccurs="unbounded">
+				<complexType>
+					<sequence minOccurs="1" maxOccurs="1">
+						<element name="param" maxOccurs=" 1" minOccurs="1" type="string" />
+					</sequence>
+					<attribute name="command" use="required" type="string"></attribute>
+				</complexType>
+			</element>
+		</sequence>
+	</complexType>
+	<element name="queryContext">
+		<complexType>
+			<sequence>
+				<element name="query" minOccurs="1" maxOccurs="unbounded">
+					<complexType>
+						<sequence>
+							<element name="sql" type="string" maxOccurs="1" minOccurs="0" />
+							<element name="varSql" type="string" maxOccurs="1" minOccurs="0" />
+							<element name="beforeInit" maxOccurs="1" minOccurs="0"  type="tns:callType" />
+							<element name="column" minOccurs="1" maxOccurs="unbounded">
+								<complexType>
+									<attribute name="key" use="required" type="string" />
+									<attribute name="id" use="optional" type="string" />
+									<attribute name="header" use="optional" type="string" />
+									<attribute name="type" use="optional"  default="ro">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="ro" />
+												<enumeration value="link" />
+												<enumeration value="ch" />
+												<enumeration value="ra" />
+												<enumeration value="ed" />
+												<enumeration value="txt" />
+												<enumeration value="coro" />
+												<enumeration value="price" />
+												<enumeration value="dyn" />
+												<enumeration value="dhxCalendar"/>
+											</restriction>
+										</simpleType>
+									</attribute>
+									<attribute name="classType" use="optional"  default="java.lang.String">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="java.lang.String" />
+												<enumeration value="java.util.Date" />
+												<enumeration value="java.lang.Integer" />
+												<enumeration value="java.lang.Double" />
+												<enumeration value="String" />
+												<enumeration value="Date" />
+												<enumeration value="Integer" />
+												<enumeration value="Float" />
+												<enumeration value="Double" />
+												<enumeration value="BigDecimal" />
+												<enumeration value="Boolean" />
+											</restriction>
+										</simpleType>
+									</attribute>
+									<attribute name="align"  default="center">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="left" />
+												<enumeration value="center" />
+												<enumeration value="right" />
+											</restriction>
+										</simpleType>
+									</attribute>
+									<attribute name="allowSort" type="boolean" default="false"  />
+								<!-- 	<attribute name="sortType"  default="str">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="str" />
+												<enumeration value="int" />
+												<enumeration value="date" />
+												<enumeration value="na" />
+												<enumeration value="customSortFunction" />
+											</restriction>
+										</simpleType>
+									</attribute> -->
+									<attribute name="allowSearch" type="boolean" default="false" />
+									<attribute name="hidden" type="boolean" default="false" />
+									<attribute name="isQuote" type="boolean" default="true" />
+									<attribute name="enableTooltip" type="boolean" default="true" />
+									<attribute name="color" type="string" />
+									<attribute name="operator"  default="eq">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="eq" />
+												<enumeration value="gt" />
+												<enumeration value="ge" />
+												<enumeration value="lt" />
+												<enumeration value="le" />
+												<enumeration value="in" />
+												<enumeration value="not_in" />
+												<enumeration value="between" />
+												<enumeration value="like" />
+												<enumeration value="not_eq" />
+												<enumeration value="null" />
+											</restriction>
+										</simpleType>
+									</attribute>
+									<attribute name="width" type="string"  default="50" />
+									<attribute name="dateFormat"  use="optional" default='yyyy-mm-dd'>
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="yyyy-mm-dd hh:ii:ss" />
+												<enumeration value="yyyy-mm-dd hh:ii" />
+												<enumeration value="yyyy-mm-dd hh" />
+												<enumeration value="yyyy-mm-dd" />
+												<enumeration value="yyyy-mm" />
+												<enumeration value="yyyy.mm.dd hh:ii:ss" />
+												<enumeration value="yyyy.mm.dd hh:ii" />
+												<enumeration value="yyyy.mm.dd hh" />
+												<enumeration value="yyyy.mm.dd" />
+												<enumeration value="yyyy.mm" />
+												<enumeration value="yyyy/mm/dd hh:ii:ss" />
+												<enumeration value="yyyy/mm/dd hh:ii" />
+												<enumeration value="yyyy/mm/dd hh" />
+												<enumeration value="yyyy/mm/dd" />
+												<enumeration value="yyyy/mm" />
+												<enumeration value="yyyy" />
+											</restriction>
+										</simpleType>
+									</attribute>
+									<attribute name="numberFormat" type="string" use="optional" default="0,000.00" />
+									<attribute name="fnRender" type="string" />
+									<attribute name="isServerCondition" type="boolean" />
+									<attribute name="value" type="string" />
+									<attribute name="isExport" type="boolean" default="true" />
+									<attribute name="isImport" type="boolean" default="false"/>
+									<attribute name="suffix" type="string" default="%" />
+									<attribute name="dict" type="string" />
+									<attribute name="maxLen" type="int" />
+									<attribute name="tooltip" type="string" />
+									<attribute name="isJustExport" type="boolean" default="false" />
+									<attribute name="render" type="string"/>
+									<attribute name="subHeader"  default="#rspan">
+										<simpleType>
+											<restriction base="string">
+												<enumeration value="#rspan" />
+												<enumeration value="#select_filter_dict" />
+												<enumeration value="#select_filter" />
+												<enumeration value="#rspan" />
+											</restriction>
+										</simpleType>
+									</attribute>
+								</complexType> 
+							</element>
+							<element name="afterInit" maxOccurs="1" minOccurs="0" type="tns:callType" />
+						</sequence> 
+						<attribute name="id" type="string" use="required" />
+						<attribute name="key" type="string" default="id" use="optional" />
+						<attribute name="countStr" type="string" default="count(*)" />
+						<attribute name="tableName"  use="required">
+							<simpleType>
+								<restriction base="string">
+									<minLength value="4" />
+								</restriction>
+							</simpleType>
+						</attribute>
+						<attribute name="className" type="string" />
+						<attribute name="pageSize" type="int" default="20" />
+						<attribute name="pagesInGrp" type="int" default="5" />
+						<attribute name="splitAt" type="int" use="optional" />
+						<attribute name="widthType"  default="px" >
+							<simpleType>
+								<restriction base="string">
+									<enumeration value="px"  />
+									<enumeration value="%" />
+								</restriction>
+							</simpleType>
+						</attribute>
+						<attribute name="allowPaging" type="boolean" default="true" />
+						<attribute name="filter" type="string" />
+						<attribute name="order" type="string" />
+						<attribute name="enableMultiline" type="boolean" default="true" />
+						<attribute name="sortKey" type="string" />
+						<attribute name="isServerFilter" type="boolean" default="false" />
+						<attribute name="enableMultiHeader" type="boolean" default="false" />
+						<attribute name="simpleSearch" type="string" default="true" />
+						<attribute name="service" type="string" />
+						<attribute name="method" type="string" />
+					</complexType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+</schema>

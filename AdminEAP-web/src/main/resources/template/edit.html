@@ -1,0 +1,148 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><li class="fa fa-remove"></li></button>
+    <h5 class="modal-title"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="${htmlPrefix}_form" name="${htmlPrefix}_form" class="form-horizontal">
+        <input type="hidden" name="id">
+        <input type="hidden" name="version">
+        <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
+        <input type="hidden" name="deleted" value="0">
+        <input type='hidden' value="${r'${CSRFToken}'}" id='csrftoken'>
+        <div class="box-body">
+            <#list 0..colsNum-1 as index>
+            <div class="col-md-${12/colsNum}">
+            <#list fields as field>
+                <#if field_index%colsNum=index>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">${field.labelName}<#if field.validateType??&&field.validateType?contains("notEmpty")><span style="color:red">*</span></#if></label>
+                    <div class="<#if field.tagType="datepicker">input-group </#if>col-sm-8">
+                        <#if field.tagType="hidden">
+                        <input type="hidden" id="${field.columnName}" name="${field.columnName}" >
+                        <#elseif field.tagType="textarea">
+                        <textarea name="${field.columnName}" id="${field.columnName}" placeholder="请填写${field.labelName}" class="form-control"></textarea>
+                        <#elseif field.tagType="datepicker">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" placeholder="请填写${field.labelName}" name="${field.columnName}" id="${field.columnName}" data-flag="datepicker" class="form-control" data-format="yyyy-mm-dd">
+                        <#elseif field.tagType="dictSelector">
+                        <select name="${field.columnName}" id="${field.columnName}" data-code="${field.dictCode}"  data-flag="dictSelector" data-placeholder="请选择${field.labelName}" class="form-control select2" style="width:100%" data-blank="true"></select>
+                        <#elseif field.tagType="urlSelector">
+                        <select name="${field.columnName}" id="${field.columnName}" data-src="${field.dictCode}" data-flag="urlSelector" data-placeholder="请选择${field.labelName}" class="form-control select2" style="width:100%" data-blank="true"></select>
+                        <#elseif field.tagType="normalSelector">
+                        <select name="${field.columnName}" id="${field.columnName}" data-placeholder="请选择${field.labelName}" class="form-control select2" style="width:100%" data-blank="true">
+                            <option></option>
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                        <#elseif field.tagType="radio">
+                            <#if !field.dictCode??>
+                        <label class="control-label"> <input type="radio" name="${field.columnName}"  value="1"> 是</label> &nbsp;
+                        <label class="control-label"> <input type="radio" name="${field.columnName}"  value="0"> 否</label>
+                            <#elseif field.dictCode?starts_with("${r'${basePath}'}")>
+                        <input type="radio" name="${field.columnName}" data-flag="urlSelector" data-src="${field.dictCode}">
+                            <#else>
+                        <input type="radio" name="${field.columnName}" data-flag="dictSelector" data-code="${field.dictCode}">
+                            </#if>
+                        <#elseif field.tagType="icheck-radio">
+                            <#if !field.dictCode??>
+                        <label class="control-label"> <input type="radio" name="${field.columnName}" data-flag="icheck" class="square-blue" value="1"> 是</label> &nbsp;
+                        <label class="control-label"> <input type="radio" name="${field.columnName}" data-flag="icheck" class="square-blue" value="0"> 否</label>
+                            <#elseif field.dictCode?starts_with("${r'${basePath}'}")>
+                        <input type="icheck-radio" name="${field.columnName}" data-flag="urlSelector" data-src="${field.dictCode}">
+                            <#else>
+                        <input type="icheck-radio" name="${field.columnName}" data-flag="dictSelector" data-code="${field.dictCode}">
+                            </#if>
+                        <#elseif field.tagType="checkbox">
+                            <#if !field.dictCode??>
+                        <label class="control-label"> <input type="checkbox" name="${field.columnName}" value="1"> 是</label> &nbsp;
+                        <label class="control-label"> <input type="checkbox" name="${field.columnName}"  value="0"> 否</label>
+                            <#elseif field.dictCode?starts_with("${r'${basePath}'}")>
+                        <input type="checkbox" name="${field.columnName}" data-flag="urlSelector" data-src="${field.dictCode}">
+                            <#else>
+                        <input type="checkbox" name="${field.columnName}" data-flag="dictSelector" data-code="${field.dictCode}">
+                            </#if>
+                        <#elseif field.tagType="icheck-checkbox">
+                            <#if !field.dictCode??>
+                        <label class="control-label"> <input type="checkbox" name="${field.columnName}" data-flag="icheck" class="square-blue" value="1"> 是</label> &nbsp;
+                        <label class="control-label"> <input type="checkbox" name="${field.columnName}" data-flag="icheck" class="square-blue" value="0"> 否</label>
+                            <#elseif field.dictCode?starts_with("${r'${basePath}'}")>
+                        <input type="icheck-checkbox" name="${field.columnName}" data-flag="urlSelector" data-src="${field.dictCode}">
+                             <#else>
+                        <input type="icheck-checkbox" name="${field.columnName}" data-flag="dictSelector" data-code="${field.dictCode}">
+                              </#if>
+                        <#else>
+                        <input type="text" class="form-control" id="${field.columnName}" name="${field.columnName}" placeholder="请填写${field.labelName}">
+                        </#if>
+                    </div>
+                </div>
+                </#if>
+            </#list>
+            </div>
+            </#list>
+        </div>
+        <div class="box-footer text-right">
+            <button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary" data-btn-type="save">提交</button>
+        </div>
+    </form>
+</div>
+<script>
+    var form;
+    var id="${r'${id?default(0)}'}";
+    $(function(){
+        //初始化表单
+        form=$("#${htmlPrefix}_form").form();
+        //数据校验
+        $("#${htmlPrefix}_form").bootstrapValidator({
+            message : '请输入有效值',
+            feedbackIcons : {
+                valid : 'glyphicon glyphicon-ok',
+                invalid : 'glyphicon glyphicon-remove',
+                validating : 'glyphicon glyphicon-refresh'
+            },
+            submitHandler : function() {
+                modals.confirm('确认保存？', function() {
+                    var ${htmlPrefix} = form.getFormSimpleData();
+                    <#assign isObj=1>
+                    <#list fields as field>
+                        <#if field.columnName?contains(".")>
+                    <#assign isObj=0>
+                        </#if>
+                    </#list>
+                    ajaxPost(basePath+'/${htmlPrefix}/save',<#if isObj=1>${htmlPrefix}<#else>{"obj":JSON.stringify(${htmlPrefix})}</#if>, function(data) {
+                        if(data.success){
+                            if(id!="0"){
+                                modals.hideWin(winId);
+                                ${htmlPrefix}Table.reloadRowData(id);
+                            }else{
+                                modals.hideWin(winId);
+                                ${htmlPrefix}Table.reloadData();
+                            }
+                        }
+                    });
+                });
+            },
+            fields : {
+            <#list fields as field>
+            <#if field.validateType??&&field.validateType!="">
+                "${field.columnName}":{
+                    validators:{
+                        ${field.validateType}
+                    }
+                }<#if field_index+1<fields?size>,</#if>
+            </#if>
+            </#list>
+            }
+        });
+        //初始化控件
+        form.initComponent();
+        //编辑回填
+        if(id!=0){
+            ajaxPost(basePath+"/${htmlPrefix}/get/"+id,null,function(data){
+                form.initFormData(data);
+            })
+        }
+    });
+
+</script>

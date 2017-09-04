@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="${basePath}/resources/common/libs/fileinput/css/fileinput.min.css">
+<form id="message_form" name="message_form" class="form-horizontal" enctype="multipart/form-data">
+    <input type="hidden" name="fileIds" id="fileIds">
+    <input type="hidden" name="receiverType" id="receiverType">
+    <input type="hidden" name="receiverIds" id="receiverIds">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            阅读消息
+        </h3>
+        <label id="messageType" class="pull-right"></label>
+    </div>
+
+    <div class="box-body">
+        <div class="mailbox-read-info">
+            <h3><label id="messageFlag" class="pull-right"></label><label name="sendSubject"></label></h3>
+            <h5>
+                发送人： <label name="sendUser"></label>&nbsp;&nbsp;
+                收件人： <label id="receiverUsers"></label>
+                <label class="mailbox-read-time pull-right" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss"></label>
+            </h5>
+        </div>
+        <div class="mailbox-read-message" id="sendContent">
+
+        </div>
+        <div class="col-md-12">
+
+            <!--<div class="form-group">
+                <div class="btn btn-default btn-file" id="uploadFile">
+                    <i class="fa fa-paperclip"></i> 上传附件(Max. 10MB)
+                </div>
+            </div>-->
+            <div class="form-group" id="file_container">
+                <input type="file" name="file" class="file" id="attachment">
+            </div>
+        </div>
+    </div>
+    <div class="box-footer">
+        <button type="reset" class="btn btn-default" data-btn-type="cancel_draft"><i class="fa fa-reply"></i> &nbsp;返回
+        </button>
+    </div>
+</form>
+
+<!--用于附件上传回填使用-->
+<script src="${basePath}/resources/common/libs/fileinput/js/fileinput.min.js"></script>
+<script src="${basePath}/resources/common/libs/fileinput/js/locales/zh.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/js/base-file.js"/>
+<script>
+    var messageform;
+    var id = "${id?default(0)}";
+    $(function () {
+        //初始化表单
+        messageform = $("#message_form").form();
+        //初始化控件
+        messageform.initComponent();
+        //编辑回填
+        if (id != 0) {
+            ajaxPost(basePath + "/message/receiver/get/" + id, null, function (data) {
+                messageform.initFormData(data.message);
+                //回填内容（含html的内容使用form组件回填有异常，所以手动回填）
+                $("#messageType").html(fnRenderMessageType(data.message.messageType));
+                $("#messageFlag").html(fnRenderMessageFlag(data.message.messageFlag));
+                $("#sendContent").html(data.message.sendContent);
+                //填报人回填
+                if (data.receiverType == 0) {
+                    ajaxPost(basePath + "/message/receiver/user/group", {"groupIds": data.message.receiverIds},
+                            function (map) {
+                                $("#receiverUsers").text(map.name);
+                            });
+                } else {
+                    ajaxPost(basePath + "/message/receiver/user/names", {userIds: data.message.receiverIds},
+                            function (map) {
+                                $("#receiverUsers").text(map.name);
+                            });
+                }
+
+            })
+        }
+
+        //取消，返回到收件箱
+        $("[data-btn-type='cancel_draft']").click(function () {
+            $("[data-btn-type='inbox']").click();
+        })
+
+        $("#attachment").file({
+            title: "请上传附件",
+            fileinput: {
+                maxFileSize: 10240,
+                maxFileCount: 3
+            },
+            fileIdContainer: "[name='fileIds']",
+            showType: 'detail',
+            window: false
+        });
+
+    });
+
+
+</script>

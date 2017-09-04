@@ -1,0 +1,95 @@
+<link rel="stylesheet" href="${basePath}/resources/common/libs/markdown/editor.md/css/editormd.min.css">
+
+<section class="content-header">
+    <h1>
+        <span>我的文章</span>
+        <small id="title_sm">预览</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">我的文章</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row form-horizontal">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header text-center">
+                        <div clas="form-group">
+                            <label id="title" style="font-size:21px;font-weight:normal"></label>
+                        </div>
+                        <div clas="form-group">
+                            <label style="font-weight: normal">关键字：</label>
+                            <label id="keywords"></label>
+                        </div>
+                </div>
+                <div clas="box-body">
+                    <div id="editormd">
+                        <textarea id="append-test" style="display:none;"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="navbar-fixed-middle">
+        <div class="box box-primary box-solid">
+            <div class="box-header with-border">
+                <h4 class="box-title" style="padding-right:20px;"><i class="fa fa-hand-o-left">&nbsp;文章目录</i></h4>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+                <!-- /.box-tools -->
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body" style="padding-left:0">
+                <div  id="custom-toc-container"></div>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+    </div>
+    </div>
+</section>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/marked.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/prettify.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/raphael.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/underscore.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/sequence-diagram.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/flowchart.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/lib/jquery.flowchart.min.js"></script>
+<script type="text/javascript" src="${basePath}/resources/common/libs/markdown/editor.md/js/editormd.min.js"></script>
+<script>
+    var editor;
+   /* var height=$(document).height();
+    $(".navbar-fixed-middle").css({"top":height/2+"px"});
+*/
+    $(function () {
+        var mid = "${id?default('')}";
+        ajaxPost(basePath + "/markdown/get/" + mid, null, function (result) {
+            $("#title").text(result.title);
+            $("#keywords").text(result.keywords);
+            editor = editormd.markdownToHTML("editormd", {
+                markdown: result.content,
+                htmlDecode: "style,script,iframe",  // you can filter tags decode
+                emoji: true,
+                tocm:true ,    // Using [TOCM]
+                tocContainer: "#custom-toc-container", // 自定义 ToC 容器层
+                tocDropdown:true,
+                taskList: true,
+                tex: true,  // 默认不解析
+                flowChart: true,  // 默认不解析
+                sequenceDiagram: true // 默认不解析
+            });
+        });
+    });
+
+    function returnToList() {
+        loadPage(basePath + "/markdown/list");
+    }
+</script>

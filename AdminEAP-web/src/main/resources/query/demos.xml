@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.example.org/query query.xsd">
+    <!--本xml片段为代码生成器生成，时间：2017-02-10 11:44:41-->
+    <query id="generator" key="id" tableName="测试列表" className="com.cnpc.demos.entity.Generator" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="name" header="姓名" width="150" operator="like" allowSort="true"/>
+        <column key="code" header="编码" width="150"/>
+        <column key="gender" header="性别" width="150"/>
+        <column key="birthday" header="生日" classType="java.util.Date" operator="between" width="150" dateFormat="yyyy-mm-dd"/>
+        <column key="nation.name" header="民族" width="150"/>
+        <column key="education" header="学历" width="150"/>
+        <column key="salary" header="工资" width="150"/>
+        <column key="department" header="所在组织" width="150"/>
+        <column key="remark" header="备注" align="left" width="150"/>
+        <column key="enable" header="是否启用" width="150"/>
+    </query>
+</queryContext>

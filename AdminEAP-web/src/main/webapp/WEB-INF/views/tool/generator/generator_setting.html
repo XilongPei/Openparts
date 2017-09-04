@@ -1,0 +1,514 @@
+<style>
+    .col-sm-2{
+        padding-right: 5px;
+        padding-left:5px;
+    }
+    .control-label{
+        font-weight: normal;
+    }
+</style>
+<section class="content-header">
+    <h1>代码生成器</h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统工具</a></li>
+        <li class="active">代码生成器</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+        <!-- /.col -->
+
+        <div class="col-md-5">
+                <form id="code-form" name="code-form" class="form-horizontal">
+                    <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="queryId" class="col-sm-2 control-label">queryId</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="queryId" name="queryId" placeholder="请填写queryId">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="button" class="btn btn-primary col-sm-12" data-btn-type="loadsetting">加载配置</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="className" class="col-sm-2 control-label">实体名</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="className" name="className" placeholder="请填写实体名（含包名）">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="modelName" class="col-sm-2 control-label">业务名:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="modelName" name="modelName" placeholder="请填写表名/业务名（中文）">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label  class="col-sm-2 control-label">html文件</label>
+                                        <div class="col-sm-9">
+                                            <label class="control-label">
+                                                <input type="checkbox" name="htmlTypes"  checked="checked" value="list"> 列表
+                                            </label> &nbsp;
+                                            <label class="control-label">
+                                                <input type="checkbox" name="htmlTypes"  checked="checked" value="addUpdate"> 新增/编辑
+                                            </label> &nbsp;
+                                            <label class="control-label">
+                                                <input type="checkbox" name="htmlTypes"  value="add"> 新增
+                                            </label> &nbsp;
+                                            <label class="control-label">
+                                                <input type="checkbox" name="htmlTypes"  value="update"> 编辑
+                                            </label>&nbsp;
+                                            <label class="control-label">
+                                                <input type="checkbox" name="htmlTypes"  value="show"> 查看
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label  class="col-sm-2 control-label">操作风格</label>
+                                        <div class="col-sm-9">
+                                            <label class="control-label">
+                                                <input type="radio" name="curdType"  checked="checked" value="dialog">
+                                                CURD-Dialog
+                                            </label> &nbsp;
+                                            <label class="control-label">
+                                                <input type="radio" name="curdType"  value="page">
+                                                CURD-Page
+                                            </label> &nbsp;
+                                            <label class="control-label">
+                                                <input type="radio" name="curdType"  value="tab">
+                                                CURD-Tab
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="colsNum" class="col-sm-2 control-label">每行列数</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="colsNum" name="colsNum" placeholder="每行form控件数量" value="1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="htmlPrefix" class="col-sm-2 control-label">文件前缀</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="htmlPrefix" name="htmlPrefix" placeholder="html文件名前缀">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="businessPackage" class="col-sm-2 control-label">文件夹</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="businessPackage" name="businessPackage" placeholder="html文件夹名/业务包名">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="htmlPath" class="col-sm-2 control-label">文件路径</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="htmlPath" name="htmlPath" placeholder="导出html文件路径">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-body">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label  class="col-sm-2 control-label">Java文件</label>
+                                    <div class="col-sm-9">
+                                        <label class="control-label">
+                                            <input type="checkbox" name="javaTypes"  checked="checked" value="controller"> Controller
+                                        </label> &nbsp;
+                                        <label class="control-label">
+                                            <input type="checkbox" name="javaTypes"   value="service"> Service接口/实现
+                                        </label> &nbsp;
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="javaPrefix" class="col-sm-2 control-label">文件前缀</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="javaPrefix" name="javaPrefix" placeholder="java文件名前缀">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="nameSpace" class="col-sm-2 control-label">命名空间</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="nameSpace" name="nameSpace" placeholder="Java文件命名空间">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="javaPath" class="col-sm-2 control-label">文件路径</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="javaPath" name="javaPath" placeholder="导出Java文件路径">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">创建菜单&nbsp;</label>
+                                    <div class="col-sm-9">
+                                        <label class="control-label">
+                                            <input type="checkbox" class="square-green" name="isCreateFunction" id="isCreateFunction" checked="checked" value="1">
+                                        </label>
+                                        <input type="text" name="parFuncCode" class="form-control" style="width: 90%;float:right" id="parFuncCode" placeholder="父功能编码">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-primary col-sm-12" data-btn-type="save">开始生成代码</button>
+                        </div>
+                    </div>
+                </form>
+             </div>
+
+        <div class="col-md-7">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body">
+                    <table id="code-table" class="table table-bordered table-striped table-hover">
+                        <thead>
+                           <tr>
+                           <th class="text-center">序号</th>
+                           <th class="text-center">名称</th>
+                           <th class="text-center">属性名</th>
+                           <th class="text-center">类型</th>
+                           <th class="text-center">控件类型</th>
+                           <th class="text-center">校验</th>
+                           <th class="text-center">字典/url</th>
+                           <th class="text-center">选择</th>
+                           <th class="text-center">查询</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr>
+                               <td colspan="9" class="text-center">配置xml后，该列表显示要编辑的数据项</td>
+                           </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    var  fieldTable,codeform;
+    $(function () {
+        //fieldTable = new CommonTable("roleFunc_table", "roleFunc_selected_list", null);
+        //加载配置
+        $("[data-btn-type='loadsetting']").click(function () {
+              loadSetting();
+        });
+
+        //表单初始化
+        codeform=$("#code-form").form({baseEntity:false});
+
+        //表单校验
+        $("#code-form").bootstrapValidator({
+            message : '请填写有效值',
+            feedbackIcons : {
+                valid : 'glyphicon glyphicon-ok',
+                invalid : 'glyphicon glyphicon-remove',
+                validating : 'glyphicon glyphicon-refresh'
+            },
+            submitHandler : function(validator) {
+                if($("#isCreateFunction").is(":checked")&&!$("#parFuncCode").val()){
+                    modals.warn("请填写父功能编码");
+                    return false;
+                }
+                modals.confirm('确认生成代码？', function() {
+                    var params = codeform.getFormSimpleData();
+                    //收集编辑字段数据
+                    var len=fieldTable.data().length;
+                    var fields=[];
+                    for(var i=0;i<len;i++){
+                        var obj=fieldTable.row(i).data();
+                        obj.isCondition=$("#code-table tbody tr:eq("+i+")").find("td:eq(7)").find("input:eq(0)").is(":checked")?1:0;
+                        obj.isSelected=$("#code-table tbody tr:eq("+i+")").find("td:eq(8)").find("input:eq(0)").is(":checked")?1:0;
+                        fields.push(obj);
+                    }
+                    params["fields"]=fields;
+                    params["htmlPath"]=$("#htmlPath").val();
+                    params["javaPath"]=$("#javaPath").val();
+                    console.log(JSON.stringify(params));
+                    console.log(params);
+                    ajaxPost(basePath+"/generator/startGenerate",{"object":JSON.stringify(params)},function(data){
+                        if(data.success){
+                            modals.correct("成功生成了代码，请刷新IDE后编译代码，并重新部署");
+                        }
+                    });
+                });
+            },
+            fields : {
+                queryId : {
+                    validators : {
+                        notEmpty : {
+                            message : '请填写queryId'
+                        }
+                    }
+                },
+                className:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写实体名'
+                        }
+                    }
+                },
+                modelName:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写业务名'
+                        }
+                    }
+                },
+                htmlTypes:{
+                    validators:{
+                        notEmpty:{
+                            message:'请选择要生成html文件'
+                        }
+                    }
+                },
+                curdType:{
+                    validators:{
+                        notEmpty:{
+                            message:'请选择curd风格'
+                        }
+                    }
+                },
+                colsNum:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写每行列数'
+                        },
+                        integer:{
+                            message:'请填写正整数'
+                        },
+                        between:{
+                            min:1,
+                            max:4,
+                            message:'请填写1-4之间的整数'
+                        }
+                    }
+                },
+                htmlPrefix:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写html文件前缀'
+                        }
+                    }
+                },
+                businessPackage:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写业务包名'
+                        }
+                    }
+                },
+                htmlPath:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写html文件路径'
+                        }
+                    }
+                },
+                javaPrefix:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写Java文件前缀'
+                        }
+                    }
+                },
+                javaTypes:{
+                    validators:{
+                        notEmpty:{
+                            message:'请选择要生成java文件'
+                        }
+                    }
+                },
+                nameSpace:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写命名空间'
+                        }
+                    }
+                },
+                javaPath:{
+                    validators:{
+                        notEmpty:{
+                            message:'请填写java文件路径'
+                        }
+                    }
+                }
+            }
+        });
+        codeform.initComponent();
+
+    });
+
+    function loadSetting() {
+        var queryId = $("#queryId").val();
+        if (!queryId) {
+            modals.info("请填写queryId");
+            return false;
+        }
+        //已经配置了xml则配置属性列表，否则弹出窗口配置xml
+        ajaxPost(basePath + "/generator/getQuerySetting", {
+            "queryId": queryId,
+            "className": $("#className").val()
+        }, function (data, status) {
+            if(data.isExistQuery=="2"){
+                modals.info("该功能请在开发环境下使用,并使用内嵌式web容器测试\r\n（如jetty-maven-plugin, tomcat7-maven-plugin）");
+                return false;
+            }else if (data.isExistQuery == "1") {
+                codeform.initFormData(data);
+                $("#code-form").data('bootstrapValidator').resetForm();
+                if (fieldTable) {
+                    fieldTable.destroy();
+                }
+                //生成数据列表
+                fieldTable = $("#code-table").DataTable({
+                    data: data.fields,
+                    paging: false,
+                    searching: false,
+                    info: false,
+                    singleSelect: true,
+                    autoWidth: false,
+                    scrollX:true,
+                    columns: [
+                        {title: '序号', data: 'rowIndex', class: 'text-center', width: '8%'},
+                        {
+                            title: '名称', data: 'labelName', class: 'text-left', width: '12%'/*,
+                         render:function(cellData,type,row){
+                         return "<input type='text' class='form-control' value='"+cellData+"' style='width:100%'>";
+                         }*/
+                        },
+                        {
+                            title: '属性名', data: 'columnName', width: '10%'/*,
+                         render:function(cellData,type,row){
+                         return "<input type='text' class='form-control' value='"+cellData+"' style='width:100%'>";
+                         }*/
+                        },
+                        {title: '类型', data: 'type', width: '10%'},
+                        {title: '控件类型', data: 'tagType', width: '10%'},
+                        {title: '校验', data: 'validateType', width: '20%'},
+                        {title: '字典/url', data: 'dictCode', width: '10%',class:'text-center'},
+                        {title: '条件', data: 'isCondition', width: '10%',class:'text-center',
+                        render:function(cellData){
+                            if(cellData!="1")
+                                return "<input type='checkbox' value='1'>";
+                            else
+                                return "<input type='checkbox' value='1' checked='checked'>";
+                        }},
+                        {title: '选择', data: 'isSelected', width: '10%',class:'text-center',
+                        render:function(cellData){
+                            if(cellData!="1")
+                                return "<input type='checkbox' value='1'>";
+                            else
+                                return "<input type='checkbox' value='1' checked='checked'>";
+                        }}
+                    ]
+                });
+
+                //双击编辑
+                $("#code-table tbody td").dblclick(function () {
+                    var cellData = fieldTable.cell(this).data();
+                    var colIndex = fieldTable.cell(this).index().column;
+                    //名称，属性名，字典编码(text修改） 126
+                    if (colIndex == 1 || colIndex == 2 || colIndex == 6) {
+                        if (cellData == null)
+                            cellData = "";
+                        var obj = $("<input type='text' value='" + cellData + "' style='width:100%'>");
+                        $(this).html(obj);
+                        obj.focus();
+                        //fieldTable.cell(this).data("")
+                    } else if (colIndex == 5) {
+                        //校验 5 textarea
+                        //cellData=cellData.replace(/\'/g, "\\\"");
+                        var obj = $("<textarea style='width: 100%'>" + cellData + "</textarea>");
+                        $(this).html(obj);
+                        obj.focus();
+                    } else if (colIndex == 3 || colIndex == 4) {
+                        //类型 控件类型 select
+                        var select = $("<select style='width:100%'></select>");
+                        var typeArr = ['String', 'Date', 'Integer', 'Double', 'Float', 'BigDecimal', 'Boolean'];
+                        var tagTypeArr=['text','hidden','number','textarea','datepicker','icheck-radio','radio','checkbox',
+                            'icheck-checkbox','dictSelector','urlSelector','normalSelector','orgSelector'];
+                        var arr=[];
+                        arr=(colIndex==3)?typeArr:tagTypeArr;
+                        for (var i = 0; i < arr.length; i++) {
+                            select.append("<option value='" + arr[i] + "'>" + arr[i] + "</option>");
+                        }
+                        $(this).html(select);
+                        select.find("option[value='" + cellData + "']").attr("selected", true);
+                    }
+                }).mouseleave(function () {
+                    var colIndex = fieldTable.cell(this).index().column;
+                    if (colIndex == 1 || colIndex == 2 || colIndex == 6) {
+                        var cellData = $(this).find("input").eq(0).val();
+                        if (cellData || cellData == "")
+                            fieldTable.cell(this).data(cellData);
+                    } else if (colIndex == 5) {
+                        var cellData = $(this).find("textarea").eq(0).val();
+                        if ($(this).find("textarea").length>0)
+                            fieldTable.cell(this).data(cellData);
+                    } else if (colIndex == 3 || colIndex == 4) {
+                        var cellData = $(this).find("select").eq(0).find("option:selected").val();
+                        fieldTable.cell(this).data(cellData);
+                    }
+                });
+
+            } else {
+                //xml不存在，填写className弹出窗口
+                var className=$("#className").val();
+                var modelName=$("#modelName").val();
+                if(!className||!modelName){
+                    modals.info("查询xml配置不存在，为第一次生成，请配置实体名和业务名");
+                    $("#code-form").bootstrapValidator('validateField', 'className');
+                    $("#code-form").bootstrapValidator('validateField','modelName');
+                    return false;
+                }
+                //弹出配置xml的窗口
+                modals.openWin({
+                    winId:'xmlWin',
+                    url:basePath+"/generator/xml?queryId="+queryId+"&className="+className+"&modelName="+modelName,
+                    width:'900px',
+                    title:"生成【"+modelName+"列表】的xml配置：queryId='"+queryId+"'"
+                })
+
+            }
+        });
+    }
+
+
+</script>

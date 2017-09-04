@@ -1,0 +1,348 @@
+<link rel="stylesheet" href="${basePath}/resources/common/libs/datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+<section class="content-header">
+    <h1>
+        <span>任务调度器</span>
+        <small>新增</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统工具</a></li>
+        <li class="active">任务调度器</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <ul>
+                <li>
+                    <span style="color:red">*</span>为必填选项，(Cron)为CronTrigger的配置项，(Simple)为SimpleTrigger的配置项，(Simple/Cron)为CronTrigger/SimpleTrigger的共有配置项目;
+                </li>
+                <li>
+                    重复类型、时间间隔与选择的重复类型有关，具体的配置属性，请参照quartz的相关配置文档
+                </li>
+            </ul>
+        </div>
+        <div class="box-body">
+            <form id="job_form" name="job_form" class="form-horizontal">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">任务名称<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="jobName" name="jobName">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">trigger名称<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="triggerName" name="triggerName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">任务状态</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="jobStatus" name="jobStatus"
+                                           readonly="readonly">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Cron表达式(Cron)</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="cronExpression" name="cronExpression">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">结束时间(Simple/Cron)</label>
+                                <div class="input-group col-sm-8">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="date" class="form-control" id="endTime" name="endTime" data-flag="datetimepicker" data-format="yyyy-mm-dd hh:ii">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">重复次数(Simple)</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="repeatCount" name="repeatCount">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">执行类名<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="jobClass" name="jobClass">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">任务组<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="jobGroup" name="jobGroup">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">trigger组<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="triggerGroup" name="triggerGroup">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">trigger类型<span style="color:red">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="triggerType" id="triggerType"
+                                            class="form-control select2" style="width:100%" data-blank="false">
+                                        <option value="CronTrigger">CronTrigger</option>
+                                        <option value="SimpleTrigger">SimpleTrigger</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">开始时间(Simple/Cron)<span style="color:red">*</span></label>
+                                <div class="input-group col-sm-8">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="date" class="form-control" id="startTime" name="startTime" data-flag="datetimepicker" data-format="yyyy-mm-dd hh:ii">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">重复类型(Simple)</label>
+                                <div class="col-sm-8">
+                                    <select name="repeatType" id="repeatType"
+                                            class="form-control select2" style="width:100%;">
+                                        <option></option>
+                                        <option value="repeatForever">repeatForever</option>
+                                        <option value="repeatHourlyForever">repeatHourlyForever</option>
+                                        <option value="repeatMinutelyForever">repeatMinutelyForever</option>
+                                        <option value="repeatSecondlyForever">repeatSecondlyForever</option>
+                                        <option value="repeatHourlyForTotalCount">repeatHourlyForTotalCount</option>
+                                        <option value="repeatMinutelyForTotalCount">repeatMinutelyForTotalCount</option>
+                                        <option value="repeatSecondlyForTotalCount">repeatSecondlyForTotalCount</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">时间间隔(Simple)</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="repeatInterval" name="repeatInterval">
+                                </div>
+                                <div class="col-sm-3">
+                                    <select class="form-control select2" name="repeatUnit" id="repeatUnit">
+                                        <option value="hour">hour</option>
+                                        <option value="minute">minute</option>
+                                        <option value="second">second</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">说明</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="desc" name="desc" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer text-right">
+                    <button type="button" class="btn btn-default" data-btn-type="cancel"><i class="fa fa-remove">&nbsp;取消</i></button>
+                    <button type="submit" class="btn btn-primary" data-btn-type="save"><i class="fa fa-save">&nbsp;提交</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script src="${basePath}/resources/adminlte/plugins/daterangepicker/moment.min.js"></script>
+<!--doc see:http://www.bootcss.com/p/bootstrap-datetimepicker/-->
+<script src="${basePath}/resources/common/libs/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="${basePath}/resources/common/libs/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+
+<script>
+    var form;
+    var jobName = "${jobName?default(0)}";
+    var jobGroup = "${jobGroup?default(0)}";
+    $(function () {
+        //初始化表单
+        form = $("#job_form").form({baseEntity:false});
+       /* $("[data-flag='datetimepicker']").datetimepicker({
+            format: "yyyy-mm-dd hh:ii",
+            autoclose: true,
+            todayBtn: true,
+            language:"zh-CN"
+        });*/
+        $("#startTime").datetimepicker("setStartDate",new Date());
+        $("#endTime").datetimepicker("setStartDate",new Date());
+        //数据校验
+        $("#job_form").bootstrapValidator({
+            message: '请输入有效值',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function () {
+                if ($("#triggerType").val() == "CronTrigger" && !$("#cronExpression").val().trim()) {
+                    modals.info("请填写Cron表达式");
+                    return false;
+                }
+                modals.confirm('确认保存？', function () {
+                    var job = form.getFormSimpleData();
+                    ajaxPost(basePath + '/job/save', {"job": JSON.stringify(job)}, function (data) {
+                        if (data.success) {
+                            returnToList();
+                        }
+                    });
+                });
+            },
+            fields: {
+                "jobName": {
+                    validators: {
+                        notEmpty: {message: '任务名称不能为空'}
+                    }
+                },
+                "jobGroup": {
+                    validators: {
+                        notEmpty: {message: '任务组不能为空'}
+                    }
+                },
+                "triggerName": {
+                    validators: {
+                        notEmpty: {message: 'trigger名称不能为空'}
+                    }
+                },
+                "triggerGroup": {
+                    validators: {
+                        notEmpty: {message: 'triggerGroup不能为空'},
+                    }
+                },
+                "repeatCount": {
+                    validators: {
+                        integer: {message: '请填写整数'},
+                        greaterThan:{
+                            value:0,
+                            message:'请填写大于0的整数',
+                            inclusive:'inclusive'
+                        }
+                    }
+                },
+                "repeatInterval": {
+                    validators: {
+                        integer: {message: '请填写整数'},
+                        greaterThan:{
+                            value:0,
+                            message:'请填写大于0的整数',
+                            inclusive:'inclusive'
+                        }
+                    }
+                },
+                "startTime":{
+                    validators:{
+                        date:{
+                            format:'YYYY-MM-DD HH:mm',
+                            message:'日期格式不正确'
+                        },
+                        notEmpty:{
+                            message:'开始时间不能为空'
+                        },
+                        callback:{
+                            callback:function(value,validator){
+                                var startTime=value;
+                                var endTime=$("#endTime").val();
+                                if(startTime&&endTime){
+                                    return DateDiff(endTime,startTime)>0;
+                                }else{
+                                    return true;
+                                }
+
+                            },
+                            message:'结束时间不能小于开始时间'
+                        }
+                    }
+                },
+                "endTime":{
+                    validators:{
+                        date:{
+                            format:'YYYY-MM-DD HH:mm',
+                            message:'日期格式不正确'
+                        },
+                        callback:{
+                            callback:function(value,validator){
+                                var startTime=$("#startTime").val();
+                                var endTime=value;
+                                if(startTime&&endTime){
+                                    return DateDiff(endTime,startTime)>0;
+                                }else{
+                                    return true;
+                                }
+
+                            },
+                            message:'结束时间不能小于开始时间'
+                        }
+
+                    }
+                },
+                "jobClass": {
+                    validators: {
+                        notEmpty: {message: '执行类名不能为空'},
+                        remote:{
+                            url:basePath+"/job/checkJobClass",
+                            data: function(validator) {
+                                return {
+                                    jobClass:$('#jobClass').val(),
+                                };
+                            },
+                            message:'该执行类不存在',
+                            delay:2000
+                        }
+                    }
+                }
+
+            }
+        });
+        //初始化控件
+        form.initComponent();
+        //编辑回填
+        if (jobName!= 0&&jobGroup!=0) {
+            $("#jobName").attr("readonly","readonly");
+            $("#jobGroup").attr("readonly","readonly");
+            var obj={};
+            obj["jobName"]=jobName;
+            obj["jobGroup"]=jobGroup;
+            $(".content-header h1 small").html("编辑任务【"+jobName+"】");
+            ajaxPost(basePath + "/job/getJob", obj, function (data) {
+                console.log(JSON.stringify(data));
+                form.initFormData(data);
+                selectRepeatUnit(data["repeatType"]);
+            })
+        }
+        //取消按钮
+        $("[data-btn-type='cancel']").click(function () {
+            returnToList();
+        });
+        //重复类型绑定时间间隔单位
+        $("#repeatType").change(function(){
+            selectRepeatUnit($(this).val());
+        });
+
+    });
+
+    //返回首页
+    function returnToList() {
+        var id=jobName+"_"+jobGroup;
+        loadPage(basePath + "/job/list?id=" + id);
+    }
+
+    //重复类型联动时间间隔单位
+    function selectRepeatUnit(value) {
+        $("#repeatUnit option").each(function(index,item){
+            var unit=$(item).val();
+            if(value.toLowerCase().indexOf(unit)>-1){
+                //$(item).attr("selected","selected");
+                $("#repeatUnit").select2({
+                    minimumResultsForSearch:Infinity
+                }).val(unit).trigger("change");
+            }
+        })
+    }
+
+
+
+</script>

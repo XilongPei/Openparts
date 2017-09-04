@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Suite" parallel="false">
+    <test name="DataProviderTest">
+        <groups>
+            <run>
+                <include name="function-test"/>
+                <exclude name="master-test"/>
+                <exclude name="unit-test"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.test.demo.DemoTest"/>
+            <class name="com.test.demo.UserTest"/>
+        </classes>
+    </test>
+</suite>

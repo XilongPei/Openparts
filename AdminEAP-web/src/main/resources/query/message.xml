@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.example.org/query query.xsd">
+    <!--本xml片段为代码生成器生成，时间：2017-03-01 11:02:53-->
+    <query id="message_list" key="id" tableName="消息列表" className="com.cnpc.tool.message.entity.Message" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="sendUser" header="发送人" classType="String" allowSort="false" width="150"/>
+        <column key="sendSubject" header="主题" classType="String" allowSort="true" width="150"/>
+        <column key="sendContent" header="内容" classType="String" align="left" allowSort="false" width="150"/>
+        <column key="sendTime" header="发送时间" classType="Date" allowSort="true" dateFormat="yyyy-mm-dd"  operator="between" width="150"/>
+        <column key="messageType" header="消息类型" classType="String" allowSort="true" width="150"/>
+        <column key="id" header="选择" classType="String" allowSort="false" width="150"/>
+        <!-- <column key="messageStatus" header="消息状态" classType="String" allowSort="true" width="150"/>
+         <column key="receiveUsers" header="接收人" hidden="true" classType="String" align="left" allowSort="false" width="150"/>
+         <column key="messageFlag" header="消息标记" classType="String" allowSort="true" width="150"/>
+         <column key="remark" header="备注" classType="String" align="left" allowSort="false" width="150"/>-->
+    </query>
+    <!-- 我的收件箱-->
+    <query id="message_inbox" key="id" tableName="我的收件箱" className="com.cnpc.tool.message.entity.MessageReceiver" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="message.sendUser" header="发送人" classType="String" allowSort="false" width="150"/>
+        <column key="message.sendSubject" header="主题" enableTooltip="true" align="left" render="type=link,method=readMsg" classType="String" allowSort="true" width="150" fnRender="fnRenderSubject"/>
+        <column key="message.sendTime" header="发送时间" classType="Date" allowSort="true"  dateFormat="yyyy-mm-dd hh:ii"  operator="between" width="150"/>
+        <column key="messageType" header="类型" classType="String" align="left" width="50" fnRender="fnRenderMessageType"/>
+        <column key="messageFlag" header="标记" classType="String"  allowSort="true" width="150" fnRender="fnRenderMessageFlag"/>
+        <!--<column key="message.deleted" header="是否删除" classType="String" allowSort="true" width="150" render="0=可用,1=禁用"/>-->
+        <column key="deleted" header="是否删除" hidden="true" classType="Integer" isServerCondition="true" value="0"/>
+    </query>
+
+    <!-- 我的回收站-->
+    <query id="message_trash" key="id" tableName="我的回收站" className="com.cnpc.tool.message.entity.MessageReceiver" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="message.sendUser" header="发送人" classType="String" allowSort="false" width="150"/>
+        <column key="message.sendSubject" header="主题" enableTooltip="true" align="left" render="type=link,method=readMsg" classType="String" allowSort="true" width="150" fnRender="fnRenderSubject"/>
+        <column key="message.sendTime" header="发送时间" classType="Date" allowSort="true"  dateFormat="yyyy-mm-dd hh:ii"  operator="between" width="150"/>
+        <column key="messageType" header="类型" classType="String" align="left" width="50" fnRender="fnRenderMessageType"/>
+        <column key="messageFlag" header="标记" classType="String" allowSort="true" width="150" fnRender="fnRenderMessageFlag"/>
+        <!--<column key="message.deleted" header="是否删除" classType="String" allowSort="true" width="150" render="0=可用,1=禁用"/>-->
+        <column key="deleted" header="是否删除" hidden="true" classType="Integer" isServerCondition="true" value="1"/>
+    </query>
+
+
+    <query id="message_sent" key="id" tableName="我的发件箱" className="com.cnpc.tool.message.entity.Message" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="id" header="id" hidden="true"/>
+        <column key="sendUser" header="发送人" hidden="true" classType="String" allowSort="false" width="150"/>
+        <!--enableTootip(是否显示) maxLen(最大长度默认10，可在dataTables.js修改默认值) tooltip（指定tooltip来源，可不配，缺省为本身） 长文本鼠标悬停显示-->
+        <!--弹窗方式render="type=window"使用;所需参数同modals.openWin的参数-->
+        <!--<column key="sendSubject" header="主题" classType="String" align="left" render="type=window,winId=messageEditWin,url=/message/edit?id=[id],title=弹窗测试[sendSubject]" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>-->
+        <!--超链接方式 render="type=link",method方法名称，params方法参数,分号;分隔，如不需要参数params为可为空，默认注入rowId-->
+        <!--<column key="sendSubject" header="主题" classType="String" align="left" render="type=link,method=loadPage,params='/message/edit?id=[id]';'#contentBody'" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>-->
+        <column key="sendSubject" header="主题" classType="String" align="left" render="type=link,method=showDetail" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>
+        <!--<column key="sendContent" header="内容" classType="String" align="left" allowSort="false" width="150" enableTooltip="true" maxLen="10"/>-->
+        <column key="sendTime" header="发送时间" classType="Date" allowSort="true" dateFormat="yyyy-mm-dd hh:ii"  operator="between" width="150"/>
+        <column key="messageType" header="类型" classType="String" align="left" width="50" fnRender="fnRenderMessageType"/>
+        <column key="messageStatus" header="状态" classType="String" allowSort="false" width="50" fnRender="fnRenderMessageStatus"/>
+        <column key="messageFlag" header="标记" classType="String" allowSort="true" width="150" fnRender="fnRenderMessageFlag"/>
+        <column key="fileIds" header="附件" classType="String" width="150" fnRender="fnRenderFileIds"/>
+         <!--<column key="receiveUsers" header="接收人" hidden="true" classType="String" align="left" allowSort="false" width="150"/>
+         <column key="messageFlag" header="消息标记" classType="String" allowSort="true" width="150"/>
+         <column key="remark" header="备注" classType="String" align="left" allowSort="false" width="150"/>-->
+    </query>
+
+    <!--草稿箱-->
+    <query id="message_draft" key="id" tableName="我的草稿箱" className="com.cnpc.tool.message.entity.Message" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="id" header="id" hidden="true"/>
+        <column key="sendUser" header="发送人" hidden="true" classType="String" allowSort="false" width="150"/>
+        <!--enableTootip(是否显示) maxLen(最大长度默认10，可在dataTables.js修改默认值) tooltip（指定tooltip来源，可不配，缺省为本身） 长文本鼠标悬停显示-->
+        <!--弹窗方式render="type=window"使用;所需参数同modals.openWin的参数-->
+        <!--<column key="sendSubject" header="主题" classType="String" align="left" render="type=window,winId=messageEditWin,url=/message/edit?id=[id],title=弹窗测试[sendSubject]" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>-->
+        <!--超链接方式 render="type=link",method方法名称，params方法参数,分号;分隔，如不需要参数params为可为空，默认注入rowId-->
+        <!--<column key="sendSubject" header="主题" classType="String" align="left" render="type=link,method=loadPage,params='/message/edit?id=[id]';'#contentBody'" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>-->
+        <column key="sendSubject" header="主题" classType="String" align="left" render="type=link,method=showDetail" enableTooltip="true" maxLen="20" allowSort="true" width="150"/>
+        <!--<column key="sendContent" header="内容" classType="String" align="left" allowSort="false" width="150" enableTooltip="true" maxLen="10"/>-->
+        <column key="sendTime" header="发送时间" classType="Date" allowSort="true" dateFormat="yyyy-mm-dd hh:ii"  operator="between" width="150"/>
+        <column key="messageType" header="类型" classType="String" align="left" width="50" fnRender="fnRenderMessageType"/>
+        <!--isServerCondition=true value=0注入服务器端查询条件，也可在前端以type=hidden隐藏域的方式注入-->
+        <column key="messageStatus" header="状态" isServerCondition="true" value="0" classType="String" allowSort="false" width="50" fnRender="fnRenderMessageStatus"/>
+        <column key="messageFlag" header="标记" classType="String" allowSort="true" width="150" fnRender="fnRenderMessageFlag"/>
+        <column key="fileIds" header="附件" classType="String" width="150" fnRender="fnRenderFileIds"/>
+        <!--<column key="receiveUsers" header="接收人" hidden="true" classType="String" align="left" allowSort="false" width="150"/>
+        <column key="messageFlag" header="消息标记" classType="String" allowSort="true" width="150"/>
+        <column key="remark" header="备注" classType="String" align="left" allowSort="false" width="150"/>-->
+    </query>
+
+    <!--用户列表，选择消息接收人-->
+    <query id="message_receiver_select_list" key="id" tableName="用户列表" className="com.cnpc.framework.base.entity.User"
+           pageSize="10"  widthType="px" order="updateDateTime desc">
+        <column key="isSelected" header="选择" fnRender="fnRenderSelectReceiver" />
+        <column key="id" header="id" hidden="true" align="center" allowSort="false"/>
+        <column key="rowIndex" header="序号" width="50" allowSort="false"/>
+        <column key="version" header="version" hidden="true"/>
+        <column key="name" header="姓名" operator="like" width="100" allowSort="true" />
+        <column key="sex" header="性别" operator="eq" width="150" allowSort="true" render="1=男,0=女" />
+        <column key="email" header="邮箱" align="left" operator="eq" width="100"  />
+        <column key="mobile" header="手机"  operator="eq" width="200" align="center"/>
+        <column key="qq" header="QQ" hidden="true" operator="eq" width="200" align="center" />
+    </query>
+</queryContext>

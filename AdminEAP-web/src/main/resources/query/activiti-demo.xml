@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.example.org/query query.xsd">
+    <!--本xml片段为代码生成器生成，时间：2017-07-05 20:13:35-->
+    <query id="train_list" key="id" tableName="培训选课列表" className="com.cnpc.activiti.entity.Train" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="name" header="课程名称" classType="String" allowSort="true" width="150"/>
+        <column key="courseTime" header="上课时间" classType="String" allowSort="true" width="150"/>
+        <column key="duration" header="课时" classType="Integer" allowSort="true" width="150"/>
+        <column key="teacher" header="上课老师" classType="String" allowSort="true" width="150"/>
+        <column key="address" header="地点" classType="String" allowSort="true" width="150"/>
+        <column key="remark" header="备注" classType="String" align="left" allowSort="false" width="150"/>
+        <column key="state" header="流程状态" fnRender="fnRenderState"/>
+        <column key="id" header="操作" fnRender="fnRenderOperation"/>
+    </query>
+</queryContext>

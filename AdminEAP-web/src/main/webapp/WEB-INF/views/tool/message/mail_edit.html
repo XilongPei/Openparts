@@ -1,0 +1,132 @@
+<link rel="stylesheet" href="${basePath}/resources/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+<style>
+    .control-label{
+        margin-right:10px;
+        font-weight: normal;
+    }
+    .modal-body{
+        padding-top:0px;
+    }
+</style>
+<div class="modal-header">
+    <button type="button" class="close" data-btn-type="cancel" aria-hidden="true">
+        <li class="fa fa-remove"></li>
+    </button>
+    <h5 class="modal-title">新增用户</h5>
+</div>
+
+<div class="modal-body">
+    <form id="mail-form" name="mail-form" class="form-horizontal">
+        <input type="hidden" name="id">
+        <input type="hidden" name="version">
+        <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
+        <input type="hidden" name="deleted">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="form-group">
+                <input class="form-control" name="subject" placeholder="Subject：请输入留言标题">
+            </div>
+            <div class="form-group">
+                <input class="form-control" name="fromUser" placeholder="From：填写您的邮箱，以便我们及时反馈">
+            </div>
+            <div class="form-group">
+                <input class="form-control" value="To: admin@admineap.com" readonly>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    <input type="radio" name="mailType" data-flag="icheck" class="square-green" value="意见/建议"> &nbsp;意见/建议</label>
+                <label class="control-label">
+                    <input type="radio" name="mailType" data-flag="icheck" class="square-green" value="bug反馈"> &nbsp;bug反馈</label>
+                <label class="control-label">
+                    <input type="radio" name="mailType" data-flag="icheck" class="square-green" value="创意/想法"> &nbsp;创意/想法</label>
+                <label class="control-label">
+                    <input type="radio" name="mailType" data-flag="icheck" class="square-green" value="功能定制"> &nbsp;功能定制</label>
+                <label class="control-label">
+                    <input type="radio" name="mailType" data-flag="icheck" class="square-green" value="其他"> &nbsp;其他</label>
+            </div>
+            <div class="form-group">
+                <textarea id="compose-textarea"  class="form-control" placeholder="请在此处给billJiang留言,如需反馈请留下您的联系方式" style="height: 150px">
+                </textarea>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer text-right">
+                <button type="button" class="btn btn-default" data-btn-type="cancel"><i class="fa fa-remove"></i> 取消</button>
+                <button type="submit" class="btn btn-primary"><i class="fa fa-envelope-o"></i> 发送</button>
+        </div>
+        <!-- /.box-footer -->
+    </form>
+
+</div>
+<script type="text/javascript" src="${basePath}/resources/adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<script>
+    //tableId,queryId,conditionContainer
+    var form = null;
+    $(function () {
+        //初始化控件
+        form = $("#mail-form").form();
+        $("#compose-textarea").wysihtml5();
+        //数据校验
+        $("#mail-form").bootstrapValidator({
+            message: '请输入有效值',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function (validator, userform, submitButton) {
+                //Save Data，对应'submit-提交'
+                var params = form.getFormSimpleData();
+                params["content"]=$("#compose-textarea").val();
+                //console.log(JSON.stringify(params));
+                if(!params.content){
+                    modals.info("请填写留言！");
+                    return false;
+                }
+                delete params["_wysihtml5_mode"];
+                //alert(JSON.stringify(params));
+                modals.confirm('确认提交留言？', function () {
+                    ajaxPost(basePath + '/message/mail/save', params, function (data, status) {
+                            closeMsgWin();
+                    });
+                });
+            },
+            fields: {
+                subject: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入留言标题'
+                        }
+                    }
+                },
+                mailType: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择留言类别'
+                        }
+                    }
+                }
+            }
+        });
+        form.initComponent();
+
+        $("[data-btn-type='cancel']").click(function () {
+            closeMsgWin();
+        });
+
+
+    });
+
+    function closeMsgWin(){
+        $(document.body).removeClass('modal-open');
+        $(document.body).css("padding-right","0px");
+        modals.hideWin("messageWin");
+    }
+
+    function resetForm() {
+        form.clearForm();
+        $("#mail-form").data('bootstrapValidator').resetForm();
+    }
+
+
+</script>

@@ -1,0 +1,172 @@
+
+<section class="content-header">
+    <h1>
+        任务调度器
+        <small>待执行任务列表</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统工具</a></li>
+        <li class="active">任务调度器</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <!-- /.box-header -->
+                <div class="dataTables_filter" id="searchDiv" style="display: none">
+                    <!--查询条件-->
+                  <input type="search" placeholder="请输入任务名称/任务组" title="任务名称/任务组" name="jobId"
+                                           class="form-control" style="width: 200px" id="jobId" likeOption="false">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" data-callback="enableOrDisableButtons()" data-btn-type="search">查询</button>
+                        <button type="button" class="btn btn-default" data-callback="enableOrDisableButtons()" data-btn-type="reset">重置</button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" data-btn-type="add" title="新增任务"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-default" disabled data-btn-type="edit" title="修改任务"><i class="fa fa-edit"></i></button>
+                        <button type="button" class="btn btn-default" disabled data-btn-type="pause" title="暂停任务"><i class="fa fa-pause"></i></button>
+                        <button type="button" class="btn btn-default" disabled data-btn-type="resume" title="恢复任务"><i class="fa fa-repeat"></i></button>
+                        <button type="button" class="btn btn-default" disabled data-btn-type="delete" title="删除任务"><i class="fa fa-remove"></i></button>
+                        <button type="button" class="btn btn-default" disabled data-btn-type="trigger" title="立即运行一次"><i class="fa fa-play"></i></button>
+                    </div>
+                </div>
+                <div class="box-body" >
+                    <table id="job_table" class="table table-bordered table-striped table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var selectId="${selectId?default(0)}";
+    var form = $("#searchDiv").form({baseEntity: false});
+    form.initComponent();
+    var jobTable, winId = "jobWin";
+    $(function (){
+        var config={
+            scrollX:true,
+            scrollXInner:'140%',
+            rowId:"jobId",
+            rowClick:function(row,isSelected){
+                enableOrDisableButtons();
+            }
+
+        }
+        jobTable = new CommonTable("job_table", "job_list", "searchDiv", config);
+        //绑定按钮事件
+        $("button[data-btn-type]").click(function () {
+            var action = $(this).data("btn-type");
+            var rowId = jobTable.getSelectedRowId();
+            var rowData=jobTable.getSelectedRowData();
+            switch (action) {
+                case "add":
+                    /*modals.openWin({
+                        winId: winId,
+                        title: '添加任务',
+                        width: "1000px",
+                        url: basePath + "/job/edit"
+                    })*/
+                    window.loadPage(basePath+"/job/edit");
+                    break;
+                case "edit":
+                    if (!rowId) {
+                        modals.info('请选择要编辑的任务');
+                        return false;
+                    }
+                    /*modals.openWin({
+                        winId: winId,
+                        title: '编辑测试【' + jobTable.getSelectedRowData().name + '】',
+                        width: '900px',
+                        url: basePath + "/job/edit?id=" + rowId
+                    });*/
+                        window.loadPage(basePath + "/job/edit?jobName=" + rowData.jobName+"&jobGroup="+rowData.jobGroup);
+                    break;
+                case "pause":
+                    if (!rowId) {
+                        modals.info('请选择要暂停的任务');
+                        return false;
+                    }
+                    modals.confirm("是否要暂停该任务？", function () {
+                        ajaxPost(basePath + "/job/pause", {
+                            "jobName": rowData.jobName,
+                            "jobGroup": rowData.jobGroup
+                        }, function (data) {
+                            if (data.success) {
+                                jobTable.reloadRowData(rowId);
+                            }
+                        });
+                    });
+                    break;
+                case "resume":
+                    if (!rowId) {
+                        modals.info('请选择要恢复的任务');
+                        return false;
+                    }
+                    modals.confirm("是否要恢复该任务？", function () {
+                        ajaxPost(basePath + "/job/resume", {
+                            "jobName": rowData.jobName,
+                            "jobGroup": rowData.jobGroup
+                        }, function (data) {
+                            if (data.success) {
+                                jobTable.reloadRowData(rowId);
+                            }
+                        });
+                    });
+                    break;
+                case "trigger":
+                    if (!rowId) {
+                        modals.info('请选择要立即运行的任务');
+                        return false;
+                    }
+                    modals.confirm("是否要立即运行一次该任务？", function () {
+                        ajaxPost(basePath + "/job/trigger", {
+                            "jobName": rowData.jobName,
+                            "jobGroup": rowData.jobGroup
+                        }, function (data) {
+                            if (data.success) {
+                                jobTable.reloadRowData(rowId);
+                            }
+                        });
+                    });
+                    break;
+                case 'delete':
+                    if (!rowId) {
+                        modals.info('请选择要删除的任务');
+                        return false;
+                    }
+                    modals.confirm("是否要删除该行数据？", function () {
+                        ajaxPost(basePath + "/job/delete", {"jobName":rowData.jobName,"jobGroup":rowData.jobGroup}, function (data) {
+                            if (data.success) {
+                                jobTable.reloadRowData(rowId);
+                            } else {
+                                modals.info("测试数据被引用，不可删除！");
+                            }
+                        });
+                    });
+                    break;
+            }
+        });
+        if(selectId!=0){
+            setTimeout(function(){jobTable.selectRow(selectId);},100);
+        }
+    })
+
+    function enableOrDisableButtons(){
+        var rowId = jobTable.getSelectedRowId();
+        var btnArr=["edit","pause","resume","delete","trigger"];
+        if(rowId){
+            $.each(btnArr,function(index,flag){
+                $("[data-btn-type='"+flag+"'").removeAttr("disabled");
+            })
+        }else{
+            $.each(btnArr,function(index,flag){
+                $("[data-btn-type='"+flag+"'").attr("disabled","disabled");
+            })
+        }
+    }
+</script>
