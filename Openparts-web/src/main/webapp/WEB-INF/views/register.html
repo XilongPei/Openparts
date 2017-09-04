@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="AdminLTE,AdminEAP,AdminLTE框架">
+    <meta name="keywords" content="AdminLTE,Openparts,AdminLTE框架">
     <meta name="description" content="基于AdminLTE的快速开发框架,让web开发更简单">
-    <title>AdminEAP | 注册</title>
+    <title>Openparts | 注册</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!--icon-->
@@ -61,7 +61,7 @@
                 <div class="col-xs-12">
                     <div class="checkbox icheck">
                         <label>
-                            <input type="checkbox" id="agreement" class="icheck" required> 同意遵循<a href="#">AdminEAP协议</a>
+                            <input type="checkbox" id="agreement" class="icheck" required> 同意遵循<a href="#">Openparts协议</a>
                         </label>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
         $("#register-form").bootstrapValidator({
             submitHandler: function (valiadtor, loginForm, submitButton) {
                 if(!$("#agreement").is(":checked")){
-                    modals.info("请先勾选同意遵循AdminEAP协议");
+                    modals.info("请先勾选同意遵循Openparts协议");
                     return;
                 }
                 valiadtor.defaultSubmit();

@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="keywords" content="AdminLTE,AdminEAP,AdminLTE框架">
+  <meta name="keywords" content="AdminLTE,Openparts,AdminLTE框架">
   <meta name="description" content="基于AdminLTE的快速开发框架,让web开发更简单">
-  <title>AdminEAP</title>
+  <title>Openparts</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!--  -->
@@ -13,14 +13,14 @@
   <link rel="shortcut icon" type="image/x-icon" href="${basePath}/resources/common/favicon.ico" media="screen" />
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="${basePath}/resources/adminlte/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome --> 
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="${basePath}/resources/common/libs/font-awesome/css/font-awesome.min.css">
 
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
 
   <link rel="stylesheet" href="${basePath}/resources/common/css/base.css">
- 
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -143,7 +143,7 @@
               </li>
               <li class="footer"><a href="#">See All Messages</a></li>
             </ul>
-          </li>  
+          </li>
           <!-- Notifications: style can be found in dropdown.less -->
           <li class="dropdown notifications-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -325,7 +325,7 @@
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
         </div>
       </div>
-      <!-- search form --> 
+      <!-- search form -->
       <form action="#" method="get" class="sidebar-form">
         <div class="input-group">
           <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -345,13 +345,13 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper" id="mainDiv">
-    
+
   </div>
   <!-- /.content-wrapper -->
 
   <footer class="main-footer text-center">
-    <strong>Copyright &copy; 2016 <a href="http://www.admineap.com">billJiang</a>.</strong> All rights
-    reserved. <b>Email</b>：admin@admineap.com <b>QQ</b>：475572229
+    <strong>Copyright &copy; 2016 <a href="http://www.Openparts.com">billJiang</a>.</strong> All rights
+    reserved. <b>Email</b>：admin@Openparts.com <b>QQ</b>：475572229
     &nbsp;&nbsp;&nbsp;
     <a href="http://www.miitbeian.gov.cn/">京ICP备16062522号</a>
   </footer>
@@ -546,8 +546,8 @@
   <!-- /.control-sidebar -->
   <!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div> 
-  
+  <div class="control-sidebar-bg"></div>
+
 </div>
 <!-- ./wrapper -->
 <script type="text/javascript">
@@ -580,7 +580,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <script src="${basePath}/resources/adminlte/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
 <!-- treeview -->
 <script src="${basePath}/resources/adminlte/plugins/bootstrap-treeview/bootstrap-treeview.min.js"></script>
-		
+
 <!-- AdminLTE for demo purposes -->
 <script src="${basePath}/resources/adminlte/dist/js/demo.js"></script>
 <!--select2-->
@@ -597,7 +597,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
    ajaxPost(basePath+"/function/all",null,function(data){
 	  var $li,$menu_f_ul;
 	  $.each(data,function(index,item){
-		  if(item.levelCode.length==6){	
+		  if(item.levelCode.length==6){
 			  $li=$('<li class="treeview"></li>');
 			  var $menu_f=$('<a href="#">\n'+
 					           '<i class="'+item.icon+'"></i> <span>'+item.name+'</span>\n'+
@@ -607,16 +607,16 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 			  $li.append($menu_f);
 			  $menu_f_ul=$('<ul class="treeview-menu"></ul>');
 			  $li.append($menu_f_ul);
-			  $("ul.sidebar-menu").append($li); 
-		  } 
+			  $("ul.sidebar-menu").append($li);
+		  }
 		  else if(item.levelCode.length==12){
 			  $menu_s=$('<li><a href="#" data-url="${basePath}'+item.url+'"><i class="'+item.icon+'"></i>'+item.name+'</a></li>');
-			  $menu_f_ul.append($menu_s); 
+			  $menu_f_ul.append($menu_s);
 		  }
 	  });
-   });  
-   
-   $(function(){ 
+   });
+
+   $(function(){
 	   //首页默认加载
        loadPage("${basePath}/homePage");
        //loadPage("${basePath}/activiti/task/todo/list");
@@ -626,7 +626,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 		   loadPage($(this).data("url"));
 		   $("ul.treeview-menu li").removeClass("active");
 		   $(this).parent().addClass("active");
-	   });  
+	   });
    });
 
 </script>

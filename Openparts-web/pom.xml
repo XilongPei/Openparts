@@ -3,20 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>AdminEAP</artifactId>
+        <artifactId>Openparts</artifactId>
         <groupId>com.cnpc</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>AdminEAP-web</artifactId>
-    <name>AdminEAP-web</name>
+    <artifactId>Openparts-web</artifactId>
+    <name>Openparts-web</name>
     <packaging>war</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.cnpc</groupId>
-            <artifactId>AdminEAP-framework</artifactId>
+            <artifactId>Openparts-framework</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- spring -->

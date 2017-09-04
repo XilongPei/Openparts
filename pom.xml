@@ -2,15 +2,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cnpc</groupId>
-    <artifactId>AdminEAP</artifactId>
+    <artifactId>Openparts</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>AdminEAP-framework</module>
-        <module>AdminEAP-web</module>
+        <module>Openparts-framework</module>
+        <module>Openparts-web</module>
     </modules>
-    <name>AdminEAP</name>
-    <url>http://www.admineap.com</url>
+    <name>Openparts</name>
+    <url>http://www.Openparts.com</url>
     <description>Enterprise Application Platform by AdminLTE</description>
     <!--使用私服nexus作为jar包仓库，配置只下载发布版本，不下载快照版本 -->
     <repositories>
