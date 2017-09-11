@@ -1,0 +1,4 @@
+gereranl-component-for-Openparts.txt
+
+file must be named as its view-name, such as:
+parts-vin-selector.html
