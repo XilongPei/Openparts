@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `car`;
 CREATE TABLE `car` (
-  `id` int(11) NOT NULL DEFAULT '0' COMMENT '车型key值',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '车型key值',
   `ckey` varchar(20) DEFAULT NULL COMMENT '车型唯一编码',
   `brand_id` int(4) DEFAULT NULL COMMENT '车辆品牌key值',
   `name` varchar(100) DEFAULT NULL COMMENT '车型名称',
@@ -98,7 +98,7 @@ CREATE TABLE `car` (
 -- ----------------------------
 DROP TABLE IF EXISTS `car_brand`;
 CREATE TABLE `car_brand` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `level` tinyint(4) DEFAULT NULL COMMENT '品牌级别： 0-品牌   1-车系',
   `name` varchar(50) DEFAULT NULL COMMENT '汽车品牌名称',
   `parent_id` int(11) DEFAULT NULL COMMENT '上级品牌key值',
@@ -115,7 +115,7 @@ CREATE TABLE `car_brand` (
 -- ----------------------------
 DROP TABLE IF EXISTS `car_brand_alias`;
 CREATE TABLE `car_brand_alias` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `brand_id` int(11) DEFAULT NULL COMMENT '车辆品牌名称的key值',
   `alias` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -130,7 +130,7 @@ CREATE TABLE `car_brand_alias` (
 -- ----------------------------
 DROP TABLE IF EXISTS `car_factory`;
 CREATE TABLE `car_factory` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '配件厂家名称',
   `address` varchar(255) DEFAULT NULL COMMENT '配件厂家地址',
   `description` text COMMENT '配件厂家介绍',
@@ -148,7 +148,7 @@ CREATE TABLE `car_factory` (
 -- ----------------------------
 DROP TABLE IF EXISTS `match_car_parts`;
 CREATE TABLE `match_car_parts` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `car_id` int(11) DEFAULT NULL COMMENT '车型key值',
   `parts_type_id` int(11) DEFAULT NULL COMMENT '配件型号key值',
   `oe_code` varchar(100) DEFAULT NULL COMMENT 'oe编码',
@@ -168,7 +168,7 @@ CREATE TABLE `match_car_parts` (
 -- ----------------------------
 DROP TABLE IF EXISTS `match_log`;
 CREATE TABLE `match_log` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `match_id` int(11) DEFAULT NULL COMMENT '车型配件匹配key值',
   `type` int(4) NOT NULL COMMENT 'log类型：1-添加  2-校正  3-引用  4-其它',
   `content` text,
@@ -186,7 +186,7 @@ CREATE TABLE `match_log` (
 -- ----------------------------
 DROP TABLE IF EXISTS `match_owner`;
 CREATE TABLE `match_owner` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `author_id` int(11) DEFAULT NULL COMMENT '注册用户key值',
   `match_id` int(11) DEFAULT NULL COMMENT '车型与配件匹配数据key值',
   PRIMARY KEY (`id`),
@@ -216,7 +216,7 @@ CREATE TABLE `parts` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_alias`;
 CREATE TABLE `parts_alias` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parts_id` int(11) DEFAULT NULL COMMENT '配件类别名称的key值',
   `alias` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -231,7 +231,7 @@ CREATE TABLE `parts_alias` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_brand`;
 CREATE TABLE `parts_brand` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '配件品牌名称',
   `cn_name` varchar(50) DEFAULT NULL COMMENT '中文名称',
   `en_name` varchar(50) DEFAULT NULL COMMENT '英文名称',
@@ -248,7 +248,7 @@ CREATE TABLE `parts_brand` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_category`;
 CREATE TABLE `parts_category` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `level` tinyint(4) DEFAULT NULL COMMENT '配件分类级别',
   `name` varchar(255) DEFAULT NULL COMMENT '配件分类名称',
   `parent_id` int(11) DEFAULT NULL COMMENT '上级分类key值',
@@ -265,7 +265,7 @@ CREATE TABLE `parts_category` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_factory`;
 CREATE TABLE `parts_factory` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '配件厂家名称',
   `address` varchar(255) DEFAULT NULL COMMENT '配件厂家地址',
   `description` text COMMENT '配件厂家介绍',
@@ -283,7 +283,7 @@ CREATE TABLE `parts_factory` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_format`;
 CREATE TABLE `parts_format` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL COMMENT '配件单位名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -297,7 +297,7 @@ CREATE TABLE `parts_format` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts_type`;
 CREATE TABLE `parts_type` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL COMMENT '材料型号名称',
   `parts_id` int(11) DEFAULT NULL COMMENT '配件类别key值',
   `iam` varchar(100) DEFAULT NULL COMMENT '配件生产编码iam',
@@ -315,7 +315,7 @@ CREATE TABLE `parts_type` (
 -- ----------------------------
 DROP TABLE IF EXISTS `points_history`;
 CREATE TABLE `points_history` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` tinyint(2) DEFAULT NULL COMMENT '积分获取类型：1-上传数据  2-校正数据  3-完成悬赏任务 4-支付 5-其它',
   `points` int(11) DEFAULT NULL,
   `author_id` int(11) DEFAULT NULL COMMENT '积分拥有者key值',
@@ -333,7 +333,7 @@ CREATE TABLE `points_history` (
 -- ----------------------------
 DROP TABLE IF EXISTS `reward_task`;
 CREATE TABLE `reward_task` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` text COMMENT '内容',
   `reward` int(11) DEFAULT NULL COMMENT '悬赏积分值',
@@ -353,7 +353,7 @@ CREATE TABLE `reward_task` (
 -- ----------------------------
 DROP TABLE IF EXISTS `reward_task_response`;
 CREATE TABLE `reward_task_response` (
-  `id` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `reward_task_id` int(11) DEFAULT NULL COMMENT '悬赏单key值',
   `author_id` int(11) DEFAULT NULL COMMENT '接单人key值',
   `description` text COMMENT '接单说明',
