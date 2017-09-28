@@ -1,4 +1,4 @@
-package com.openparts.controller;
+package com.openparts.base.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.cnpc.framework.annotation.RefreshCSRFToken;
