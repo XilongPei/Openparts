@@ -1,4 +1,4 @@
-package com.openparts.entity;
+package com.openparts.base.entity;
 
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;

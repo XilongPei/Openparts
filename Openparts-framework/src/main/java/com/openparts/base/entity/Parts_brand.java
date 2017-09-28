@@ -1,4 +1,4 @@
-package com.openparts.entity;
+package com.openparts.base.entity;
 
 import java.util.Set;
 import com.cnpc.framework.annotation.ForeignShow;
@@ -13,7 +13,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 
-import com.openparts.entity.OP_BaseEntity;
+import com.openparts.base.entity.OP_BaseEntity;
 
 /*
 -- ----------------------------

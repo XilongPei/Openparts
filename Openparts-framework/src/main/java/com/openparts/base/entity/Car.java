@@ -1,4 +1,4 @@
-package com.openparts.entity;
+package com.openparts.base.entity;
 
 import java.util.Set;
 import com.cnpc.framework.annotation.Header;
@@ -10,7 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import com.openparts.entity.OP_BaseEntity;
+import com.openparts.base.entity.OP_BaseEntity;
 
 /*
 -- ----------------------------
