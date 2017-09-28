@@ -17,7 +17,7 @@ import com.openparts.base.entity.OP_BaseEntity;
 -- ----------------------------
 DROP TABLE IF EXISTS `parts`;
 CREATE TABLE `parts` (
-  `id` int(11) NOT NULL DEFAULT '0' COMMENT '配件类别key值',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '配件类别key值',
   `name` varchar(100) DEFAULT NULL COMMENT '材料类别名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='配件类别表';

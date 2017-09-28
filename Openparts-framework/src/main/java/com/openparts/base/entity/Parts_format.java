@@ -27,4 +27,15 @@ CREATE TABLE `parts_format` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Parts_format extends OP_BaseEntity {
 
+    @Header(name = "类别名称")
+    @Column(name = "name", length = 20)
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

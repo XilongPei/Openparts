@@ -39,7 +39,7 @@ public class Parts_alias extends OP_BaseEntity {
     private Parts parts;
 
     /**
-      * @ManyToOne：多对一,cascade：级联,请参考上一篇
+      * @ManyToOne：多对一,cascade：级联,
       * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
       * cascade：级联,它可以有有五个值可选,分别是：
       * CascadeType.PERSIST：级联新建

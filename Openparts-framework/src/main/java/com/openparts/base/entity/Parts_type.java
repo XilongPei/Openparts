@@ -1,5 +1,6 @@
 package com.openparts.base.entity;
 
+import java.util.Set;
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,6 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.CascadeType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
 
 import com.openparts.base.entity.OP_BaseEntity;
 
@@ -31,4 +38,106 @@ CREATE TABLE `parts_type` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Parts_type extends OP_BaseEntity {
 
+    @Header(name = "材料型号名称")
+    @Column(name = "name", length = 255)
+    private String name;
+
+    @Header(name = "配件类别key值")
+    @Column(name = "parts_id", length = 11)
+    private int parts_id;
+
+    @Header(name = "配件生产编码iam")
+    @Column(name = "iam", length = 100)
+    private String iam;
+
+    @Header(name = "配件品牌key值")
+    @Column(name = "brand_id", length = 11)
+    private int brand_id;
+
+    @Header(name = "配件单位key值")
+    @Column(name = "format_id", length = 11)
+    private int format_id;
+
+    private Parts parts;
+    private Set<Parts_brand> parts_brand;
+    private Set<Parts_format> parts_format;
+
+    /**
+      * @ManyToOne：多对一,cascade：级联,
+      * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
+      * cascade：级联,它可以有有五个值可选,分别是：
+      * CascadeType.PERSIST：级联新建
+      * CascadeType.REMOVE : 级联删除
+      * CascadeType.REFRESH：级联刷新
+      * CascadeType.MERGE  ： 级联更新
+      * CascadeType.ALL    ： 以上全部四项
+      * @JoinColumn:主表外键字段
+      */
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @JoinColumn(name = "parts_id")
+    public Parts getParts() {
+        return parts;
+    }
+
+    /**
+      * @OneToOne：一对一关联
+      * cascade：级联,它可以有有五个值可选,分别是：
+      * CascadeType.PERSIST：级联新建
+      * CascadeType.REMOVE : 级联删除
+      * CascadeType.REFRESH：级联刷新
+      * CascadeType.MERGE  ： 级联更新
+      * CascadeType.ALL    ： 以上全部四项
+      * @JoinColumn:主表外键字段
+      */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "brand_id")
+    public Set<Parts_brand> getParts_brand() {
+        return parts_brand;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "format_id")
+    public Set<Parts_format> getParts_format() {
+        return parts_format;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setParts_id(int parts_id) {
+        this.parts_id = parts_id;
+    }
+
+    public int getParts_id() {
+        return parts_id;
+    }
+
+    public void setIam(String iam) {
+        this.iam = iam;
+    }
+
+    public String getIam() {
+        return iam;
+    }
+
+    public void setBrand_id(int brand_id) {
+        this.brand_id = brand_id;
+    }
+
+    public int getBrand_id() {
+        return brand_id;
+    }
+
+    public void setFormat_id(int format_id) {
+        this.format_id = format_id;
+    }
+
+    public int getFormat_id() {
+        return format_id;
+    }
 }

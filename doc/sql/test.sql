@@ -134,8 +134,8 @@ CREATE TABLE `car_factory` (
   `name` varchar(255) DEFAULT NULL COMMENT '配件厂家名称',
   `address` varchar(255) DEFAULT NULL COMMENT '配件厂家地址',
   `description` text COMMENT '配件厂家介绍',
-  `date_added` int(11) DEFAULT NULL COMMENT '添加日期',
-  `update_time` int(11) DEFAULT NULL COMMENT '最后更新时间',
+  `date_added` date DEFAULT NULL COMMENT '添加日期',
+  `update_time` date DEFAULT NULL COMMENT '最后更新时间'
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -202,7 +202,7 @@ CREATE TABLE `match_owner` (
 -- ----------------------------
 DROP TABLE IF EXISTS `parts`;
 CREATE TABLE `parts` (
-  `id` int(11) NOT NULL DEFAULT '0' COMMENT '配件类别key值',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '配件类别key值',
   `name` varchar(100) DEFAULT NULL COMMENT '材料类别名称',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='配件类别表';
@@ -269,8 +269,8 @@ CREATE TABLE `parts_factory` (
   `name` varchar(255) DEFAULT NULL COMMENT '配件厂家名称',
   `address` varchar(255) DEFAULT NULL COMMENT '配件厂家地址',
   `description` text COMMENT '配件厂家介绍',
-  `date_added` int(11) DEFAULT NULL COMMENT '添加日期',
-  `update_time` int(11) DEFAULT NULL COMMENT '最后更新时间',
+  `date_added` date DEFAULT NULL COMMENT '添加日期',
+  `update_time` date DEFAULT NULL COMMENT '最后更新时间'
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
