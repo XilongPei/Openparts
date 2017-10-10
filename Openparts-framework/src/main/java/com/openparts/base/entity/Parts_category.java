@@ -1,5 +1,6 @@
 package com.openparts.base.entity;
 
+import java.util.Set;
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -50,7 +51,8 @@ public class Parts_category extends OP_BaseEntity {
     @Column(name = "parts_id", length = 11)
     private int parts_id;
 
-    private Parts parts;
+    private Set<Parts> parts;
+
 
     /**
       * @OneToMany：一对多,cascade：级联,
@@ -65,8 +67,12 @@ public class Parts_category extends OP_BaseEntity {
       */
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
     @JoinColumn(name = "parts_id")
-    public Parts getParts() {
+    public Set<Parts> getParts() {
         return parts;
+    }
+
+    public void setParts(Set<Parts> parts) {
+        this.parts = parts;
     }
 
     public void setLevel(int level) {

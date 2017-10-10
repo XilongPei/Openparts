@@ -45,7 +45,7 @@ public class Parts_brand extends OP_BaseEntity {
     @Column(name = "en_name", length = 100)
     private String en_name;
 
-    private Set<Parts_factory> parts_factory;
+    private Parts_factory parts_factory;
 
     /**
       * @OneToOne：一对一关联
@@ -59,8 +59,12 @@ public class Parts_brand extends OP_BaseEntity {
       */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "factory_id")
-    public Set<Parts_factory> getParts_factory() {
+    public Parts_factory getParts_factory() {
         return parts_factory;
+    }
+
+    public void setParts_factory(Parts_factory parts_factory) {
+        this.parts_factory = parts_factory;
     }
 
     public void setName(String name) {

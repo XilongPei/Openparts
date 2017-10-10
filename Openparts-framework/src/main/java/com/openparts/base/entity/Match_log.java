@@ -45,4 +45,8 @@ public class Match_log extends OP_BaseEntity {
     public Car getCar() {
         return car;
     }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
 }

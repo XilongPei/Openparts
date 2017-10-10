@@ -29,5 +29,7 @@ CREATE TABLE `reward_task_response` (
 @Table(name="op_reward_task_response")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Reward_task_response extends OP_BaseEntity {
-
+    @Header(name = "接单说明")
+    @Column(name = "description", length = 3000)
+    private String description;
 }

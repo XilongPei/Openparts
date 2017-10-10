@@ -29,16 +29,17 @@ CREATE TABLE `car_brand_alias` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Car_brand_alias extends OP_BaseEntity {
 
+    /*
     @Header(name = "车辆品牌key值")
     @Column(name = "brand_id", length = 11)
     private String brand_id;
+    */
 
     @Header(name = "汽车品牌别名")
     @Column(name = "alias", length = 255)
     private String alias;
 
-    private Car car;
-
+    private Car_brand car_brand;
     /**
       * @ManyToOne：多对一,cascade：级联,请参考上一篇
       * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
@@ -52,16 +53,12 @@ public class Car_brand_alias extends OP_BaseEntity {
       */
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
     @JoinColumn(name = "brand_id")
-    public Car getCar() {
-        return car;
+    public Car_brand getCar_brand() {
+        return car_brand;
     }
 
-    public String getBrand_id() {
-        return brand_id;
-    }
-
-    public void setBrand_id(String brand_id) {
-        this.brand_id = brand_id;
+    public void setCar_brand(Car_brand car_brand) {
+        this.car_brand = car_brand;
     }
 
     public String getAlias() {

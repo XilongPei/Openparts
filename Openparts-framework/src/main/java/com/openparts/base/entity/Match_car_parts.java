@@ -37,6 +37,10 @@ CREATE TABLE `match_car_parts` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Match_car_parts extends OP_BaseEntity {
 
+    @Header(name = "车型key值")
+    @Column(name = "car_id", length = 255)
+    private String car_id;
+
     @Header(name = "配件型号key值")
     @Column(name = "parts_type_id", length = 255)
     private String parts_type_id;
@@ -65,7 +69,7 @@ public class Match_car_parts extends OP_BaseEntity {
     private Set<Parts_type> parts_type;
 
     /**
-      * @ManyToOne：多对一,cascade：级联,请参考上一篇
+      * @ManyToOne：多对一,cascade：级联
       * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
       * cascade：级联,它可以有有五个值可选,分别是：
       * CascadeType.PERSIST：级联新建
@@ -81,15 +85,23 @@ public class Match_car_parts extends OP_BaseEntity {
         return car;
     }
 
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
    /**
      * @OneToMany
-     * mappedBy = "car"：意思是说这里的一对一配置参考了car
-     * car又是什么呢? car是Car_brand_alias类中的getCar(),注意不是Car_brand_alias类中的
-      * car属性,Car_brand_alias类中的OneToOne配置就是在getCar()方法上面配的.
+     * mappedBy = "parts"：意思是说这里的一对一配置参考了parts
+     * parts又是什么呢? parts是Parts_alias类中的getParts(),注意不是Parts_alias类中的
+      * parts属性,Parts_alias类中的OneToOne配置就是在getParts()方法上面配的.
      */
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "parts")
     public Set<Parts_type> getParts_type() {
         return parts_type;
+    }
+
+    public void setParts_type(Set<Parts_type> parts_type) {
+        this.parts_type = parts_type;
     }
 
     public void setOe_code(String oe_code) {
@@ -115,7 +127,6 @@ public class Match_car_parts extends OP_BaseEntity {
     public int getCount() {
         return count;
     }
-
 
     public void setStatus(int status) {
         this.status = status;

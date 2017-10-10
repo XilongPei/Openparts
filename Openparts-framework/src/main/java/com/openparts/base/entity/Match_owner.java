@@ -12,6 +12,10 @@ import javax.persistence.Transient;
 import com.openparts.base.entity.OP_BaseEntity;
 
 /*
+ * 匹配会发生多次，最终结果的owner才在这张表中
+ */
+
+/*
 -- ----------------------------
 -- Table structure for `match_owner`
 -- ----------------------------
@@ -28,5 +32,7 @@ CREATE TABLE `match_owner` (
 @Table(name="op_match_owner")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Match_owner extends OP_BaseEntity {
-
+    @Header(name = "标题")
+    @Column(name = "author_id", length = 255)
+    private String author_id;
 }

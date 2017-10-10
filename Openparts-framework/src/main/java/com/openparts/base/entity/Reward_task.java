@@ -32,5 +32,7 @@ CREATE TABLE `reward_task` (
 @Table(name="op_reward_task")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Reward_task extends OP_BaseEntity {
-
+    @Header(name = "标题")
+    @Column(name = "title", length = 255)
+    private String title;
 }

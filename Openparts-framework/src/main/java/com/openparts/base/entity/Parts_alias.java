@@ -55,6 +55,10 @@ public class Parts_alias extends OP_BaseEntity {
         return parts;
     }
 
+    public void setParts(Parts parts) {
+        this.parts = parts;
+    }
+
     public void setAlias(String alias) {
         this.alias = alias;
     }

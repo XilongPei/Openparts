@@ -30,5 +30,7 @@ CREATE TABLE `points_history` (
 @Table(name="op_points_history")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Points_history extends OP_BaseEntity {
-
+    @Header(name = "积分操作说明")
+    @Column(name = "description", length = 3000)
+    private String description;
 }

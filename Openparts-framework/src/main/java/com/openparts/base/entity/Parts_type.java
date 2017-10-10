@@ -42,25 +42,29 @@ public class Parts_type extends OP_BaseEntity {
     @Column(name = "name", length = 255)
     private String name;
 
+    /*
     @Header(name = "配件类别key值")
     @Column(name = "parts_id", length = 11)
     private int parts_id;
+    */
 
     @Header(name = "配件生产编码iam")
     @Column(name = "iam", length = 100)
     private String iam;
 
+    /*
     @Header(name = "配件品牌key值")
     @Column(name = "brand_id", length = 11)
     private int brand_id;
+    */
 
     @Header(name = "配件单位key值")
     @Column(name = "format_id", length = 11)
     private int format_id;
 
     private Parts parts;
-    private Set<Parts_brand> parts_brand;
-    private Set<Parts_format> parts_format;
+    private Parts_brand parts_brand;
+    private Parts_format parts_format;
 
     /**
       * @ManyToOne：多对一,cascade：级联,
@@ -79,6 +83,10 @@ public class Parts_type extends OP_BaseEntity {
         return parts;
     }
 
+    public void setParts(Parts parts) {
+        this.parts = parts;
+    }
+
     /**
       * @OneToOne：一对一关联
       * cascade：级联,它可以有有五个值可选,分别是：
@@ -91,14 +99,22 @@ public class Parts_type extends OP_BaseEntity {
       */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "brand_id")
-    public Set<Parts_brand> getParts_brand() {
+    public Parts_brand getParts_brand() {
         return parts_brand;
+    }
+
+    public void setParts_brand(Parts_brand parts_brand) {
+        this.parts_brand = parts_brand;
     }
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "format_id")
-    public Set<Parts_format> getParts_format() {
+    public Parts_format getParts_format() {
         return parts_format;
+    }
+
+    public void setParts_format(Parts_format parts_format) {
+        this.parts_format = parts_format;
     }
 
     public void setName(String name) {
@@ -109,6 +125,7 @@ public class Parts_type extends OP_BaseEntity {
         return name;
     }
 
+    /*
     public void setParts_id(int parts_id) {
         this.parts_id = parts_id;
     }
@@ -116,6 +133,7 @@ public class Parts_type extends OP_BaseEntity {
     public int getParts_id() {
         return parts_id;
     }
+    */
 
     public void setIam(String iam) {
         this.iam = iam;
@@ -123,21 +141,5 @@ public class Parts_type extends OP_BaseEntity {
 
     public String getIam() {
         return iam;
-    }
-
-    public void setBrand_id(int brand_id) {
-        this.brand_id = brand_id;
-    }
-
-    public int getBrand_id() {
-        return brand_id;
-    }
-
-    public void setFormat_id(int format_id) {
-        this.format_id = format_id;
-    }
-
-    public int getFormat_id() {
-        return format_id;
     }
 }

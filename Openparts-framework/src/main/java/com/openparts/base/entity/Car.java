@@ -10,8 +10,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.FetchType;
 import com.openparts.base.entity.OP_BaseEntity;
-
 /*
 -- ----------------------------
 -- Table structure for `car`
@@ -109,24 +109,28 @@ public class Car extends OP_BaseEntity {
     @Column(name = "sales_name", length = 100)
     private String sales_name;
 
-    private Set<Car_brand_alias> car_brand_alias;
+    private Set<Car_brand> car_brand;
     private Set<Match_car_parts> match_car_parts;
-    private Set<Car_factory> car_factory;
+    private Car_factory car_factory;
 
-   /**
-     * @OneToMany
-     * mappedBy = "car"：意思是说这里的一对一配置参考了car
-     * car又是什么呢? car是Car_brand_alias类中的getCar(),注意不是Car_brand_alias类中的
-      * car属性,Car_brand_alias类中的OneToOne配置就是在getCar()方法上面配的.
-     */
-    @OneToMany(mappedBy = "car")
-    public Set<Car_brand_alias> getCar_brand_alias() {
-        return car_brand_alias;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id")
+    public Set<Car_brand> getCar_brand() {
+        return car_brand;
     }
 
-    @OneToMany(mappedBy = "car")
+    public void setCar_brand(Set<Car_brand> car_brand) {
+        this.car_brand = car_brand;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
     public Set<Match_car_parts> getMatch_car_parts() {
         return match_car_parts;
+    }
+
+    public void setMatch_car_parts(Set<Match_car_parts> match_car_parts) {
+        this.match_car_parts = match_car_parts;
     }
 
     /**
@@ -141,8 +145,12 @@ public class Car extends OP_BaseEntity {
       */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "factory_id")
-    public Set<Car_factory> getCar_factory() {
+    public Car_factory getCar_factory() {
         return car_factory;
+    }
+
+    public void setCar_factory(Car_factory car_factory) {
+        this.car_factory = car_factory;
     }
 
     public String getCkey() {
