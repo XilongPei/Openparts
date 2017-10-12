@@ -62,12 +62,12 @@ public class Parts_type extends OP_BaseEntity {
     @Column(name = "format_id", length = 11)
     private int format_id;
 
-    private Parts parts;
+    private Set<Parts> parts;
     private Parts_brand parts_brand;
     private Parts_format parts_format;
 
     /**
-      * @ManyToOne：多对一,cascade：级联,
+      * @OneToMany,cascade：级联,
       * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
       * cascade：级联,它可以有有五个值可选,分别是：
       * CascadeType.PERSIST：级联新建
@@ -77,26 +77,16 @@ public class Parts_type extends OP_BaseEntity {
       * CascadeType.ALL    ： 以上全部四项
       * @JoinColumn:主表外键字段
       */
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "parts_id")
-    public Parts getParts() {
+    public Set<Parts> getParts() {
         return parts;
     }
 
-    public void setParts(Parts parts) {
+    public void setParts(Set<Parts> parts) {
         this.parts = parts;
     }
 
-    /**
-      * @OneToOne：一对一关联
-      * cascade：级联,它可以有有五个值可选,分别是：
-      * CascadeType.PERSIST：级联新建
-      * CascadeType.REMOVE : 级联删除
-      * CascadeType.REFRESH：级联刷新
-      * CascadeType.MERGE  ： 级联更新
-      * CascadeType.ALL    ： 以上全部四项
-      * @JoinColumn:主表外键字段
-      */
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "brand_id")
     public Parts_brand getParts_brand() {

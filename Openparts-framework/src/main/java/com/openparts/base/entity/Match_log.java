@@ -1,5 +1,7 @@
 package com.openparts.base.entity;
 
+import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,7 +13,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
+import javax.persistence.Lob;
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
+import org.hibernate.annotations.Type;
 import com.openparts.base.entity.OP_BaseEntity;
 
 /*
@@ -34,7 +39,27 @@ CREATE TABLE `match_log` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Match_log extends OP_BaseEntity {
 
-    private Car car;
+    @Header(name = "type")
+    @Column(name = "type", length = 4)
+    private Integer type;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Type(type="text")
+    @Header(name = "content")
+    @Column(name = "content", length = 3000, nullable=true)
+    private Integer content;
+
+    @Header(name = "status")
+    @Column(name = "status", length = 4)
+    private Integer status;
+
+    @Header(name = "date_added")
+    @Column(name = "date_added")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date date_added;
+
+    private Match_car_parts match_car_parts;
 
     /**
      * @ManyToOne：多对一,cascade：级联,请参考上一篇
@@ -42,11 +67,11 @@ public class Match_log extends OP_BaseEntity {
      */
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
     @JoinColumn(name = "match_id")
-    public Car getCar() {
-        return car;
+    public Match_car_parts getMatch_car_parts() {
+        return match_car_parts;
     }
 
-    public void setCar(Car car) {
-        this.car = car;
+    public void setMatch_car_parts(Match_car_parts match_car_parts) {
+        this.match_car_parts = match_car_parts;
     }
 }

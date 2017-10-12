@@ -29,26 +29,26 @@ CREATE TABLE `car_brand` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Car_brand extends OP_BaseEntity {
     @Header(name = "品牌级别")
-    @Column(name = "level", length = 20)
-    private String level;
+    @Column(name = "level", length = 4)
+    private Integer level;
 
     @Header(name = "汽车品牌名称")
-    @Column(name = "name", length = 20)
+    @Column(name = "name", length = 50)
     private String name;
 
     @Header(name = "上级品牌key值")
-    @Column(name = "parent_id", length = 20)
-    private String parent_id;
+    @Column(name = "parent_id", length = 11)
+    private Integer parent_id;
 
     @Header(name = "汽车品牌logo图片地址")
-    @Column(name = "image", length = 20)
+    @Column(name = "image", length = 255)
     private String image;
 
-    public String getLevel() {
+    public Integer getLevel() {
         return level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         this.level = level;
     }
 
@@ -60,11 +60,11 @@ public class Car_brand extends OP_BaseEntity {
         this.name = name;
     }
 
-    public String getParent_id() {
+    public Integer getParent_id() {
         return parent_id;
     }
 
-    public void setParent_id(String parent_id) {
+    public void setParent_id(Integer parent_id) {
         this.parent_id = parent_id;
     }
 

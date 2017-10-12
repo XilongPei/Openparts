@@ -1,14 +1,18 @@
 package com.openparts.base.entity;
 
 import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Lob;
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
+import org.hibernate.annotations.Type;
 import com.openparts.base.entity.OP_BaseEntity;
 
 /*
@@ -39,8 +43,12 @@ public class Car_factory extends OP_BaseEntity {
     @Column(name = "address", length = 255)
     private String address;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Type(type="text")
     @Header(name = "厂家介绍")
-    @Column(name = "description", length = 3000)
+    @Column(name = "description", length = 3000, nullable=true)
+
     private String description;
 
     @Header(name = "添加日期")

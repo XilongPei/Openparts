@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
 
@@ -38,18 +38,7 @@ public class Parts_alias extends OP_BaseEntity {
 
     private Parts parts;
 
-    /**
-      * @ManyToOne：多对一,cascade：级联,
-      * fetch = FetchType.LAZY,延迟加载策略,如果不想延迟加载可以用FetchType.EAGER
-      * cascade：级联,它可以有有五个值可选,分别是：
-      * CascadeType.PERSIST：级联新建
-      * CascadeType.REMOVE : 级联删除
-      * CascadeType.REFRESH：级联刷新
-      * CascadeType.MERGE  ： 级联更新
-      * CascadeType.ALL    ： 以上全部四项
-      * @JoinColumn:主表外键字段
-      */
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinColumn(name = "parts_id")
     public Parts getParts() {
         return parts;

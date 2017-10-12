@@ -34,15 +34,15 @@ CREATE TABLE `parts_brand` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Parts_brand extends OP_BaseEntity {
     @Header(name = "类别名称")
-    @Column(name = "name", length = 100)
+    @Column(name = "name", length = 255)
     private String name;
 
     @Header(name = "中文名称")
-    @Column(name = "cn_name", length = 100)
+    @Column(name = "cn_name", length = 50)
     private String cn_name;
 
     @Header(name = "英文名称")
-    @Column(name = "en_name", length = 100)
+    @Column(name = "en_name", length = 50)
     private String en_name;
 
     private Parts_factory parts_factory;

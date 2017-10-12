@@ -3,12 +3,14 @@ package com.openparts.base.entity;
 import com.cnpc.framework.annotation.ForeignShow;
 import com.cnpc.framework.annotation.Header;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
+import javax.persistence.Lob;
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
+import org.hibernate.annotations.Type;
 import com.openparts.base.entity.OP_BaseEntity;
 
 /*
@@ -29,7 +31,11 @@ CREATE TABLE `reward_task_response` (
 @Table(name="op_reward_task_response")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Reward_task_response extends OP_BaseEntity {
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Type(type="text")
     @Header(name = "接单说明")
-    @Column(name = "description", length = 3000)
+    @Column(name = "description", length = 3000, nullable=true)
     private String description;
 }

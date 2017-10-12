@@ -9,6 +9,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.persistence.Lob;
+import javax.persistence.Basic;
+import javax.persistence.FetchType;
+import org.hibernate.annotations.Type;
 import com.openparts.base.entity.OP_BaseEntity;
 
 /*
@@ -39,8 +43,11 @@ public class Parts_factory extends OP_BaseEntity {
     @Column(name = "address", length = 255)
     private String address;
 
+    @Lob
     @Header(name = "厂家介绍")
-    @Column(name = "description", length = 3000)
+    @Column(name = "description", length = 3000, nullable=true)
+    @Basic(fetch = FetchType.LAZY)
+    @Type(type="text")
     private String description;
 
     @Header(name = "添加日期")

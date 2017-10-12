@@ -89,13 +89,8 @@ public class Match_car_parts extends OP_BaseEntity {
         this.car = car;
     }
 
-   /**
-     * @OneToMany
-     * mappedBy = "parts"：意思是说这里的一对一配置参考了parts
-     * parts又是什么呢? parts是Parts_alias类中的getParts(),注意不是Parts_alias类中的
-      * parts属性,Parts_alias类中的OneToOne配置就是在getParts()方法上面配的.
-     */
-    @OneToMany(mappedBy = "parts")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @JoinColumn(name = "parts_type_id")
     public Set<Parts_type> getParts_type() {
         return parts_type;
     }
