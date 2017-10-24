@@ -1,4 +1,4 @@
-package com.openparts.common.util;
+package com.openparts.common.utils;
 
 import org.apache.commons.lang.StringUtils;
 

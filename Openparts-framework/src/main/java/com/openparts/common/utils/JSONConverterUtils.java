@@ -1,4 +1,4 @@
-package com.openparts.common.util;
+package com.openparts.common.utils;
 
 import com.openparts.common.pojo.Result;
 import org.codehaus.jackson.map.ObjectMapper;

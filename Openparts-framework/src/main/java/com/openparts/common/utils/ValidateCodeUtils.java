@@ -1,4 +1,4 @@
-package com.openparts.common.util;
+package com.openparts.common.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

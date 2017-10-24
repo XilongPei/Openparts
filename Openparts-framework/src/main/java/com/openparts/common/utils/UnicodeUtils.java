@@ -1,4 +1,4 @@
-package com.openparts.common.util;
+package com.openparts.common.utils;
 
 /**
  * Created by shenhongxi on 15/5/8.
