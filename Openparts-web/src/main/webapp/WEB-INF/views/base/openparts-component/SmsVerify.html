@@ -1,0 +1,87 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="getiphone.css" />
+  </head>
+  <body style="width: 100%;height: 100%;background:#fff url(iponeImg/beijing.png) no-repeat center fixed;background-size:100% 100%;text-align: center;">
+<div class="form_box">
+  <div class="line mb40">
+    <div class="item">手机验证码：</div>
+    <div class="cont">
+        <!--点击发送验证码后，倒计时class="count" style="block" -->
+        <p class="code">
+        <input type="text" value="" class="input_text">
+        <span class="info">
+           <em style="display: none" class="count">（60）秒后重新发送</em>
+           <a href="javascript:;" class="send" onclick="sendValidCode();">发送验证码</a>
+        </span>
+        </p>
+    </div>
+  </div>
+  <!--消息提示区域 -->
+  <div style="visibility: hidden; margin-left: 192px; height: 30px;" id="errorNotice">
+  </div>
+  <!--设置页面-->
+  <div class="line">
+    <div class="item"></div>
+    <div class="cont">
+      <input type="button" onclick="checkValidCode();" value="确 定" class="button01">
+    </div>
+  </div>
+</div>
+  </body>
+
+
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<!-- script src="${basePath}/resources/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script -->
+<script type="text/javascript">
+//发送验证码
+function sendValidCode(){
+    $('#errorNotice').html('');
+    $('.input_text').val('');
+    $.ajax({
+        type: 'post',
+        dataType: "json",
+        url: "/utils/sendverifysms",
+        data: {
+            ajaxMethod: "sendValidCodeNew",
+            mtype: "2"
+        },
+        success: function(data){
+            if (data.result > 0) {
+
+            }
+            else {
+                $('#errorNotice').html('短信发送失败，请稍后重试！');
+                $('#errorNotice').css('visibility', 'visible');
+            }
+        },
+        error: function(data){
+            $('#errorNotice').html('短信发送失败，请稍后重试！');
+            $('#errorNotice').css('visibility', 'visible');
+        }
+    });
+
+
+    //60秒后重新发送
+    var btnSend = $(".send");
+    var msg = $('.count');
+    btnSend.removeAttr('style').attr('style', 'display:none;');
+    msg.removeAttr('style').attr('style', 'display:block');
+    var left_time = 60;
+    var tt = window.setInterval(function(){
+        left_time = left_time - 1;
+        if (left_time <= 0) {
+            window.clearInterval(tt);
+            msg.html('（60）秒后重新发送');
+            msg.removeAttr('style').attr('style', 'display:none;');
+            btnSend.removeAttr('style').attr('style', 'display:block');
+        }
+        else {
+            msg.html('（' + left_time + '）秒后重新发送');
+        }
+    }, 1000);
+}
+</script>
+</html>
