@@ -1,7 +1,7 @@
 package com.fs.controller;
 
 import com.openparts.common.pojo.ResultCode;
-import com.openparts.common.util.ResultHelper;
+import com.openparts.common.utils.ResultHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
