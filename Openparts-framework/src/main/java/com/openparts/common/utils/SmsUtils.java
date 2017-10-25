@@ -31,7 +31,7 @@ public class SmsUtils {
     static String account = "用户名"; //用户名是登录ihuyi.com账号名（例如：cf_demo123）
     static String password = "密码";  //查看密码请登录用户中心->验证码、通知短信->帐户及签名设置->APIKEY
 
-    public static String SendSms(UtilsService utilsService, String mobile) {
+    public static String sendSms(UtilsService utilsService, String mobile) {
 
         HttpClient client = new HttpClient();
         PostMethod method = new PostMethod(Url);
@@ -42,7 +42,7 @@ public class SmsUtils {
         int mobile_code = (int)((Math.random()*9+1)*100000);
 
         //store mobile_code into database for verify mobile
-        utilsService.SaveVerifyString(mobile,  Integer.toString(mobile_code).substring(0,6));
+        utilsService.saveVerifyString(mobile,  Integer.toString(mobile_code).substring(0,6));
 
         String content = new String("您的验证码是：" + mobile_code + "，请在60秒内完成验证。如非本人操作，请忽略。");
 

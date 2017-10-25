@@ -22,10 +22,10 @@ public class UtilsController {
      */
     @RequestMapping(value = "/sendverifysms", method = RequestMethod.POST)
     @ResponseBody
-    private String SendVerifySms(@PathVariable("mobile") String mobile, HttpServletRequest request) {
+    private String sendVerifySms(@PathVariable("mobile") String mobile, HttpServletRequest request) {
 
         String retStr;
-        retStr = SmsUtils.SendSms(utilsService, mobile);
+        retStr = SmsUtils.sendSms(utilsService, mobile);
 
         return retStr;
     }

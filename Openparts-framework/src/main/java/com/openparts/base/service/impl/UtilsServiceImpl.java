@@ -26,7 +26,7 @@ public class UtilsServiceImpl extends BaseServiceImpl implements UtilsService {
     public RedisDao redisDao;
 
     @Override
-    public void SaveVerifyString(String mobile, String strVerify) {
+    public void saveVerifyString(String mobile, String strVerify) {
         int i;
 
         if (redisDao == null) {
@@ -39,7 +39,7 @@ public class UtilsServiceImpl extends BaseServiceImpl implements UtilsService {
     }
 
     @Override
-    public String GetVerifyString(String mobile) {
+    public String getVerifyString(String mobile) {
         return "";
     }
 

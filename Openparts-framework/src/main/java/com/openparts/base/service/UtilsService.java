@@ -8,7 +8,7 @@ import com.cnpc.framework.base.service.BaseService;
 
 public interface UtilsService extends BaseService {
 
-    void SaveVerifyString(String mobile, String strVerify);
+    void saveVerifyString(String mobile, String strVerify);
 
-    String GetVerifyString(String mobile);
+    String getVerifyString(String mobile);
 }
