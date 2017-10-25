@@ -37,6 +37,8 @@ CREATE TABLE `match_car_parts` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Match_car_parts extends OP_BaseEntity {
 
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Header(name = "车型key值")
     @Column(name = "car_id", length = 255)
     private String car_id;

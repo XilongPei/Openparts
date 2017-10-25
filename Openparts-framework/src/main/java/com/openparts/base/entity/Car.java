@@ -93,6 +93,8 @@ CREATE TABLE `car` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Car extends OP_BaseEntity {
 
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Header(name = "车型唯一编码")
     @Column(name = "ckey", length = 20)
     private String ckey;

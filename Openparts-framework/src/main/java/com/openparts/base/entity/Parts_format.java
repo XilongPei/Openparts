@@ -27,6 +27,8 @@ CREATE TABLE `parts_format` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Parts_format extends OP_BaseEntity {
 
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Header(name = "类别名称")
     @Column(name = "name", length = 20)
     private String name;

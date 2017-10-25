@@ -28,6 +28,9 @@ CREATE TABLE `car_brand` (
 @Table(name="op_car_brand")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Car_brand extends OP_BaseEntity {
+
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Header(name = "品牌级别")
     @Column(name = "level", length = 4)
     private Integer level;

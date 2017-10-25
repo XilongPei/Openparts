@@ -30,7 +30,9 @@ public class UtilsServiceImpl extends BaseServiceImpl implements UtilsService {
         int i;
 
         if (redisDao == null) {
-            i = baseDao.executeHql("String hql");
+            String hql = "update from Mobile_hints where mobile='" + mobile + "' set verify_str='" + strVerify + "'" ;
+
+            i = baseDao.executeHql(hql);
             return;
         }
 

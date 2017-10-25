@@ -34,6 +34,9 @@ CREATE TABLE `match_owner` (
 @Table(name="op_match_owner")
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Match_owner extends OP_BaseEntity {
+
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Header(name = "标题")
     @Column(name = "author_id", length = 255)
     private String author_id;

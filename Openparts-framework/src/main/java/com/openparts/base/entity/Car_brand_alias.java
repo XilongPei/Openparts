@@ -29,6 +29,8 @@ CREATE TABLE `car_brand_alias` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Car_brand_alias extends OP_BaseEntity {
 
+    private static final long serialVersionUID = 5569761987303812150L;
+
     /*
     @Header(name = "车辆品牌key值")
     @Column(name = "brand_id", length = 11)

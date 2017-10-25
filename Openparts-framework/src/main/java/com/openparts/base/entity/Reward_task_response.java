@@ -32,6 +32,8 @@ CREATE TABLE `reward_task_response` (
 @JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler", "fieldHandler" })
 public class Reward_task_response extends OP_BaseEntity {
 
+    private static final long serialVersionUID = 5569761987303812150L;
+
     @Lob
     @Basic(fetch = FetchType.LAZY)
     @Type(type="text")
