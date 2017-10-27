@@ -6,13 +6,15 @@ import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.type.Type;
-
+import org.hibernate.*;
 import com.cnpc.framework.base.pojo.PageInfo;
 
 /**
  * @author bin
  */
 public interface BaseDao {
+
+    Session getCurrentSession();
 
     /**
      * 保存对象

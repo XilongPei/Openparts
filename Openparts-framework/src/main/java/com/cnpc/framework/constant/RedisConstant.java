@@ -49,12 +49,17 @@ public class RedisConstant {
     public static final String MESSAGE_PRE = "message:";
 
     /**
+     * 消息缓存前缀
+     */
+    public static final String UTILS_MOBILE_VERIFY_STR_PRE = "utils_mvs:";
+
+    /**
      * 组装key
      * @param pre 前缀
      * @param after 后缀
      * @return key
      */
-    public static final String getKey(String pre,String after){
+    public static final String getKey(String pre, String after) {
         return pre+after;
     }
 }

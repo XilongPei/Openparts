@@ -15,6 +15,8 @@ import javax.annotation.Resource;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import com.openparts.base.entity.Mobile_hints;
+import org.hibernate.*;
 
 @Service("utilsService")
 public class UtilsServiceImpl extends BaseServiceImpl implements UtilsService {
@@ -33,11 +35,21 @@ public class UtilsServiceImpl extends BaseServiceImpl implements UtilsService {
             String hql = "update from Mobile_hints where mobile='" + mobile + "' set verify_str='" + strVerify + "'" ;
 
             i = baseDao.executeHql(hql);
+            if (i < 1) {
+                Session session = baseDao.getCurrentSession();
+                Mobile_hints mobile_hints = new Mobile_hints();
+
+                session.beginTransaction();
+                mobile_hints.setMobile(mobile);
+                mobile_hints.setVerify_str(strVerify);
+                baseDao.save(mobile_hints);
+                session.getTransaction().commit();
+            }
             return;
         }
 
         boolean b;
-        b = redisDao.add(mobile, strVerify);
+        b = redisDao.add(RedisConstant.UTILS_MOBILE_VERIFY_STR_PRE+mobile, strVerify);
     }
 
     @Override

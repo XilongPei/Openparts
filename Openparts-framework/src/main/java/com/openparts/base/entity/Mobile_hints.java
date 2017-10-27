@@ -32,15 +32,15 @@ public class Mobile_hints extends OP_BaseEntity {
     private static final long serialVersionUID = 5569761987303812150L;
 
     @Header(name = "Mobile")
-    @Column(name = "mobile", length = 20)
+    @Column(name = "mobile", length=20, nullable=false)
     private String mobile;
 
     @Header(name = "verify_str")
-    @Column(name = "verify_str", length = 20)
+    @Column(name = "verify_str", length=20, nullable=false)
     private String verify_str;
 
     @Header(name = "最后更新时间")
-    @Column(name = "update_time")
+    @Column(name = "update_time", insertable=false, updatable=true)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date update_time;
 
