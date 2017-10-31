@@ -265,4 +265,60 @@ public class LoginController {
     }
 
 
+    @RequestMapping(value = "whisperLogin", method = RequestMethod.POST)
+    @ResponseBody
+    private Map whisperLogin(@RequestParam(value = "loginName", required = true, defaultValue = "") String loginName,
+                                @RequestParam(value = "password", required = true, defaultValue = "") String password) {
+        Subject subject = SecurityUtils.getSubject();
+        Map<String, String> map = new HashMap<String, String>();
+
+        //密码加密+加盐
+        password = EncryptUtil.getPassword(password, loginName);
+        UsernamePasswordToken token = new UsernamePasswordToken(loginName, password);
+        subject = SecurityUtils.getSubject();
+
+        String msg;
+        try {
+            subject.login(token);
+            //通过认证
+            if (subject.isAuthenticated()) {
+                User user = userService.getUserByLoginName(loginName);
+                // this shouldn't occured
+                if (user == null) {
+                    map.put("ret", "fail");
+                    return map;
+                } else {
+                    map.put("whisperId", user.getWhisperId());
+                    map.put("whisperKey", user.getWhisperKey());
+                    map.put("ret", "success");
+                    return map;
+                }
+            } else {//没有授权
+                msg = "您没有得到相应的授权！";
+                map.put("ret", "fail");
+                map.put("msg", msg);
+                return map;
+            }
+        //0 未授权 1 账号问题 2 密码错误  3 账号密码错误
+        } catch (IncorrectCredentialsException e) {
+            msg = "ResultCode:2, 登录密码错误. Password for account " + token.getPrincipal() + " was incorrect";
+        } catch (ExcessiveAttemptsException e) {
+            msg = "ResultCode:3, 登录失败次数过多";
+        } catch (LockedAccountException e) {
+            msg = "ResultCode:1, 帐号已被锁定. The account for username " + token.getPrincipal() + " was locked.";
+        } catch (DisabledAccountException e) {
+            msg = "ResultCode:1, 帐号已被禁用. The account for username " + token.getPrincipal() + " was disabled.";
+        } catch (ExpiredCredentialsException e) {
+            msg = "ResultCode:1, 帐号已过期. the account for username " + token.getPrincipal() + "  was expired.";
+        } catch (UnknownAccountException e) {
+            msg = "ResultCode:1, 帐号不存在. There is no user with username of " + token.getPrincipal();
+        } catch (UnauthorizedException e) {
+            msg = "ResultCode:1, 您没有得到相应的授权！" + e.getMessage();
+        }
+
+        map.put("ret", "fail");
+        map.put("msg", msg);
+        return map;
+    }
+
 }

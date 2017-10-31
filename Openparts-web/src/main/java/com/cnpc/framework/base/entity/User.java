@@ -73,6 +73,16 @@ public class User extends BaseEntity {
     @Column(name="dept_id")
     private String deptId;
 
+    // whisper related
+    //`id` VARCHAR(63) NOT NULL UNIQUE,
+    //`key` VARCHAR(63) NOT NULL,
+    @Header(name="whisperId")
+    @Column(name="whisperId", length = 64)
+    private String whisperId;
+
+    @Header(name="whisperKey")
+    @Column(name="whisperKey", length = 64)
+    private String whisperKey;
 
     @Transient
     private String avatarId;
@@ -224,4 +234,23 @@ public class User extends BaseEntity {
         this.isSuperAdmin = isSuperAdmin;
     }
 
+    public String getWhisperId() {
+
+        return whisperId;
+    }
+
+    public void setWhisperId(String whisperId) {
+
+        this.whisperId = whisperId;
+    }
+
+    public String getWhisperKey() {
+
+        return whisperKey;
+    }
+
+    public void setWhisperKey(String whisperKey) {
+
+        this.whisperKey = whisperKey;
+    }
 }
