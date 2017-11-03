@@ -25,7 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import com.openparts.common.utils.KaliumKeyPair;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -211,6 +211,17 @@ public class LoginController {
         oAuthInfo.setoAuthType(oAuthType);
         //保存用户
         user.setPassword(EncryptUtil.getPassword(user.getPassword(), user.getLoginName()));
+
+        if (user.getWhisperId() == null) {
+            KaliumKeyPair keyPair;
+
+            keyPair = new KaliumKeyPair();
+            //System.out.println("----keyPair.getPublicKey()------>" + keyPair.getPublicKey());
+            //System.out.println("----keyPair.getPrivateKey()------>" + keyPair.getPrivateKey());
+            user.setWhisperId(keyPair.getPublicKey());
+            user.setWhisperKey(keyPair.getPrivateKey());
+        }
+
         String userId = userService.save(user).toString();
         //建立第三方账号关联
         OAuthUser oAuthUser = oAuthUserService.findByOAuthTypeAndOAuthId(oAuthType, oAuthId);

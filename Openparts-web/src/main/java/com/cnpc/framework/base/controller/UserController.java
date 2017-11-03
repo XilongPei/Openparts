@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.openparts.common.utils.KaliumKeyPair;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -70,6 +70,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value = "/save")
     @ResponseBody
     private Result saveUser(User user, HttpServletRequest request) {
+        KaliumKeyPair keyPair;
+
         if (StrUtil.isEmpty(user.getId())) {
             //设置初始密码
             user.setPassword(EncryptUtil.getPassword(initPassword,user.getLoginName()));
@@ -77,13 +79,31 @@ public class UserController {
             userRoleService.setRoleForRegisterUser(userId);
             //头像和用户管理
             userService.updateUserAvatar(user, request.getRealPath("/"));
+
+            keyPair = new KaliumKeyPair();
+            //System.out.println("----keyPair.getPublicKey()------>" + keyPair.getPublicKey());
+            //System.out.println("----keyPair.getPrivateKey()------>" + keyPair.getPrivateKey());
+            user.setWhisperId(keyPair.getPublicKey());
+            user.setWhisperKey(keyPair.getPrivateKey());
+
         } else {
-            User oldUser=this.getUser(user.getId());
-            if(oldUser.getLoginName().equals(user.getLoginName())){
+            User oldUser = this.getUser(user.getId());
+            if (oldUser.getLoginName().equals(user.getLoginName())) {
                oldUser.setPassword(EncryptUtil.getPassword(initPassword,user.getLoginName()));
             }
-            BeanUtils.copyProperties(user,oldUser);
+
+            BeanUtils.copyProperties(user, oldUser);
+            if (oldUser.getWhisperId() == null) {
+                keyPair = new KaliumKeyPair();
+                //System.out.println("----keyPair.getPublicKey()------>" + keyPair.getPublicKey());
+                //System.out.println("----keyPair.getPrivateKey()------>" + keyPair.getPrivateKey());
+                oldUser.setWhisperId(keyPair.getPublicKey());
+                oldUser.setWhisperKey(keyPair.getPrivateKey());
+            }
+
             oldUser.setUpdateDateTime(new Date());
+
+
             userService.update(oldUser);
         }
         return new Result(true);
