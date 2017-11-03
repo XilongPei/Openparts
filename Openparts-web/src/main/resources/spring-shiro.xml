@@ -32,6 +32,7 @@
     </bean>
     <!--redis管理session-->
     <bean id="webSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+    <!--<bean id="webSessionManager" class="com.cnpc.framework.filter.MyWebSessionManager">-->
         <property name="sessionDAO" ref="redisSessionDao"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="globalSessionTimeout" value="${shiro.session.timeout}"/>
@@ -74,6 +75,10 @@
                 <entry key="logout" value-ref="systemLogoutFilter"/>
             </map>
         </property>
+        <property name="filterChainDefinitionMap" ref="filterChainDefinitionClass" />
+    </bean>
+
+    <bean id="filterChainDefinitionClass" class="com.cnpc.framework.filter.ShirofilterChainDefinitions" scope="singleton">
         <property name="filterChainDefinitions">
             <value>
                 <!--/=anon-->
@@ -83,11 +88,8 @@
                 /register=anon
                 /oauth/**=anon
                 /resources/**=anon
+                /wechat/callback=anon
                 /**=authc
-                <!--/=anon-->
-                <!--/main=anon-->
-                <!--/index=anon-->
-                <!-- /*=anon -->
             </value>
         </property>
     </bean>

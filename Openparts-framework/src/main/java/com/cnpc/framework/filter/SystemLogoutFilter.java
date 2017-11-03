@@ -4,7 +4,6 @@ import org.apache.shiro.session.SessionException;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 

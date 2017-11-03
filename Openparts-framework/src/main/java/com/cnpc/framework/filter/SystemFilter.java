@@ -24,8 +24,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
  * @author billJiang QQ:475572229
  */
 public class SystemFilter implements Filter {
-    @Autowired
-    private ShiroFilterFactoryBean shiroFilterFactoryBean;
+
 
     private static List<String> anonlist;
 
