@@ -15,7 +15,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <context:property-placeholder location="classpath:jdbc.properties,classpath:setting.properties"/>
 
     <!-- 自动扫描(自动注入) service层类 -->
-    <context:component-scan base-package="com.cnpc.**.service"/>
+    <context:component-scan base-package="com.cnpc.**.service com.openparts.**.service"/>
 
     <!-- 自动扫描（自动注入） dao层类 -->
     <context:component-scan base-package="com.cnpc.**.dao"/>
@@ -31,7 +31,5 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
     <import resource="classpath:spring-shiro.xml"/>
     <!--缓存框架redis配置-->
     <import resource="classpath:spring-redis.xml"/>
-
-
 
 </beans>
