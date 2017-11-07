@@ -96,7 +96,7 @@ public class LoginController {
                     subject.getSession().setAttribute("isAuthorized", true);
                     return MAIN_PAGE;
                 } else {//没有授权
-                    msg = "您没有得到相应的授权！";
+                    msg = "您没有得到相应的授权！ [subject.isAuthenticated() == true]";
                     model.addAttribute("message", new ResultCode("1", msg));
                     subject.getSession().setAttribute("isAuthorized", false);
                     LOGGER.error(msg);

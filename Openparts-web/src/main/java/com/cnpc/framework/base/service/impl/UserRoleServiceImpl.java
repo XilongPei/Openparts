@@ -45,12 +45,13 @@ public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleServ
 
     @Override
     public void setRoleForRegisterUser(String userId) {
-        String hql="from Role where code='COMMON' and (deleted=0 or deleted is null)";
-        Role role=this.get(hql);
-        if(role==null){
+        String hql = "from Role where code='COMMON' and (deleted=0 or deleted is null)";
+        Role role = this.get(hql);
+        if (role == null) {
             //System.out.println("系统管理需要配置名称为COMMON的角色，并未该角色分配权限");
             logger.error("系统管理需要配置名称为COMMON的角色，并未该角色分配权限");
-        }else{
+        }
+        else {
             UserRole userRole=new UserRole();
             User user=this.get(User.class,userId);
             userRole.setUser(user);
