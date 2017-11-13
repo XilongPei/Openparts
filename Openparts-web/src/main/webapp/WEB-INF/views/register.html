@@ -57,6 +57,20 @@
                 <input type="password" class="form-control" name="repassword" id="repassword" placeholder="再次确认密码">
                 <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
             </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="mobile" id="mobile" placeholder="请输入手机号">
+                <span class="glyphicon glyphicon-iphone form-control-feedback"></span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="verifycode" id="verifycode" placeholder="请输入验证码">
+                <span>
+                    <img alt="验证码" class="form-control-feedback" src="${basePath}/api/getVerifyCodeImage" id="captchaImg" style="cursor:pointer;width:180px;height:38px;" onclick="changeVerifyCode();">
+                </span>
+            </div>
+            <div class="form-group has-feedback">
+                <input type="text" class="form-control" name="smscode" id="smscode" placeholder="请输入短信验证码">
+                <span class="glyphicon glyphicon-sms form-control-feedback"></span>
+            </div>
             <div class="row">
                 <div class="col-xs-12">
                     <div class="checkbox icheck">
@@ -192,7 +206,9 @@
 
     });
 
-
+function changeVerifyCode() {
+    $('#captchaImg').hide().attr('src', '${basePath}/api/getVerifyCodeImage' + Math.floor(Math.random()*100) ).fadeIn();
+}
 </script>
 </body>
 </html>

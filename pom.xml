@@ -317,10 +317,10 @@
                     <version>2.2</version>
                     <configuration>
                         <!-- 注意此处的url -->
-                        <url>http://xxxxxx/manager/text</url><!--部署到本地tomcat7-->
+                        <url>http://localhost:8080/manager/text</url><!--部署到本地tomcat7-->
                         <path>/${project.name}</path>  <!-- 此处的名字是项目发布的工程名 -->
-                        <username>tomcat</username><!--settings.xml文件已配置，此处可不配-->
-                        <password>tomcat_test</password><!--settings.xml文件已配置，此处可不配-->
+                        <username>admin</username><!--settings.xml文件已配置，此处可不配-->
+                        <password>password</password><!--settings.xml文件已配置，此处可不配-->
                     </configuration>
                 </plugin>
             </plugins>

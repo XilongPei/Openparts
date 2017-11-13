@@ -185,6 +185,24 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.axet</groupId>
+            <artifactId>kaptcha</artifactId>
+            <version>0.0.9</version>
+        </dependency>
+        <!-- kaptcha依赖-->
+        <dependency>
+            <groupId>com.jhlabs</groupId>
+            <artifactId>imaging</artifactId>
+            <version>01012005</version>
+        </dependency>
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -229,10 +247,10 @@
                 <version>2.2</version>
                 <configuration>
                     <!-- 注意此处的url -->
-                    <url>http://xx.xxx.xxx.xxx:8080/manager/text</url><!--部署到本地tomcat7-->
+                    <url>http://localhost:8080/manager/text</url><!--部署到本地tomcat7-->
                     <path>/${project.name}</path>  <!-- 此处的名字是项目发布的工程名 -->
-                    <username>xxxx</username><!--settings.xml文件已配置，此处可不配-->
-                    <password>xxxxx</password><!--settings.xml文件已配置，此处可不配-->
+                    <username>admin</username><!--settings.xml文件已配置，此处可不配-->
+                    <password>password</password><!--settings.xml文件已配置，此处可不配-->
                 </configuration>
             </plugin>
         </plugins>
