@@ -55,10 +55,81 @@ public class LoginController {
     @Resource
     private UserRoleService userRoleService;
 
-
     private final static String MAIN_PAGE = PropertiesUtil.getValue("page.main");
     private final static String LOGIN_PAGE = PropertiesUtil.getValue("page.login");
     private final static String REGISTER_PAGE = PropertiesUtil.getValue("page.register");
+
+    private String tryLogin(Subject subject, Model model, UsernamePasswordToken token) {
+        String msg = null;
+
+        try {
+            subject.login(token);
+            //通过认证
+            if (subject.isAuthenticated()) {
+                String userId = subject.getPrincipal().toString();
+                Set<String> roles = roleService.getRoleCodeSet(userId);
+                Set<String> functions = functionService.getFunctionCodeSet(roles, userId);
+                //---------调用realm doGetAuthorizationInfo----------
+                boolean isPermitted = subject.isPermitted("user");
+                if (!roles.isEmpty()) {
+                    subject.getSession().setAttribute("isAuthorized", true);
+                    return MAIN_PAGE;
+                } else {//没有授权
+                    msg = "您没有得到相应的授权！ [subject.isAuthenticated() == true]";
+                    if (model != null) {
+                        model.addAttribute("message", new ResultCode("1", msg));
+                    }
+                    subject.getSession().setAttribute("isAuthorized", false);
+                    LOGGER.error(msg);
+                    return LOGIN_PAGE;
+                }
+            } else {
+                return LOGIN_PAGE;
+            }
+        //0 未授权 1 账号问题 2 密码错误  3 账号密码错误
+        } catch (IncorrectCredentialsException e) {
+            msg = "登录密码错误. Password for account " + token.getPrincipal() + " was incorrect";
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("2", msg));
+            }
+        } catch (ExcessiveAttemptsException e) {
+            msg = "登录失败次数过多";
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("3", msg));
+            }
+        } catch (LockedAccountException e) {
+            msg = "帐号已被锁定. The account for username " + token.getPrincipal() + " was locked.";
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("1", msg));
+            }
+        } catch (DisabledAccountException e) {
+            msg = "帐号已被禁用. The account for username " + token.getPrincipal() + " was disabled.";
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("1", msg));
+            }
+        } catch (ExpiredCredentialsException e) {
+            msg = "帐号已过期. the account for username " + token.getPrincipal() + "  was expired.";
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("1", msg));
+            }
+        } catch (UnknownAccountException e) {
+            msg = "帐号不存在. There is no user with username of " + token.getPrincipal();
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("1", msg));
+            }
+        } catch (UnauthorizedException e) {
+            msg = "您没有得到相应的授权！" + e.getMessage();
+            if (model != null) {
+                model.addAttribute("message", new ResultCode("1", msg));
+            }
+        }
+
+        if (msg != null) {
+            LOGGER.error(msg);
+        }
+
+        return LOGIN_PAGE;
+    }
 
     @RequestMapping(value = "/login")
     private String doLogin(HttpServletRequest request, Model model) {
@@ -82,63 +153,9 @@ public class LoginController {
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
         token.setRememberMe(true);
         subject = SecurityUtils.getSubject();
-        String msg;
-        try {
-            subject.login(token);
-            //通过认证
-            if (subject.isAuthenticated()) {
-                String userId = subject.getPrincipal().toString();
-                Set<String> roles = roleService.getRoleCodeSet(userId);
-                Set<String> functions = functionService.getFunctionCodeSet(roles, userId);
-                //---------调用realm doGetAuthorizationInfo----------
-                boolean isPermitted = subject.isPermitted("user");
-                if (!roles.isEmpty()) {
-                    subject.getSession().setAttribute("isAuthorized", true);
-                    return MAIN_PAGE;
-                } else {//没有授权
-                    msg = "您没有得到相应的授权！ [subject.isAuthenticated() == true]";
-                    model.addAttribute("message", new ResultCode("1", msg));
-                    subject.getSession().setAttribute("isAuthorized", false);
-                    LOGGER.error(msg);
-                    return LOGIN_PAGE;
-                }
 
-            } else {
-                return LOGIN_PAGE;
-            }
-            //0 未授权 1 账号问题 2 密码错误  3 账号密码错误
-        } catch (IncorrectCredentialsException e) {
-            msg = "登录密码错误. Password for account " + token.getPrincipal() + " was incorrect";
-            model.addAttribute("message", new ResultCode("2", msg));
-            LOGGER.error(msg);
-        } catch (ExcessiveAttemptsException e) {
-            msg = "登录失败次数过多";
-            model.addAttribute("message", new ResultCode("3", msg));
-            LOGGER.error(msg);
-        } catch (LockedAccountException e) {
-            msg = "帐号已被锁定. The account for username " + token.getPrincipal() + " was locked.";
-            model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
-        } catch (DisabledAccountException e) {
-            msg = "帐号已被禁用. The account for username " + token.getPrincipal() + " was disabled.";
-            model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
-        } catch (ExpiredCredentialsException e) {
-            msg = "帐号已过期. the account for username " + token.getPrincipal() + "  was expired.";
-            model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
-        } catch (UnknownAccountException e) {
-            msg = "帐号不存在. There is no user with username of " + token.getPrincipal();
-            model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
-        } catch (UnauthorizedException e) {
-            msg = "您没有得到相应的授权！" + e.getMessage();
-            model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
-        }
-        return LOGIN_PAGE;
+        return tryLogin(subject, model, token);
     }
-
 
  /*   @RequestMapping(value = "/logout")
     private String doLogout(HttpServletRequest request) {
@@ -169,7 +186,6 @@ public class LoginController {
         model.addAttribute("oAuthInfo", new OAuthUser());
         return REGISTER_PAGE;
     }
-
 
     //----------------oauth 认证------------------
     @RequestMapping(value = "/oauth/{type}/callback", method = RequestMethod.GET)
@@ -235,20 +251,13 @@ public class LoginController {
         return loginByAuth(user);
     }
 
-
     public String loginByAuth(User user) {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
         token.setRememberMe(true);
         Subject subject = SecurityUtils.getSubject();
-        subject.login(token);
-        //通过认证
-        if (subject.isAuthenticated()) {
-            return MAIN_PAGE;
-        } else {
-            return LOGIN_PAGE;
-        }
-    }
 
+        return tryLogin(subject, null, token);
+    }
 
     /**
      * 校验当前登录名/邮箱的唯一性
