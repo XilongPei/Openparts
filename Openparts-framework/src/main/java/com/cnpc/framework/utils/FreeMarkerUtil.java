@@ -14,7 +14,7 @@ import java.io.*;
 public class FreeMarkerUtil {
 	/**
 	 * 获取模板路径
-	 * 
+	 *
 	 * @param templateName
 	 *            模板名称（含后缀名）
 	 * @return
@@ -27,7 +27,7 @@ public class FreeMarkerUtil {
 
 	/**
 	 * 获取模板资源
-	 * 
+	 *
 	 * @param templateName
 	 *            模板名称（含后缀名）
 	 * @return Resource
@@ -40,7 +40,7 @@ public class FreeMarkerUtil {
 
 	/**
 	 * 获取模板
-	 * 
+	 *
 	 * @param templateName
 	 *            模板名称（含后缀名）
 	 * @return Template
@@ -68,7 +68,7 @@ public class FreeMarkerUtil {
 
 	/**
 	 * 根据freemark模板生成文件
-	 * 
+	 *
 	 * @param templateName
 	 *            模板名称（含后缀名）
 	 * @param filePath
@@ -80,7 +80,11 @@ public class FreeMarkerUtil {
 			throws TemplateException, IOException {
 		Writer writer = null;
 		Template template = getTemplate(templateName);
-		String dir = filePath.substring(0, filePath.lastIndexOf("\\"));
+
+		// Windows/Linux
+		// String dir = filePath.substring(0, filePath.lastIndexOf("\\"));
+		String dir = filePath.substring(0, filePath.lastIndexOf("/"));
+
 		File fdir = new File(dir);
 		if (!fdir.exists()) {
 			if (!fdir.mkdirs()) {
@@ -90,7 +94,7 @@ public class FreeMarkerUtil {
 		}
 		File file = new File(filePath);
 		if(file.exists())
-			file.delete(); 
+			file.delete();
 		writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
 		template.setEncoding("utf-8");
 		template.process(setting, writer);
