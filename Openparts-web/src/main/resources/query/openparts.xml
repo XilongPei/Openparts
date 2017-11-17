@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<queryContext xmlns="http://www.example.org/query" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.example.org/query query.xsd">
+<!--本xml片段为代码生成器生成，时间：2017-11-17 12:45:48-->
+<query id="whisper_nodes" key="id" tableName="whisper_nodes列表" className="com.openparts.base.entity.Whisper_nodes" widthType="px">
+        <column key="rowIndex" header="序号" width="80"/>
+        <column key="name" header="name" classType="String" allowSort="true" width="150"/>
+        <column key="description" header="description" classType="String" allowSort="true" width="150"/>
+        <column key="version" header="version" classType="String" allowSort="true" width="150"/>
+        <column key="device_id" header="device_id" classType="String" allowSort="true" width="150"/>
+        <column key="real_device_id" header="real_device_id" classType="String" allowSort="true" width="150"/>
+        <column key="device_type" header="device_type" classType="String" allowSort="true" width="150"/>
+        <column key="manufacturer" header="manufacturer" classType="String" allowSort="true" width="150"/>
+        <column key="model" header="model" classType="String" allowSort="true" width="150"/>
+        <column key="os" header="os" classType="String" allowSort="true" width="150"/>
+        <column key="os_version" header="os_version" classType="String" allowSort="true" width="150"/>
+</query>
+</queryContext>

@@ -1,0 +1,168 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><li class="fa fa-remove"></li></button>
+    <h5 class="modal-title"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="whisper_nodes_form" name="whisper_nodes_form" class="form-horizontal">
+        <input type="hidden" name="id">
+        <input type="hidden" name="version">
+        <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
+        <input type="hidden" name="deleted" value="0">
+        <input type='hidden' value="${CSRFToken}" id='csrftoken'>
+        <div class="box-body">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">name<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="请填写name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">device_ver<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="device_ver" name="device_ver" placeholder="请填写device_ver">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">real_device_id</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="real_device_id" name="real_device_id" placeholder="请填写real_device_id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">manufacturer<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="manufacturer" name="manufacturer" placeholder="请填写manufacturer">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">os<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="os" name="os" placeholder="请填写os">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">description<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="description" name="description" placeholder="请填写description">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">device_id</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="device_id" name="device_id" placeholder="请填写device_id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">device_type<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="device_type" name="device_type" placeholder="请填写device_type">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">model<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="model" name="model" placeholder="请填写model">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">os_version<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="os_version" name="os_version" placeholder="请填写os_version">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-right">
+            <button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary" data-btn-type="save">提交</button>
+        </div>
+    </form>
+</div>
+<script>
+    var form;
+    var id="${id?default(0)}";
+    $(function(){
+        //初始化表单
+        form=$("#whisper_nodes_form").form();
+        //数据校验
+        $("#whisper_nodes_form").bootstrapValidator({
+            message : '请输入有效值',
+            feedbackIcons : {
+                valid : 'glyphicon glyphicon-ok',
+                invalid : 'glyphicon glyphicon-remove',
+                validating : 'glyphicon glyphicon-refresh'
+            },
+            submitHandler : function() {
+                modals.confirm('确认保存？', function() {
+                    var whisper_nodes = form.getFormSimpleData();
+                    ajaxPost(basePath+'/whisper_nodes/save',whisper_nodes, function(data) {
+                        if(data.success){
+                            if(id!="0"){
+                                modals.hideWin(winId);
+                                whisper_nodesTable.reloadRowData(id);
+                            }else{
+                                modals.hideWin(winId);
+                                whisper_nodesTable.reloadData();
+                            }
+                        }
+                    });
+                });
+            },
+            fields : {
+                "name":{
+                    validators:{
+                        notEmpty:{message:'name不能为空'}
+                    }
+                },
+                "description":{
+                    validators:{
+                        notEmpty:{message:'description不能为空'}
+                    }
+                },
+                "device_ver":{
+                    validators:{
+                        notEmpty:{message:'device_ver不能为空'}
+                    }
+                },
+                "device_type":{
+                    validators:{
+                        notEmpty:{message:'device_type不能为空'}
+                    }
+                },
+                "manufacturer":{
+                    validators:{
+                        notEmpty:{message:'manufacturer不能为空'}
+                    }
+                },
+                "model":{
+                    validators:{
+                        notEmpty:{message:'model不能为空'}
+                    }
+                },
+                "os":{
+                    validators:{
+                        notEmpty:{message:'os不能为空'}
+                    }
+                },
+                "os_version":{
+                    validators:{
+                        notEmpty:{message:'os_version不能为空'}
+                    }
+                }
+            }
+        });
+        //初始化控件
+        form.initComponent();
+        //编辑回填
+        if(id!=0){
+            ajaxPost(basePath+"/whisper_nodes/get/"+id,null,function(data){
+                form.initFormData(data);
+            })
+        }
+    });
+
+</script>
