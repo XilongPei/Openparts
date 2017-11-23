@@ -260,8 +260,8 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
 
     @Override
     public Map getMessageCount() {
-        Map<String, Integer> retMap =redisDao.get(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId(),Map.class);
-        if(retMap==null) {
+        Map<String, Integer> retMap = redisDao.get(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId(),Map.class);
+        if (retMap == null) {
             retMap = new HashMap<>();
             //发件箱
             String hql_sent = "select count(id) from Message where sendUserID='" + SecurityUtil.getUserId() + "'";
@@ -281,13 +281,14 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             retMap.put("trash", count_trash.intValue());
             redisDao.add(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId(), retMap);
             return retMap;
-        }else {
+        }
+        else {
             return retMap;
         }
     }
 
     @Override
-    public void deleteCacheForMsgCount(){
+    public void deleteCacheForMsgCount() {
         redisDao.delete(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId());
     }
 
