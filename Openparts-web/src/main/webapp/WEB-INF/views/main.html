@@ -560,7 +560,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <!-- Bootstrap 3.3.6 -->
 <script src="${basePath}/resources/adminlte/bootstrap/js/bootstrap.min.js"></script>
 <!-- SlimScroll -->
-<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+<script src="${basePath}/resources/adminlte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
 <!-- FastClick -->
 <script src="${basePath}/resources/adminlte/plugins/fastclick/fastclick.js"></script>
 <!-- AdminLTE App -->
@@ -630,6 +630,15 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 		   $(this).parent().addClass("active");
 	   });
    });
+
+   function updateMsgCount(){
+       ajaxPost(basePath+"/message/navbarnumber",null,function (map) {
+          $("#folder ul li a").find("span.label").each(function(index,item){
+              var btnType=$(item).parents("li").data("btn-type");
+              $(item).text(map[btnType]);
+          });
+       });
+   }
 
 </script>
 </body>
