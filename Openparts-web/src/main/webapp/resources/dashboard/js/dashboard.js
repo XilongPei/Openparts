@@ -1,13 +1,53 @@
 /*
- * Author: Abdullah A Almsaeed
- * Date: 4 Jan 2014
- * Description:
- *      This is a demo file used only for the main dashboard (index.html)
+ * openparts dashboard
  **/
+
+var openpartsdata = null;
 
 $(function () {
 
   "use strict";
+
+  $.ajax({
+    url:"dashboard/getdata",
+    type:"get",
+    success:function(data) {
+      openpartsdata = JSON.parse(data);
+
+  var area = new Morris.Area({
+    element: 'revenue-chart',
+    resize: true,
+    data: openpartsdata.sMorrisArea,
+    xkey: 'y',
+    ykeys: ['item1', 'item2'],
+    labels: ['Item 1', 'Item 2'],
+    lineColors: ['#a0d0e0', '#3c8dbc'],
+    hideHover: 'auto'
+  });
+  var line = new Morris.Line({
+    element: 'line-chart',
+    resize: true,
+    data: openpartsdata.sMorrisLine,
+    xkey: 'y',
+    ykeys: ['item1'],
+    labels: ['Item 1'],
+    lineColors: ['#efefef'],
+    lineWidth: 2,
+    hideHover: 'auto',
+    gridTextColor: "#fff",
+    gridStrokeWidth: 0.4,
+    pointSize: 4,
+    pointStrokeColors: ["#efefef"],
+    gridLineColor: "#efefef",
+    gridTextFamily: "Open Sans",
+    gridTextSize: 10
+  });
+
+    },
+    error:function(data) {
+      $.messager.alert("error","error","error");
+    }
+  });
 
   //Make the dashboard widgets sortable Using jquery UI
   $(".connectedSortable").sortable({
@@ -124,6 +164,7 @@ $(function () {
 
   /* Morris.js Charts */
   // Sales chart
+  /*
   var area = new Morris.Area({
     element: 'revenue-chart',
     resize: true,
@@ -174,6 +215,7 @@ $(function () {
     gridTextFamily: "Open Sans",
     gridTextSize: 10
   });
+  */
 
   //Donut Chart
   var donut = new Morris.Donut({
