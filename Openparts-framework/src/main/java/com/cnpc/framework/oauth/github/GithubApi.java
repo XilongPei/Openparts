@@ -17,6 +17,10 @@ public class GithubApi extends DefaultApi20 {
 
     private final String githubState;
 
+    public GithubApi() {
+        this.githubState = "state";
+    }
+
     public GithubApi(String state) {
         this.githubState = state;
     }
@@ -32,13 +36,11 @@ public class GithubApi extends DefaultApi20 {
 
     @Override
     public String getAccessTokenEndpoint() {
-        return String.format(ACCESS_TOKEN_URL,githubState);
+        return String.format(ACCESS_TOKEN_URL, githubState);
     }
 
-
-
     @Override
-    public OAuthService createService(OAuthConfig config){
+    public OAuthService createService(OAuthConfig config) {
         return new GithubOAuthService(this,config);
     }
 

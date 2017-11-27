@@ -16,19 +16,17 @@ import java.util.ArrayList;
  * e-mail:jrn1012@petrochina.com.cn qq:475572229
  */
 @Configuration
-public class OAuthConfig {
+public class OAuthGithubConfig {
+
     @Value("${oauth.callback.url}")
     String callback_url;
 
     /**
      * github配置
      */
-    @Value("${oauth.github.key}")
-    String github_key;
-    @Value("${oauth.github.secret}")
-    String github_secret;
-    @Value("${oauth.github.state}")
-    String github_state;
+    @Value("${oauth.github.key}") String github_key;
+    @Value("${oauth.github.secret}") String github_secret;
+    @Value("${oauth.github.state}") String github_state;
 
     @Bean
     public GithubApi githubApi(){
@@ -36,9 +34,13 @@ public class OAuthConfig {
     }
 
     @Bean
-    public CustomOAuthService getGithubOAuthService(){
+    public CustomOAuthService getGithubOAuthService() {
+        if (github_key == null) {
+            return null;
+        }
+
         return (CustomOAuthService)new ServiceBuilder()
-                .provider(githubApi())
+                .provider(GithubApi.class)
                 .apiKey(github_key)
                 .apiSecret(github_secret)
                 .callback(String.format(callback_url, OAuthTypes.GITHUB))
