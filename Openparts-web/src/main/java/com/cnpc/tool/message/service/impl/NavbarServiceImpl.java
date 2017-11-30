@@ -21,7 +21,7 @@ import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
+import com.openparts.conf.OpenpartsProperties;
 import java.util.*;
 
 @Service("NavbarService")
@@ -34,80 +34,13 @@ public class NavbarServiceImpl extends BaseServiceImpl implements NavbarService 
         Map<String, String> retMap = redisDao.get(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId(),Map.class);
 
         retMap.put("msg_num", "128");
-        retMap.put("msg_str", "You have 128 messages");
+        retMap.put("msg_str", String.format(OpenpartsProperties.getValue("msg_str"), 128));
         retMap.put("wrn_num", "138");
-        retMap.put("wrn_str", "You have 10 notifications");
+        retMap.put("wrn_str", String.format(OpenpartsProperties.getValue("wrn_str"), 138));
         retMap.put("task_num", "");
-        retMap.put("task_str", "You have 128 messages");
+        retMap.put("task_str", String.format(OpenpartsProperties.getValue("task_str"), 188));
 
-        String msg_menu =
-"                  <li>\n" +
-"                    <a href=\"#\">\n" +
-"                      <div class=\"pull-left\">\n" +
-"                        <img src=\"resources/adminlte/dist/img/user0-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n" +
-"                      </div>\n" +
-"                      <h4>\n" +
-"                        Support Team\n" +
-"                        <small><i class=\"fa fa-clock-o\"></i> 5 mins</small>\n" +
-"                      </h4>\n" +
-"                      <p>Why not buy a new awesome theme?</p>\n" +
-"                    </a>\n" +
-"                  </li>\n";
-/*
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${basePath}/resources/adminlte/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${basePath}/resources/adminlte/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${basePath}/resources/adminlte/dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="${basePath}/resources/adminlte/dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-
-                </ul>
-*/
+        String msg_menu = OpenpartsProperties.getValue("msg_menu");
 
         String wrn_menu =
 "                  <li>\n" +
