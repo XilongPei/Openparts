@@ -57,6 +57,19 @@ public class QueryController {
     }
 
     /**
+     * 第一次加载页面初始化
+     *
+     * @param reqObj 前台参数
+     * @return
+     */
+    @RequestMapping("/loadData_CC")
+    @ResponseBody
+    public Map<String, Object> loadData_CC(String reqObj) throws Exception {
+
+        return queryService.loadData_CC(reqObj);
+    }
+
+    /**
      * 导出数据
      *
      * @param reqObjs   前台参数

@@ -2,6 +2,7 @@ package com.cnpc.framework.query.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.cnpc.framework.base.pojo.PageInfo;
+import com.cnpc.framework.base.pojo.FieldDictInfo;
 import com.cnpc.framework.base.service.impl.BaseServiceImpl;
 import com.cnpc.framework.exception.QueryException;
 import com.cnpc.framework.query.entity.Query;
@@ -11,6 +12,8 @@ import com.cnpc.framework.query.service.QueryService;
 import com.cnpc.framework.query.util.ExportUtil;
 import com.cnpc.framework.query.util.QueryUtil;
 import com.cnpc.framework.utils.StrUtil;
+import com.cnpc.framework.base.service.DictService;
+import com.cnpc.framework.utils.SpringContextUtil;
 import jxl.Workbook;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
@@ -20,18 +23,18 @@ import org.hibernate.type.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
+import java.lang.reflect.Field;
 
 @Service("queryService")
 public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
 
     private static final Logger logger = LoggerFactory.getLogger(QueryServiceImpl.class);
-
 
     @Override
     public Map<String, Object> loadData(String reqObj) throws Exception {
@@ -46,6 +49,59 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
         //返回数据
         List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
+
+        //table自定义方法，以后有需要的话可放开
+        //List<Call> callList = getCallList(query);
+        //query.setCallList(callList);
+        map.put("query", query);
+        map.put("pageInfo", pageInfo);
+        map.put("rows", objList);
+        return map;
+    }
+
+    public static List<FieldDictInfo> getFieldsDictInfo(Class<?> objClass) {
+        ArrayList fieldsDictInfoList = new ArrayList<>();
+        FieldDictInfo fieldDictInfo;
+
+        Field[] fields = objClass.getDeclaredFields();
+
+        for (int i = 0; i < fields.length; i++) {
+            fieldDictInfo = FieldDictInfo.getFieldDictInfo(objClass, fields[i]);
+            if (fieldDictInfo != null) {
+                fieldsDictInfoList.add(fieldDictInfo);
+            }
+        }
+
+        return fieldsDictInfoList;
+    }
+
+    @Override
+    public Map<String, Object> loadData_CC(String reqObj) throws Exception {
+
+        Map<String, Object> map = new HashMap<>();
+        QueryCondition queryCondition = JSON.parseObject(reqObj, QueryCondition.class);
+        Query query = QueryUtil.getQuery(queryCondition);
+        Class<?> objClass = QueryUtil.getClassName(query.getClassName());
+        PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
+        List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
+
+        String value;
+        List<FieldDictInfo> fieldDictInfos = getFieldsDictInfo(objClass);
+        if (fieldDictInfos != null) {
+        	FieldDictInfo FieldDictInfo;
+            DictService dictService = (DictService)SpringContextUtil.getBean("dictService");
+
+            for (int k = 0;  k < objList.size();  k++) {
+
+                Object obj = objList.get(k);
+
+            	for (int i = 0;  i < fieldDictInfos.size();  i++) {
+            		FieldDictInfo = fieldDictInfos.get(i);
+                    value = (String)FieldDictInfo.getMethodGet().invoke(obj);
+                    FieldDictInfo.getMethodSet().invoke(obj, dictService.getDictNameCC(value));
+                }
+            }
+        }
 
         //table自定义方法，以后有需要的话可放开
         //List<Call> callList = getCallList(query);

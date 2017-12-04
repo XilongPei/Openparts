@@ -48,7 +48,7 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
     }
 
     public List<Dict> getDictsByCode(String code) {
-        String key = RedisConstant.DICT_PRE+ code;
+        String key = RedisConstant.DICT_PRE + code;
         List dicts = redisDao.get(key, List.class);
         if (dicts == null) {
             String hql = "from Dict where code='" + code + "'";
@@ -59,6 +59,11 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
         } else {
             return dicts;
         }
+    }
 
+    public String getDictNameCC(String code) {
+        String hql = "SELECT name FROM Dict WHERE code='" + code + "'";
+        String str = this.get(hql);
+        return str;
     }
 }

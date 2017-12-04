@@ -15,6 +15,13 @@ public interface QueryService extends BaseService {
      */
     Map<String, Object> loadData(String reqObj) throws Exception;
 
+    /**
+     * 通用加载数据方法, Chinese Characters, 汉字替换，代码替换
+     *
+     * @param reqObj 前台请求参数
+     * @return
+     */
+    Map<String, Object> loadData_CC(String reqObj) throws Exception;
 
     /**
      * 通用数据导出，生成excel
