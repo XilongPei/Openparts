@@ -81,6 +81,14 @@
         // alert(JSON.stringify(columns));
         var allowPaging = this.data.query.allowPaging;
         var rowId = this.data.query.key;
+
+        if(typeof(that.config)=="undefined"){
+            ajaxSrc = "/query/loadData";
+        }else if(typeof(that.config.ajaxSrcOfTable)=="undefined"){
+            ajaxSrc = "/query/loadData";
+        }else{
+            ajaxSrc = that.config.ajaxSrcOfTable;
+        }
         this.table = $('#' + tableId).DataTable($.extend({
             "paging": allowPaging, // 分页
             "lengthChange": allowPaging, // 每页记录数可选项
@@ -100,7 +108,7 @@
             "displayLength": that.data.pageInfo.pageSize,// 每页记录条数，默认为10
             "serverSide": true,
             "ajaxDataProp": "data",
-            "ajaxSource": basePath + "/user/loadData",
+            "ajaxSource": basePath + ajaxSrc,
             "fnServerData": $.proxy(that.fillDataTable, that),
             "fnInitComplete": $.proxy(that.fnInitComplete, that),
             "singleSelect": true,  //单选
@@ -400,8 +408,17 @@
         console.log("reqObj:");
         console.log(reqParam);
         console.log(JSON);
+
+        if(typeof(this.config)=="undefined"){
+            ajaxSrc = "/query/loadData";
+        }else if(typeof(this.config.ajaxSrcOfTable)=="undefined"){
+            ajaxSrc = "/query/loadData";
+        }else{
+            ajaxSrc = this.config.ajaxSrcOfTable;
+        }
+
         //注释以上部分，统一用ajaxPost处理，以便处理session超时（ajax请求超时）
-        ajaxPost(basePath + "/query/loadData", {"reqObj": this.toJSONString(reqParam)}, function (result, status) {
+        ajaxPost(basePath + ajaxSrc, {"reqObj": this.toJSONString(reqParam)}, function (result, status) {
             retData = result;
         });
         var start = 0;

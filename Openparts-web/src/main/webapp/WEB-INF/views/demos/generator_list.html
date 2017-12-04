@@ -59,10 +59,15 @@
 
 <script>
     var form = $("#searchDiv").form({baseEntity: false});
+
     form.initComponent();
     var generatorTable, winId = "generatorWin";
+
     $(function (){
-        generatorTable = new CommonTable("generator_table", "generator", "searchDiv", null);
+        var table_config={
+                "ajaxSrcOfTable":"/query/loadData_CC"
+            };
+        generatorTable = new CommonTable("generator_table", "generator", "searchDiv", table_config);
         //绑定按钮事件
         $("button[data-btn-type]").click(function () {
             var action = $(this).data("btn-type");
