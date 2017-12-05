@@ -37,7 +37,7 @@ public class Generator extends BaseEntity {
     private Dict nation;
 
 
-    @Header(name="学历",joinClass = Dict.class,dataSource="EDUCATION")
+    @Header(name="学历",joinClass = Dict.class,dataSource="EDUCATION" ,codeField="code")
     @Column(name="education")
     private String education;
 

@@ -19,6 +19,8 @@ public class FieldSetting {
     private String validateType;
     //字典编码，或者url路径
     private String dictCode;
+    private String codeField;
+
     private String isSelected;
     private String isCondition;
 
@@ -28,15 +30,26 @@ public class FieldSetting {
         String remark = field.getAnnotation(Header.class).name();
         this.setColumnName(field.getName());
         String dataSource = field.getAnnotation(Header.class).dataSource();
+
         if (!StrUtil.isEmpty(dataSource)) {
             this.setDictCode(dataSource);
             if (field.getAnnotation(Header.class).joinClass().equals(Dict.class)) {
                 this.setTagType("dictSelector");
             }
-        } else if (field.getAnnotation(Header.class).joinClass().equals(Dict.class)) {
+        }
+        else if (field.getAnnotation(Header.class).joinClass().equals(Dict.class)) {
             this.setDictCode(PingYinUtil.getFirstSpell(field.getName()).toUpperCase());
             this.setTagType("dictSelector");
         }
+
+        String str = field.getAnnotation(Header.class).codeField();
+        if (!StrUtil.isEmpty(str)) {
+            this.setCodeField(str);
+        }
+        else {
+            this.setCodeField("id");
+        }
+
         if (field.getType() == String.class) {
             if (StrUtil.isEmpty(this.getTagType())) {
                 if (field.getAnnotation(Column.class).length() > 255) {
@@ -161,5 +174,11 @@ public class FieldSetting {
         this.dictCode = dictCode;
     }
 
+    public String getCodeField() {
+        return codeField;
+    }
 
+    public void setCodeField(String codeField) {
+        this.codeField = codeField;
+    }
 }

@@ -98,7 +98,7 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
             	for (int i = 0;  i < fieldDictInfos.size();  i++) {
             		FieldDictInfo = fieldDictInfos.get(i);
                     value = (String)FieldDictInfo.getMethodGet().invoke(obj);
-                    FieldDictInfo.getMethodSet().invoke(obj, dictService.getDictNameCC(value));
+                    FieldDictInfo.getMethodSet().invoke(obj, dictService.getDictNameCC(FieldDictInfo.getDictCode(), FieldDictInfo.getCodeField(), value));
                 }
             }
         }

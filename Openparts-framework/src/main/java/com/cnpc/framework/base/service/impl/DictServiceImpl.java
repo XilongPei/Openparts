@@ -61,9 +61,24 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
         }
     }
 
-    public String getDictNameCC(String code) {
-        String hql = "SELECT name FROM Dict WHERE id='" + code + "'";
-        String str = this.get(hql);
-        return str;
+    public String getDictNameCC(String dictCode, String codeField, String code) {
+        //String hql = "SELECT name FROM Dict WHERE id='" + code + "'";
+        String str;
+
+        String hql2 = "from Dict where code='" + dictCode + "'";
+        Dict dict = this.get(hql2);
+        if (dict != null ) {
+            str = "parentId='" + dict.getId() + "' AND ";
+        } else {
+            return code;
+        }
+
+        String hql = "SELECT name FROM Dict WHERE " + str + codeField + "='" + code + "'";
+        String codeName = this.get(hql);
+        if (codeName != null) {
+            return codeName;
+        }
+
+        return code;
     }
 }

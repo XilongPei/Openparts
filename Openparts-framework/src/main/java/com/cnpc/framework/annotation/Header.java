@@ -16,7 +16,7 @@ public @interface Header {
 
     /**
      * 字段说明
-     * 
+     *
      * @return
      */
     String name() default "";
@@ -36,6 +36,8 @@ public @interface Header {
      */
     String dataSource() default "";
 
-
-
+    /**
+     * 存放字典代码的字段名
+     */
+    String codeField() default "";
 }

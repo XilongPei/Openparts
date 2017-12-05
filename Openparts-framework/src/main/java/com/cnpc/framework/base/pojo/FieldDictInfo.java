@@ -15,6 +15,7 @@ public class FieldDictInfo {
     private Field field;
     private String tagType;
     private String dictCode;
+    private String codeField;
     private Method methodGet;
     private Method methodSet;
 
@@ -37,6 +38,14 @@ public class FieldDictInfo {
         	return null;
         }
 
+        String str = field.getAnnotation(Header.class).codeField();
+        if (!StrUtil.isEmpty(str)) {
+        	fieldDictInfo.setCodeField(str);
+        }
+        else {
+        	fieldDictInfo.setCodeField("id");
+        }
+
         fieldDictInfo.setDictCode(dataSource);
         fieldDictInfo.setField(field);
 
@@ -57,6 +66,14 @@ public class FieldDictInfo {
 
     public void setDictCode(String dictCode) {
         this.dictCode = dictCode;
+    }
+
+    public String getCodeField() {
+        return codeField;
+    }
+
+    public void setCodeField(String codeField) {
+        this.codeField = codeField;
     }
 
     public Method getMethodGet() {
