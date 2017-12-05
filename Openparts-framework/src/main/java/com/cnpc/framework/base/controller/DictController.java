@@ -82,6 +82,9 @@ public class DictController {
 
             dict.setDictCode(dictService.getDictCodeByID(dict.getParentId()));
         }
+        else {
+            dictService.updateChildrenDictCode(dict.getCode(), dict.getId());
+        }
 
         dict.setUpdateDateTime(new Date());
         dictService.saveOrUpdate(dict);

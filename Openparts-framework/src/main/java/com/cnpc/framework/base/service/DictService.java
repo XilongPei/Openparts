@@ -13,4 +13,5 @@ public interface DictService extends BaseService {
 
     String getDictNameCC(String dictCode, String codeField, String code);
     String getDictCodeByID(String id);
+    int updateChildrenDictCode(String dictCode, String parent_id);
 }

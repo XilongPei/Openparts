@@ -42,7 +42,7 @@ public class Dict extends BaseEntity {
     private String remark;
 
     @Header(name = "代码库名")
-    @Column(name = "dictCode", length = 200)
+    @Column(name = "dictCode", length=200, nullable=true)
     private String dictCode;
 
     @Transient

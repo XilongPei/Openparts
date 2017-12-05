@@ -93,4 +93,13 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
 
         return id;
     }
+
+    public int updateChildrenDictCode(String dictCode, String parent_id) {
+        /*
+        update tbl_dict set dictCode = "EDUCATION" where parent_id = "402881f053cd670d0153cd6d6be40000"
+        */
+        String hql = "UPDATE Dict SET dictCode = '" + dictCode + "' WHERE parent_id = '" + parent_id + "'";
+        return this.executeHql(hql);
+    }
+
 }
