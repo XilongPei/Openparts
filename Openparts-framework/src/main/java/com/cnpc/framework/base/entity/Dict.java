@@ -41,6 +41,10 @@ public class Dict extends BaseEntity {
     @Column(name = "remark", length = 1000)
     private String remark;
 
+    @Header(name = "代码库名")
+    @Column(name = "dictCode", length = 200)
+    private String dictCode;
+
     @Transient
     private String parentName;
 
@@ -114,4 +118,13 @@ public class Dict extends BaseEntity {
         this.parentId = parentId;
     }
 
+    public String getDictCode() {
+
+        return dictCode;
+    }
+
+    public void setDictCode(String dictCode) {
+
+        this.dictCode = dictCode;
+    }
 }

@@ -12,4 +12,5 @@ public interface DictService extends BaseService {
     List<Dict> getDictsByCode(String code);
 
     String getDictNameCC(String dictCode, String codeField, String code);
+    String getDictCodeByID(String id);
 }

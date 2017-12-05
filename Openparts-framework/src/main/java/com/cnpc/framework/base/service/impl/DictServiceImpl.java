@@ -62,7 +62,7 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
     }
 
     public String getDictNameCC(String dictCode, String codeField, String code) {
-        //String hql = "SELECT name FROM Dict WHERE id='" + code + "'";
+        /*
         String str;
 
         String hql2 = "from Dict where code='" + dictCode + "'";
@@ -74,11 +74,23 @@ public class DictServiceImpl extends BaseServiceImpl implements DictService {
         }
 
         String hql = "SELECT name FROM Dict WHERE " + str + codeField + "='" + code + "'";
+        */
+        String hql = "SELECT name FROM Dict WHERE dictCode='" + dictCode + "' AND " + codeField + "='" + code + "'";
         String codeName = this.get(hql);
         if (codeName != null) {
             return codeName;
         }
 
         return code;
+    }
+
+    public String getDictCodeByID(String id) {
+        String hql = "SELECT code FROM Dict WHERE id='" + id + "'";
+        String codeName = this.get(hql);
+        if (codeName != null) {
+            return codeName;
+        }
+
+        return id;
     }
 }

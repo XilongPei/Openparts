@@ -76,12 +76,16 @@ public class DictController {
     @ResponseBody
     public Result save(Dict dict) {
 
-        dict.setUpdateDateTime(new Date());
-        dictService.saveOrUpdate(dict);
         if (!StrUtil.isEmpty(dict.getParentId())) {
             Dict parent = dictService.get(Dict.class, dict.getParentId());
             dictService.deleteCacheByKey(RedisConstant.DICT_PRE + parent.getCode());
+
+            dict.setDictCode(dictService.getDictCodeByID(dict.getParentId()));
         }
+
+        dict.setUpdateDateTime(new Date());
+        dictService.saveOrUpdate(dict);
+
         dictService.deleteCacheByKey(RedisConstant.DICT_PRE+"tree");
         return new Result(true);
     }
