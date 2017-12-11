@@ -84,6 +84,8 @@
 
         if(typeof(that.config)=="undefined"){
             ajaxSrc = "/query/loadData";
+        }else if($.isEmptyObject(this.config)){
+            ajaxSrc = "/query/loadData";
         }else if(typeof(that.config.ajaxSrcOfTable)=="undefined"){
             ajaxSrc = "/query/loadData";
         }else{
@@ -410,6 +412,8 @@
         console.log(JSON);
 
         if(typeof(this.config)=="undefined"){
+            ajaxSrc = "/query/loadData";
+        }else if($.isEmptyObject(this.config)){
             ajaxSrc = "/query/loadData";
         }else if(typeof(this.config.ajaxSrcOfTable)=="undefined"){
             ajaxSrc = "/query/loadData";
