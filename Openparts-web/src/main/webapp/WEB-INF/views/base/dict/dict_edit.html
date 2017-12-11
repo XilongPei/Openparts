@@ -1,0 +1,138 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><li class="fa fa-remove"></li></button>
+    <h5 class="modal-title"></h5>
+</div>
+
+<div class="modal-body">
+    <form id="dict_form" name="dict_form" class="form-horizontal">
+        <input type="hidden" name="id">
+        <input type="hidden" name="version">
+        <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
+        <input type="hidden" name="deleted" value="0">
+        <input type='hidden' value="${CSRFToken}" id='csrftoken'>
+        <div class="box-body">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">字典名称<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="name" name="name" placeholder="请填写字典名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">唯一编码<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="code" name="code" placeholder="请填写唯一编码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">字典值<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="value" name="value" placeholder="请填写字典值">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">父级ID</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="parentId" name="parentId" placeholder="请填写父级ID">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">层级编码<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="levelCode" name="levelCode" placeholder="请填写层级编码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">备注<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <textarea name="remark" id="remark" placeholder="请填写备注" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">代码库名<span style="color:red">*</span></label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="dictCode" name="dictCode" placeholder="请填写代码库名">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-right">
+            <button type="button" class="btn btn-default" data-btn-type="cancel" data-dismiss="modal">取消</button>
+            <button type="submit" class="btn btn-primary" data-btn-type="save">提交</button>
+        </div>
+    </form>
+</div>
+<script>
+    var form;
+    var id="${id?default(0)}";
+    $(function(){
+        //初始化表单
+        form=$("#dict_form").form();
+        //数据校验
+        $("#dict_form").bootstrapValidator({
+            message : '请输入有效值',
+            feedbackIcons : {
+                valid : 'glyphicon glyphicon-ok',
+                invalid : 'glyphicon glyphicon-remove',
+                validating : 'glyphicon glyphicon-refresh'
+            },
+            submitHandler : function() {
+                modals.confirm('确认保存？', function() {
+                    var dict = form.getFormSimpleData();
+                    ajaxPost(basePath+'/dict_manager/save',dict, function(data) {
+                        if(data.success){
+                            if(id!="0"){
+                                modals.hideWin(winId);
+                                dictTable.reloadRowData(id);
+                            }else{
+                                modals.hideWin(winId);
+                                dictTable.reloadData();
+                            }
+                        }
+                    });
+                });
+            },
+            fields : {
+                "name":{
+                    validators:{
+                        notEmpty:{message:'字典名称不能为空'}
+                    }
+                },
+                "code":{
+                    validators:{
+                        notEmpty:{message:'唯一编码不能为空'}
+                    }
+                },
+                "value":{
+                    validators:{
+                        notEmpty:{message:'字典值不能为空'}
+                    }
+                },
+                "levelCode":{
+                    validators:{
+                        notEmpty:{message:'层级编码不能为空'}
+                    }
+                },
+                "remark":{
+                    validators:{
+                        notEmpty:{message:'备注不能为空'}
+                    }
+                },
+                "dictCode":{
+                    validators:{
+                        notEmpty:{message:'代码库名不能为空'}
+                    }
+                }
+            }
+        });
+        //初始化控件
+        form.initComponent();
+        //编辑回填
+        if(id!=0){
+            ajaxPost(basePath+"/dict_manager/get/"+id,null,function(data){
+                form.initFormData(data);
+            })
+        }
+    });
+
+</script>

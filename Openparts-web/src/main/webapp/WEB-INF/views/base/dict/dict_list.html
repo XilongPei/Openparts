@@ -1,0 +1,86 @@
+<section class="content-header">
+    <h1>
+        数据字典管理管理
+        <small>列表</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="${basePath}"><i class="fa fa-dashboard"></i> 首页</a></li>
+        <li><a href="#">系统管理</a></li>
+        <li class="active">数据字典管理管理</li>
+    </ol>
+</section>
+
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="dataTables_filter" id="searchDiv" style="display: none">
+                    <input placeholder="名称(编码的文字解释)" name="name" class="form-control" type="search" likeOption="true" />
+                    <input placeholder="唯一编码" name="code" class="form-control" type="search" likeOption="true" />
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" data-btn-type="search">查询</button>
+                        <button type="button" class="btn btn-default" data-btn-type="reset">重置</button>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" data-btn-type="add">新增</button>
+                        <button type="button" class="btn btn-default" data-btn-type="edit">编辑</button>
+                        <button type="button" class="btn btn-default" data-btn-type="delete">删除</button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table id="dict_table" class="table table-bordered table-striped table-hover">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    var dictTable, winId = "dictWin";
+    $(function (){
+        dictTable = new CommonTable("dict_table", "dict_manager", "searchDiv", null);
+        //绑定按钮事件
+        $("button[data-btn-type]").click(function () {
+            var action = $(this).data("btn-type");
+            var rowId = dictTable.getSelectedRowId();
+            switch (action) {
+                case "add":
+                    modals.openWin({
+                        winId: winId,
+                        title: '新增数据字典管理',
+                        width: "900px",
+                        url: basePath + "/dict_manager/edit"
+                    })
+                    break;
+                case "edit":
+                    if (!rowId) {
+                        modals.info('请选择要编辑的行');
+                        return false;
+                    }
+                    modals.openWin({
+                        winId: winId,
+                        title: '编辑数据字典管理【' + dictTable.getSelectedRowData().name + '】',
+                        width: '900px',
+                        url: basePath + "/dict_manager/edit?id=" + rowId
+                    });
+                    break;
+                case 'delete':
+                    if (!rowId) {
+                        modals.info('请选择要删除的行');
+                        return false;
+                    }
+                    modals.confirm("是否要删除该行数据？", function () {
+                        ajaxPost(basePath + "/dict_manager/delete/" + rowId, null, function (data) {
+                            if (data.success) {
+                                dictTable.reloadRowData();
+                            } else {
+                                modals.info("数据字典管理数据被引用，不可删除！");
+                            }
+                        });
+                    })
+                    break;
+            }
+        })
+    })
+</script>

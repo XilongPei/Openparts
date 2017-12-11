@@ -17,7 +17,7 @@ public class Dict extends BaseEntity {
     private static final long serialVersionUID = 5569761987303812150L;
 
     @ForeignShow
-    @Header(name = "字典名称")
+    @Header(name = "名称(编码的文字解释)")
     @Column(name = "name", length = 200)
     private String name;
 
@@ -33,7 +33,7 @@ public class Dict extends BaseEntity {
     @Column(name = "parent_id")
     private String parentId;
 
-    @Header(name = "层级编码")
+    @Header(name = "层级编码(列表排序用)")
     @Column(name = "levelCode", length = 36)
     private String levelCode;
 

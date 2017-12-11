@@ -103,4 +103,16 @@
 		<column key="mobile" header="手机"  operator="eq" width="200" align="center"/>
 		<column key="qq" header="QQ" hidden="true" operator="eq" width="200" align="center" />
 	</query>
+
+	<query id="dict_manager" key="id" tableName="数据字典管理列表" className="com.cnpc.framework.base.entity.Dict">
+	        <column key="rowIndex" header="序号" width="80"/>
+	        <column key="id" header="ID" classType="String" allowSort="true" width="150"/>
+	        <column key="name" header="名称(编码的文字解释)" classType="String" allowSort="true" width="150"/>
+	        <column key="code" header="唯一编码" classType="String" allowSort="true" width="150"/>
+	        <column key="value" header="字典值" classType="String" allowSort="true" width="150"/>
+	        <column key="parentId" header="父级ID" classType="String" allowSort="true" width="150"/>
+	        <column key="levelCode" header="层级编码(列表排序用)" classType="String" allowSort="true" width="150"/>
+	        <column key="remark" header="备注" classType="String" align="left" allowSort="false" width="150"/>
+	        <column key="dictCode" header="代码库名" classType="String" allowSort="true" width="150"/>
+	</query>
 </queryContext>
