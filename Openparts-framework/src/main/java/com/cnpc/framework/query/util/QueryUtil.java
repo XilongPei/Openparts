@@ -490,12 +490,11 @@ public class QueryUtil {
             } catch (Exception ex) {
                 throw new QueryException("转化类【" + column.getClassType() + "】出现异常！");
             }
-            //操
-            // 作需要值，并且有值
+            //操作需要值，并且有值
             Object newValue = value;
             if (isNeedValue(operator) && isNotEmptyValue(value)) {
                 //对值进行处理
-                Map<String, Object> value_map = getValueForOperator( operator, value, clazz);
+                Map<String, Object> value_map = getValueForOperator(operator, value, clazz);
                 if (value_map == null)
                     continue;
                 newValue = value_map.get("value");
