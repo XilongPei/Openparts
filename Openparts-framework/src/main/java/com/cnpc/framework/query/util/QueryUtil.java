@@ -212,9 +212,20 @@ public class QueryUtil {
      */
     private static boolean getIsCondition(Map map) {
         boolean isCondition = true;
-        if (map.get("isCondition") != null)
+        if (map.get("isCondition") != null) {
             isCondition = Boolean.valueOf(map.get("isCondition").toString());
+        }
+
         return isCondition;
+    }
+
+    private static boolean getLikeOption(Map map) {
+        boolean likeOption = true;
+        if (map.get("likeOption") != null) {
+            likeOption = Boolean.valueOf(map.get("likeOption").toString());
+        }
+
+        return likeOption;
     }
 
     /**
@@ -224,10 +235,16 @@ public class QueryUtil {
      * @param column 列配置
      * @return 操作符
      */
-    private static String getOperatorStr(Map map, Column column) {
+    private static String getOperatorStr(Map map, Column column, boolean likeOption) {
         if (map.get("operator") != null && !StrUtil.isEmpty(map.get("operator").toString())) {
             return map.get("operator").toString();
         }
+
+        //the default: class Column operator = "eq";
+        if (likeOption) {
+            return "like";
+        }
+
         return column.getOperator();
     }
 
@@ -474,12 +491,14 @@ public class QueryUtil {
             String key = map.get("key").toString();
             Object value = map.get("value");
             boolean isCondition = getIsCondition(map);
+            boolean likeOption = getLikeOption(map);
+
             Column column = query.getColumn(key);
             if (column == null) {
                 column = new Column();
                 column.setKey(key);
             }
-            String operatorStr = getOperatorStr(map, column);
+            String operatorStr = getOperatorStr(map, column, likeOption);
             logger.debug("condition:"+key+" "+operatorStr+" "+ value);
 
             ConditionOperator operator = getOperator(operatorStr);
@@ -620,13 +639,16 @@ public class QueryUtil {
         for (Map<String, Object> map : conditions) {
             String key = map.get("key").toString();
             Object value = map.get("value");
+            boolean likeOption = getLikeOption(map);
+
             Column column = query.getColumn(key);
             if (column == null) {
                 column = new Column();
                 column.setKey(key);
             }
-            String operatorStr = getOperatorStr(map, column);
-            logger.debug("condition:"+key+" "+operatorStr+" "+ value);
+            String operatorStr = getOperatorStr(map, column, likeOption);
+
+            logger.debug("condition:" + key + " " + operatorStr + " " + value);
             ConditionOperator operator = getOperator(operatorStr);
             //类型处理
             Class clazz;
@@ -644,11 +666,12 @@ public class QueryUtil {
                     continue;
                 newValue = value_map.get("value");
                 operator = (ConditionOperator) value_map.get("operator");
-                criteria=ObjectUtil.getCriteriaWithAlias(criteria,key);
-                criteria=operator.getCriteria(criteria,key,newValue);
-            } else if (!isNeedValue(operator)) {
-                criteria=ObjectUtil.getCriteriaWithAlias(criteria,key);
-                criteria=operator.getCriteria(criteria,key,newValue);
+                criteria = ObjectUtil.getCriteriaWithAlias(criteria, key);
+                criteria = operator.getCriteria(criteria, key, newValue);
+            }
+            else if (!isNeedValue(operator)) {
+                criteria = ObjectUtil.getCriteriaWithAlias(criteria, key);
+                criteria = operator.getCriteria(criteria, key, newValue);
             }
         }
 

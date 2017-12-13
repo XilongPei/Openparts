@@ -375,6 +375,7 @@
                     map.key = key;
                     map.value = value;
                     map.isCondition = isCondition;
+                    map.likeOption = likeOption;
                     map.operator = operator;
                     conditions.push(map);
                     // alert("key:"+key+" value:"+value);
