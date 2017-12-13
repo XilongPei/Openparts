@@ -220,7 +220,7 @@ public class QueryUtil {
     }
 
     private static boolean getLikeOption(Map map) {
-        boolean likeOption = true;
+        boolean likeOption = false;
         if (map.get("likeOption") != null) {
             likeOption = Boolean.valueOf(map.get("likeOption").toString());
         }
