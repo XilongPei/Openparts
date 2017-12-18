@@ -54,6 +54,11 @@ public class RedisConstant {
     public static final String UTILS_MOBILE_VERIFY_STR_PRE = "utils_mvs:";
 
     /**
+     * access_token
+     */
+    public static final String ACCESS_TOKEN_PRE = "access_token:";
+
+    /**
      * 组装key
      * @param pre 前缀
      * @param after 后缀
