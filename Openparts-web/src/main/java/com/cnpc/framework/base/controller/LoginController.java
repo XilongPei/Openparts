@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.openparts.common.utils.KaliumKeyPair;
+import com.openparts.common.CommonConstants;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ import java.util.Set;
 @Controller
 public class LoginController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Resource
     private RoleService roleService;
@@ -86,7 +87,7 @@ public class LoginController {
                         model.addAttribute("message", new ResultCode("1", msg));
                     }
                     subject.getSession().setAttribute("isAuthorized", false);
-                    LOGGER.error(msg);
+                    logger.error(msg);
                     return LOGIN_PAGE;
                 }
             } else {
@@ -131,7 +132,7 @@ public class LoginController {
         }
 
         if (msg != null) {
-            LOGGER.error(msg);
+            logger.error(msg);
         }
 
         return LOGIN_PAGE;
@@ -217,7 +218,7 @@ public class LoginController {
         } catch (Exception e) {
             String msg = "连接" + type + "服务器异常. 错误信息为：" + e.getMessage();
             model.addAttribute("message", new ResultCode("1", msg));
-            LOGGER.error(msg);
+            logger.error(msg);
             return LOGIN_PAGE;
         }
 
@@ -372,7 +373,10 @@ public class LoginController {
                     //generate access_token
                     AccessToken access_token = new AccessToken();
                     String key = RedisConstant.ACCESS_TOKEN_PRE + access_token.getKey();
-                    redisDao.add(key, 1000, access_token.getValue());
+                    redisDao.add(key, CommonConstants.ACCESS_TOKEN_LIFE_SECONDS, access_token.getValue());
+
+                    logger.debug("CommonConstants.ACCESS_TOKEN_LIFE_SECONDS = " + CommonConstants.ACCESS_TOKEN_LIFE_SECONDS);
+
                     map.put("ret", "success");
                     return map;
                 }
