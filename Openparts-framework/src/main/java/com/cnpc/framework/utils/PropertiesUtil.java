@@ -58,4 +58,14 @@ public class PropertiesUtil {
         }
 
     }
+
+    public static boolean getBooleanValue(String key, boolean defaultBoolean) {
+
+        String str = props.getProperty(key);
+
+        if (StrUtil.isEmpty(str))
+            return defaultBoolean;
+
+        return Boolean.parseBoolean(str);
+    }
 }

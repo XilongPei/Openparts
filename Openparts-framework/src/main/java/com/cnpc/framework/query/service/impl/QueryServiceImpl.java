@@ -12,6 +12,7 @@ import com.cnpc.framework.query.service.QueryService;
 import com.cnpc.framework.query.util.ExportUtil;
 import com.cnpc.framework.query.util.QueryUtil;
 import com.cnpc.framework.utils.StrUtil;
+import com.cnpc.framework.utils.FunctionRightsUtil;
 import com.cnpc.framework.base.service.DictService;
 import com.cnpc.framework.utils.SpringContextUtil;
 import jxl.Workbook;
@@ -166,6 +167,11 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
      * @throws QueryException 获取过程中的异常
      */
     public List getDataList(QueryCondition queryCondition, Query query, PageInfo pageInfo, Class objClass, boolean isQuery) throws QueryException {
+
+        if (!FunctionRightsUtil.getFunctionRights("QUERY_" + query.getId())) {
+            return null;
+        }
+
         List objList = null;
         //使用反射的接口查询，一般用于非常复杂的查询
         if (!query.getSimpleSearch()) {
