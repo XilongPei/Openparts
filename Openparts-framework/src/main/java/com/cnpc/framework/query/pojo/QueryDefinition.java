@@ -5,7 +5,7 @@ import com.cnpc.framework.query.entity.QueryContext;
 import com.cnpc.framework.utils.ConfigurationUtil;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
-
+import com.openparts.common.CommonConstants;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,7 +16,7 @@ public class QueryDefinition {
 
     public static final String DEFAULT_CONFIG_LOCATION = "query/*.xml";
 
-    static final Logger log = Logger.getLogger(QueryDefinition.class);
+    static final Logger logger = Logger.getLogger(QueryDefinition.class);
 
     private static QueryDefinition instance = new QueryDefinition();
 
@@ -31,13 +31,13 @@ public class QueryDefinition {
 
     }
 
-    public void initQuery(){
+    public void initQuery() {
         cachedFilesCount = 0;
         Resource resources[] = ConfigurationUtil.getAllResources(DEFAULT_CONFIG_LOCATION);
         if (resources != null) {
             for (int i = 0; i < resources.length; i++) {
                 Resource resource = resources[i];
-                log.info("Loading query from {" + resource.toString() + "}");
+                logger.info("Loading query from {" + resource.toString() + "}");
                 try {
                     QueryContext queryContext = (QueryContext) ConfigurationUtil.parseXMLObject(
                             com.cnpc.framework.query.entity.QueryContext.class, resource);
@@ -49,27 +49,29 @@ public class QueryDefinition {
                         Query query = (Query) it.next();
                         Query previous = (Query) querys.put(query.getId(), query);
                         if (previous != null)
-                            log.error("Duplicated Query register! id[{" + query.getId() + "}], in file {" + resource.toString() + "}");
+                            logger.error("Duplicated Query register! id[{" + query.getId() + "}], in file {" + resource.toString() + "}");
                     } while (true);
                     if (resource.getURL().getProtocol().equals("file"))
                         cachedFiles.put(resource, Long.valueOf(resource.getFile().lastModified()));
                 } catch (IOException e) {
-                    log.error("Could not load query from {" + resource.toString() + "}, reason:", e);
+                    logger.error("Could not load query from {" + resource.toString() + "}, reason:", e);
                 } catch (RuntimeException e) {
-                    log.error("Fail to digester query from {" + resource + "}, reason:", e);
+                    logger.error("Fail to digester query from {" + resource + "}, reason:", e);
                 }
             }
 
             cachedFilesCount = cachedFiles.size();
-            log.debug("cached query files: {" + cachedFilesCount + "}");
+            logger.debug("cached query files: {" + cachedFilesCount + "}");
         }
     }
 
     public static Query getQueryById(String queryId) {
 
-        // TODO 正式发布时，请注释该行代码
-        instance.update();
-        return (Query) instance.querys.get(queryId);
+        if (CommonConstants.DEBUG_RUNNING) {
+            instance.update();
+        }
+
+        return (Query)instance.querys.get(queryId);
     }
 
     public static Map getQuerys() {
@@ -94,7 +96,7 @@ public class QueryDefinition {
                                     com.cnpc.framework.query.entity.QueryContext.class, resource);
                             List list = queryContext.getQueries();
                             Query query;
-                            for (Iterator it = list.iterator(); it.hasNext(); log.debug("Update Query id[" + query.getId() + "], in {"
+                            for (Iterator it = list.iterator(); it.hasNext(); logger.debug("Update Query id[" + query.getId() + "], in {"
                                     + resource.toString() + "}")) {
                                 query = (Query) it.next();
                                 instance.querys.put(query.getId(), query);
@@ -102,14 +104,13 @@ public class QueryDefinition {
                             cachedFiles.put(resource, Long.valueOf(resource.getFile().lastModified()));
                         }
                     } catch (IOException e) {
-                        log.error("Could not load query from {" + resource.toString() + "}, reason:", e);
+                        logger.error("Could not load query from {" + resource.toString() + "}, reason:", e);
                     } catch (RuntimeException e) {
-                        log.error("Fail to digester query from {" + resource.toString() + "}, reason:", e);
+                        logger.error("Fail to digester query from {" + resource.toString() + "}, reason:", e);
                     }
                 }
             }
 
         }
     }
-
 }

@@ -9,4 +9,5 @@ public class CommonConstants {
 
     public static final int ACCESS_TOKEN_LIFE_SECONDS = PropertiesUtil.getIntValue("access_token.life_seconds", 1000);
 
+    public static final boolean DEBUG_RUNNING = PropertiesUtil.getBooleanValue("DEBUG_RUNNING", true);
 }
