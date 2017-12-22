@@ -10,7 +10,7 @@ public class MongoDBConfig {
     private String addresses;
     private List<MongoDBCredential> credentials;
 
-    MongoDBConfig(String addresses, List<MongoDBCredential> credentials) {
+    public MongoDBConfig(String addresses, List<MongoDBCredential> credentials) {
         this.addresses = addresses;
         this.credentials = credentials;
     }

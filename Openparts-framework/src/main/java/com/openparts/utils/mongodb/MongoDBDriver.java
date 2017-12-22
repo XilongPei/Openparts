@@ -24,7 +24,7 @@ public class MongoDBDriver {
 
     private MongoDBConfig configuration;
 
-    MongoDBDriver(MongoDBConfig configuration) throws Exception {
+    public MongoDBDriver(MongoDBConfig configuration) throws Exception {
         this.configuration = configuration;
 
         connectionsPerHost = PropertiesUtil.getIntValue("mongodb.driver.connectionsPerHost", 32);

@@ -1,0 +1,14 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+      http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <bean id="mongodbBean" class="com.cnpc.framework.base.dao.impl.MongodbDaoClient">
+        <property name="databaseName" value="${mongodb.filesystem.dbname}"/>
+        <property name="username" value="${mongodb.filesystem.username}"/>
+        <property name="password" value="${mongodb.filesystem.password}"/>
+        <property name="addresses" value="${mongodb.filesystem.addresses}"/>
+    </bean>
+
+</beans>
