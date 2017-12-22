@@ -159,7 +159,6 @@ public class LoginController {
         password = EncryptUtil.getPassword(password, userName);
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
         token.setRememberMe(true);
-        subject = SecurityUtils.getSubject();
 
         return tryLogin(subject, model, token);
     }
