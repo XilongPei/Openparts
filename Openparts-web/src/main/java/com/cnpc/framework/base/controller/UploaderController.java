@@ -8,7 +8,7 @@ import com.cnpc.framework.base.pojo.FileResult;
 import com.cnpc.framework.base.pojo.MarkDownResult;
 import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.service.UploaderService;
-import com.cnpc.framework.util.SecurityUtil;
+import com.cnpc.framework.utilsWeb.SecurityUtil;
 import com.cnpc.framework.utils.DateUtil;
 import com.cnpc.framework.utils.FileUtil;
 import com.cnpc.framework.utils.PropertiesUtil;

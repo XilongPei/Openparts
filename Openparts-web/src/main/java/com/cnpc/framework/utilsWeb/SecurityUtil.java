@@ -1,4 +1,4 @@
-package com.cnpc.framework.util;
+package com.cnpc.framework.utilsWeb;
 
 import com.cnpc.framework.base.entity.User;
 import com.cnpc.framework.base.service.UserService;
@@ -13,11 +13,11 @@ import javax.annotation.Resource;
  */
 public class SecurityUtil {
 
-    public static String getUserId(){
+    public static String getUserId() {
        return SecurityUtils.getSubject().getPrincipal().toString();
     }
 
-    public static User getUser(){
+    public static User getUser() {
         return (User)SecurityUtils.getSubject().getSession().getAttribute("user");
     }
 }

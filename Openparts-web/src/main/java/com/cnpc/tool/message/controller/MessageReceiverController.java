@@ -3,7 +3,7 @@ package com.cnpc.tool.message.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.cnpc.framework.base.pojo.Result;
-import com.cnpc.framework.util.SecurityUtil;
+import com.cnpc.framework.utilsWeb.SecurityUtil;
 import com.cnpc.tool.message.entity.Message;
 import com.cnpc.tool.message.entity.MessageGroup;
 import com.cnpc.tool.message.entity.MessageGroupUser;

@@ -2,7 +2,7 @@ package com.cnpc.tool.markdown.controller;
 
 import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.service.BaseService;
-import com.cnpc.framework.util.SecurityUtil;
+import com.cnpc.framework.utilsWeb.SecurityUtil;
 import com.cnpc.framework.utils.StrUtil;
 import com.cnpc.tool.markdown.entity.MarkDown;
 import org.apache.shiro.SecurityUtils;

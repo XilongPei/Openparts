@@ -5,7 +5,7 @@ import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.service.impl.BaseServiceImpl;
 import com.cnpc.framework.constant.RedisConstant;
 import com.cnpc.framework.message.SimpleMailSender;
-import com.cnpc.framework.util.SecurityUtil;
+import com.cnpc.framework.utilsWeb.SecurityUtil;
 import com.cnpc.framework.utils.StrUtil;
 import com.cnpc.tool.message.entity.Message;
 import com.cnpc.tool.message.entity.MessageGroup;
