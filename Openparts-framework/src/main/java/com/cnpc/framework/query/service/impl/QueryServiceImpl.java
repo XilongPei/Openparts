@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.ArrayList;
 import java.util.Map;
 import java.lang.reflect.Field;
@@ -168,8 +169,20 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
      */
     public List getDataList(QueryCondition queryCondition, Query query, PageInfo pageInfo, Class objClass, boolean isQuery) throws QueryException {
 
-        if (!FunctionRightsUtil.getFunctionRights("QUERY_" + query.getId())) {
-            return null;
+        String rolesCanAccess = query.getRolesCanAccess();
+        if (rolesCanAccess != null) {
+            int i;
+
+            String strs[] = StrUtil.split(rolesCanAccess, ',');
+            Set<String> roles = FunctionRightsUtil.getCurrentUserRoles();
+            for (i = 0;  i < strs.length;  i++) {
+                if (roles.contains(strs[i]))
+                    break;
+            }
+
+            if (i >= strs.length) {
+                return null;
+            }
         }
 
         List objList = null;

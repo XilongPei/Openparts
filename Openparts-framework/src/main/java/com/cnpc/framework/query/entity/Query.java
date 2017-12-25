@@ -78,6 +78,8 @@ public class Query {
     @SetProperty(attributeName = "method", pattern = "queryContext/query")
     private String method;
 
+    @SetProperty(attributeName = "rolesCanAccess", pattern = "queryContext/query")
+    private String rolesCanAccess;
     /**
      * sql 扩展 ，支持复杂查询
      */
@@ -116,6 +118,7 @@ public class Query {
         enableMultiHeader = false;
         simpleSearch = true;
         startRow = 1;
+        rolesCanAccess = null;
     }
 
     public List<Call> getCallList() {
@@ -402,4 +405,13 @@ public class Query {
         this.startRow = startRow;
     }
 
+    public String getRolesCanAccess() {
+
+        return rolesCanAccess;
+    }
+    
+    public void setRolesCanAccess(String rolesCanAccess) {
+
+        this.rolesCanAccess = rolesCanAccess;
+    }
 }
