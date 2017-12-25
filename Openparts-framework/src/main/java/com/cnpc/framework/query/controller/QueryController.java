@@ -46,40 +46,59 @@ public class QueryController {
     /**
      * 第一次加载页面初始化
      *
-     * @param reqObj 前台参数
+     * @param reqObj
+     *            前台参数
      * @return
      */
     @RequestMapping("/loadData")
     @ResponseBody
-    public Map<String, Object> loadData(String reqObj) throws Exception {
+    public Map<String, Object> loadData(String reqObj, HttpServletResponse response) throws Exception {
 
-        return queryService.loadData(reqObj);
+        Map<String, Object>  map;
+        map = queryService.loadData(reqObj);
+
+        if (map == null) {
+            response.setHeader("session-status", "timeout");
+            return null;
+        }
+
+        return map;
     }
 
     /**
      * 第一次加载页面初始化
      *
-     * @param reqObj 前台参数
+     * @param reqObj
+     *            前台参数
      * @return
      */
     @RequestMapping("/loadData_CC")
     @ResponseBody
-    public Map<String, Object> loadData_CC(String reqObj) throws Exception {
+    public Map<String, Object> loadData_CC(String reqObj, HttpServletResponse response) throws Exception {
 
-        return queryService.loadData_CC(reqObj);
+        Map<String, Object>  map;
+        map = queryService.loadData_CC(reqObj);
+
+        if (map == null) {
+            response.setHeader("session-status", "timeout");
+            return null;
+        }
+
+        return map;
     }
 
     /**
      * 导出数据
      *
-     * @param reqObjs   前台参数
-     * @param tableName 表名
+     * @param reqObjs
+     *            前台参数
+     * @param tableName
+     *            表名
      * @param response
      * @throws Exception
      */
     @RequestMapping(value = "/exportData")
-    public void exportData(String reqObjs, String tableName,  HttpServletResponse response)
-            throws Exception {
+    public void exportData(String reqObjs, String tableName, HttpServletResponse response) throws Exception {
         String tempFile = queryService.exportData(reqObjs, tableName);
         response.getWriter().print(tempFile);
     }
@@ -94,9 +113,10 @@ public class QueryController {
             out = response.getOutputStream();
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-            response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes("GBK"), "ISO-8859-1") + ".xls");
-            File file = new File(request.getRealPath("/") + File.separator + "templates" + File.separator + "temp" + File.separator
-                    + templateName + ".xls");
+            response.setHeader("content-disposition",
+                    "attachment;filename=" + new String(fileName.getBytes("GBK"), "ISO-8859-1") + ".xls");
+            File file = new File(request.getRealPath("/") + File.separator + "templates" + File.separator + "temp"
+                    + File.separator + templateName + ".xls");
             FileInputStream inputStream = new FileInputStream(file);
             // 开始读取下载
             byte[] b = new byte[1024];
@@ -136,8 +156,10 @@ public class QueryController {
     /**
      * 跳转到自定义表格配置界面 配置其中一个query,与其绑定的query也随着改变 XXB
      *
-     * @param queryId     主query
-     * @param bindQueryId 次query
+     * @param queryId
+     *            主query
+     * @param bindQueryId
+     *            次query
      * @param pageName
      * @param model
      * @return
@@ -157,7 +179,7 @@ public class QueryController {
 
         ColumnConfig config = new ColumnConfig();
         // 得到已选择的Column
-        //TODO
+        // TODO
         String userid = "todo";
         DetachedCriteria criteria = DetachedCriteria.forClass(QueryConfig.class);
         criteria.add(Restrictions.eq("queryId", queryId));
@@ -166,8 +188,8 @@ public class QueryController {
         List<QueryConfig> list = queryService.findByCriteria(criteria);
         // 如果数据库不为空，则取数据库，否则取xml配置文档
         Query query = QueryDefinition.getQueryById(queryId);
-        Object[][] selected = new Object[][]{};
-        Object[][] unSelected = new Object[][]{};
+        Object[][] selected = new Object[][] {};
+        Object[][] unSelected = new Object[][] {};
         List<Column> columnList = new ArrayList<Column>();
         for (Column column : query.getColumnList()) {
             columnList.add(column);
@@ -231,7 +253,7 @@ public class QueryController {
     public Map<String, Object> getColumnConfig(String queryId, String pageName, HttpSession session) throws Exception {
 
         Query query = QueryDefinition.getQueryById(queryId);
-        //TODO
+        // TODO
         String userid = "todo";
         DetachedCriteria criteria = DetachedCriteria.forClass(QueryConfig.class);
         criteria.add(Restrictions.eq("queryId", queryId));
@@ -242,7 +264,7 @@ public class QueryController {
         if (list.size() > 0)
             colsName = list.get(0).getColumns();
         Map<String, Object> map = new HashMap<String, Object>();
-        //query.setCallList(getCallList(query));
+        // query.setCallList(getCallList(query));
         map.put("query", query);
         map.put("columnName", colsName);
         return map;
@@ -258,7 +280,7 @@ public class QueryController {
     public String saveUserDefine(String configObj, HttpSession session) {
 
         QueryConfig config = JSON.parseObject(configObj, QueryConfig.class);
-        //TODO
+        // TODO
         String userid = "todo";
         config.setUserid(userid);
         queryService.deleteAndSave(config);
@@ -277,7 +299,7 @@ public class QueryController {
     public String setDefault(String configObj, HttpSession session) {
 
         QueryConfig config = JSON.parseObject(configObj, QueryConfig.class);
-        //TODO
+        // TODO
         config.setUserid(null);
         queryService.delete(config);
         return "200";
@@ -290,7 +312,7 @@ public class QueryController {
         List<QueryConfig> cfgList = JSON.parseArray(configList, QueryConfig.class);
         if (cfgList == null || cfgList.size() < 1)
             return "";
-        //TODO
+        // TODO
         for (QueryConfig cfg : cfgList) {
             cfg.setUserid(null);
             queryService.deleteAndSave(cfg);
@@ -312,7 +334,7 @@ public class QueryController {
         List<QueryConfig> cfgList = JSON.parseArray(configList, QueryConfig.class);
         if (cfgList == null || cfgList.size() < 1)
             return "";
-        //TODO
+        // TODO
         for (QueryConfig cfg : cfgList) {
             cfg.setUserid(null);
             queryService.delete(cfg);

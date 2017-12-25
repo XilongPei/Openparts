@@ -50,7 +50,10 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         // 分页信息
         PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
         //返回数据
+
         List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
+        if (objList == null)
+            return null;
 
         //table自定义方法，以后有需要的话可放开
         //List<Call> callList = getCallList(query);
@@ -85,7 +88,10 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         Query query = QueryUtil.getQuery(queryCondition);
         Class<?> objClass = QueryUtil.getClassName(query.getClassName());
         PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
+
         List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
+        if (objList == null)
+            return null;
 
         String value;
         List<FieldDictInfo> fieldDictInfos = getFieldsDictInfo(objClass);
