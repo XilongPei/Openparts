@@ -4,8 +4,8 @@
       http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-    <bean id="mongodbBean" class="com.cnpc.framework.base.dao.impl.MongodbDaoClient">
-        <property name="databaseName" value="${mongodb.filesystem.dbname}"/>
+    <bean id="mongodbBean" class="com.openparts.base.dao.impl.MongodbDaoClient">
+        <property name="dbname" value="${mongodb.filesystem.dbname}"/>
         <property name="username" value="${mongodb.filesystem.username}"/>
         <property name="password" value="${mongodb.filesystem.password}"/>
         <property name="addresses" value="${mongodb.filesystem.addresses}"/>
