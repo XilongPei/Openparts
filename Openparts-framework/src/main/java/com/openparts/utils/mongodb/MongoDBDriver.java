@@ -18,7 +18,6 @@ public class MongoDBDriver {
     private Integer maxWaitTime = 30000;
     private Integer connectTimeout = 30000;
     private Integer socketTimeout = 30000;
-
     private Integer maxConnectionIdle = 6000;
 
 
@@ -33,7 +32,6 @@ public class MongoDBDriver {
         socketTimeout = PropertiesUtil.getIntValue("mongodb.driver.socketTimeout", 30000);
         maxConnectionIdle = PropertiesUtil.getIntValue("mongodb.driver.maxConnectionIdle", 30000);
 
-        ////init,db check and connected.
         MongoClientOptions.Builder builder = MongoClientOptions.builder();
 
         builder.connectionsPerHost(this.connectionsPerHost);
@@ -44,6 +42,11 @@ public class MongoDBDriver {
         builder.socketTimeout(this.socketTimeout);
         builder.maxConnectionIdleTime(maxConnectionIdle);
 
+        /**
+         * 在options里添加readPreference=secondaryPreferred即可实现，读请求优先到Secondary节点，从而实现读写分离的功能
+         * 在options里添加maxPoolSize=xx即可将客户端连接池限制在xx以内。
+         * 在options里添加w= majority即可保证写请求成功写入大多数节点才向客户端确认
+         */
         MongoClientOptions options = builder.build();
 
         this.mongo = new MongoClient(configuration.buildAddresses(), configuration.buildCredentials(), options);
@@ -62,11 +65,6 @@ public class MongoDBDriver {
         return mongo.getDatabase(dbName);
     }
 
-    /**
-     * old api
-     * @param dbName
-     * @return
-     */
     public DB getDB(String dbName) {
         return mongo.getDB(dbName);
     }
