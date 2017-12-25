@@ -1,5 +1,6 @@
 package com.cnpc.framework.filter;
 
+import com.cnpc.framework.utils.FunctionRightsUtil;
 import com.cnpc.framework.utils.SpringContextUtil;
 import com.cnpc.framework.utils.AccessToken;
 import com.cnpc.framework.base.dao.RedisDao;
@@ -8,6 +9,7 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.util.AntPathMatcher;
 import org.apache.shiro.util.PatternMatcher;
+import org.apache.shiro.subject.Subject;
 import org.apache.log4j.Logger;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
-
 /**
  * filter过滤器，获取项目路径，设置ajax超时标识
  *
@@ -40,7 +41,8 @@ public class SystemFilter implements Filter {
         log.debug(request.getRequestURL());
 
         String basePath = request.getContextPath();
-        boolean isauth = SecurityUtils.getSubject().isAuthenticated();
+        Subject subject = SecurityUtils.getSubject();
+        boolean isauth = subject.isAuthenticated();
 
         request.setAttribute("basePath", basePath);
         request.setAttribute("isauth", isauth);
@@ -58,7 +60,7 @@ public class SystemFilter implements Filter {
                 }
                 String accessStr = redisDao.get(key);
 
-                if (!AccessToken.checkExpiresIn(accessStr)) {
+                if (!AccessToken.checkExpiresIn(accessStr) || !FunctionRightsUtil.getFunctionRights(subject, path)) {
                     // 在响应头设置session状态
                     response.setHeader("session-status", "timeout");
                     return;

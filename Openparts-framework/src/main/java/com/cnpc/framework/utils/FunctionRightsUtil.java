@@ -34,15 +34,13 @@ public class FunctionRightsUtil {
             return false;
         }
 
-        boolean match = false;
         for (String str : functions) {
             if (pathMatcher.matches(str, path)) {
-                match = true;
                 return true;
             }
         }
 
-        return true;
+        return false;
     }
 
     public static Set<String> getCurrentUserRoles() {
