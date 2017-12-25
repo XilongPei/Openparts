@@ -57,8 +57,8 @@ public class QueryController {
         Map<String, Object>  map;
         map = queryService.loadData(reqObj);
 
-        if (map == null) {
-            response.setHeader("session-status", "timeout");
+        if (map.get("rows") == null) {
+            response.sendError(403, "Forbidden to access query, id=\"" + map.get("query") + "\"");
             return null;
         }
 
@@ -79,8 +79,8 @@ public class QueryController {
         Map<String, Object>  map;
         map = queryService.loadData_CC(reqObj);
 
-        if (map == null) {
-            response.setHeader("session-status", "timeout");
+        if (map.get("rows") == null) {
+            response.sendError(403, "Forbidden to access query, id=\"" + map.get("query") + "\"");
             return null;
         }
 

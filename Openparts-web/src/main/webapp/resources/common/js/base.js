@@ -158,18 +158,30 @@ function ajaxPost(url, params, callback) {
                         jQuery("#csrftoken").val(resJson.csrf.CSRFToken);
                         this.success(resJson.retData, 200);
                     }
-                    return;
+                    return false;
                 } else {
-                    modals.error({
+                    modals.confirm({
                         text: JSON.stringify(err) + '<br/>err1:' + JSON.stringify(err1) + '<br/>err2:' + JSON.stringify(err2),
+                        callback:function () {
+                            window.location.href = basePath + "/";
+                        },
+                        cancel_call:function () {
+                            window.location.href = basePath + "/";
+                        },
                         large: true
                     });
-                    return;
+                    return false;
                 }
             }
 
-            modals.error({
+            modals.confirm({
                 text: JSON.stringify(err) + '<br/>err1:' + JSON.stringify(err1) + '<br/>err2:' + JSON.stringify(err2),
+                callback:function () {
+                    window.location.href = basePath + "/";
+                },
+                cancel_call:function () {
+                    window.location.href = basePath + "/";
+                },
                 large: true
             });
         }

@@ -52,15 +52,18 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         //返回数据
 
         List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
-        if (objList == null)
-            return null;
-
-        //table自定义方法，以后有需要的话可放开
-        //List<Call> callList = getCallList(query);
-        //query.setCallList(callList);
-        map.put("query", query);
-        map.put("pageInfo", pageInfo);
-        map.put("rows", objList);
+        if (objList == null) {
+            map.put("rows", null);
+            map.put("query", query.getId());
+        }
+        else {
+            //table自定义方法，以后有需要的话可放开
+            //List<Call> callList = getCallList(query);
+            //query.setCallList(callList);
+            map.put("query", query);
+            map.put("pageInfo", pageInfo);
+            map.put("rows", objList);
+        }
         return map;
     }
 
@@ -90,8 +93,11 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
 
         List objList = getDataList(queryCondition, query, pageInfo, objClass, true);
-        if (objList == null)
-            return null;
+        if (objList == null) {
+            map.put("rows", null);
+            map.put("query", query.getId());
+            return map;
+        }
 
         String value;
         List<FieldDictInfo> fieldDictInfos = getFieldsDictInfo(objClass);
@@ -138,7 +144,16 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
             Class<?> objClass = QueryUtil.getClassName(query.getClassName());
             //此处pageInfo没有什么用处
             PageInfo pageInfo = QueryUtil.getPageInfo(queryCondition, query);
+
             List objList = getDataList(queryCondition, query, pageInfo, objClass, false);
+            if (objList == null) {
+                workbook.write();
+                workbook.close();
+                fout.flush();
+                fout.close();
+                return fileName;
+            }
+
             //构建工作表
             WritableSheet sheet = workbook.createSheet(StrUtil.isEmpty(queryCondition.getSheetName()) ?
                     tableName : queryCondition.getSheetName(), qindex);
@@ -160,7 +175,6 @@ public class QueryServiceImpl extends BaseServiceImpl implements QueryService {
         return fileName;
 
     }
-
 
     /**
      * 获取查询结果数据
