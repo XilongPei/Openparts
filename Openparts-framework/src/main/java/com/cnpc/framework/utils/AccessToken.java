@@ -21,8 +21,8 @@ public class AccessToken implements Serializable {
         // UUID是由一个十六进制形式的数字组成,表现出来的形式例如
         // 550E8400-E29B-11D4-A716-446655440000
         String s = UUID.randomUUID().toString();
-        //去掉“-”符号
-		this.key = s.substring(0,8)+s.substring(9,13)+s.substring(14,18)+s.substring(19,23)+s.substring(24);
+
+		this.key = s.replaceAll("-", "");
 
 		Long expirationTimeMillis = System.currentTimeMillis() + 1000;
         this.value = expirationTimeMillis.toString();
@@ -31,7 +31,7 @@ public class AccessToken implements Serializable {
     public String getKey() {
         return key;
     }
-    
+
     public String getValue() {
         return value;
     }
