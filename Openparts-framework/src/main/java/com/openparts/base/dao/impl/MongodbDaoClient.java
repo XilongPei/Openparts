@@ -5,16 +5,18 @@ import com.openparts.utils.mongodb.MongoDBClient;
 import com.openparts.utils.mongodb.MongoDBConfig;
 import com.openparts.utils.mongodb.MongoDBCredential;
 import com.openparts.utils.mongodb.MongoDBDriver;
+import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.InitializingBean;
+import com.cnpc.framework.utils.StrUtil;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MongodbDaoClient extends MongoDBClient implements InitializingBean {
 
-    private String dbname;
-    private String username;
-    private String password;
-    private String addresses;
+    private String dbname = null;
+    private String username = null;
+    private String password = null;
+    private String addresses = null;
 
     public MongodbDaoClient() {
     	super(null, null);
@@ -22,8 +24,12 @@ public class MongodbDaoClient extends MongoDBClient implements InitializingBean 
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        if (StrUtil.isBlank(dbname))
+            return;
+
     	databaseName = dbname;
-    	
+
         List<MongoDBCredential> credentials = new ArrayList<MongoDBCredential>();
         MongoDBCredential credential = new MongoDBCredential(dbname, username, password);
         credentials.add(credential);
@@ -31,6 +37,11 @@ public class MongodbDaoClient extends MongoDBClient implements InitializingBean 
         MongoDBConfig mongoDBConfig = new MongoDBConfig(addresses, credentials);
 
         this.mongoDBDriver = new MongoDBDriver(mongoDBConfig);
+    }
+
+
+    MongoDatabase getDatabase() {
+        return mongoDBDriver.getDatabase(dbname);
     }
 
     public void setDbname(String dbname) {

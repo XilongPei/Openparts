@@ -87,7 +87,6 @@ public class GridFSClient extends MongoDBClient {
             file.save();
             return concat(filename, format);
         } catch (Exception e) {
-
             throw new RuntimeException(e);
         } finally {
             try {
