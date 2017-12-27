@@ -489,7 +489,7 @@ public class QueryUtil {
         logger.debug("-------"+query.getId()+"的filter查询条件-----------");
         for (Map<String, Object> map : conditions) {
             String key = map.get("key").toString();
-            Object value = map.get("value");
+            String value = map.get("value").toString();
             boolean isCondition = getIsCondition(map);
             boolean likeOption = getLikeOption(map);
 
@@ -498,8 +498,19 @@ public class QueryUtil {
                 column = new Column();
                 column.setKey(key);
             }
+
+            int len = value.length();
+            if (len > 2) {
+                char c1 = value.charAt(0);
+                char c2 = value.charAt(len - 1);
+                if ((c1 == '"' && c2 == '"') || (c1 == '\'' && c2 == '\'')) {
+                    value = value.substring(1, len-1);
+                }
+            }
+
             String operatorStr = getOperatorStr(map, column, likeOption);
-            logger.debug("condition:"+key+" "+operatorStr+" "+ value);
+
+            logger.debug("condition:" + key + " " + operatorStr + " \"" + value + "\"");
 
             ConditionOperator operator = getOperator(operatorStr);
 
@@ -638,7 +649,7 @@ public class QueryUtil {
         logger.debug("-------"+query.getId()+"的filter查询条件-----------");
         for (Map<String, Object> map : conditions) {
             String key = map.get("key").toString();
-            Object value = map.get("value");
+            String value = map.get("value").toString();
             boolean likeOption = getLikeOption(map);
 
             Column column = query.getColumn(key);
@@ -646,9 +657,19 @@ public class QueryUtil {
                 column = new Column();
                 column.setKey(key);
             }
+
+            int len = value.length();
+            if (len > 2) {
+                char c1 = value.charAt(0);
+                char c2 = value.charAt(len - 1);
+                if ((c1 == '"' && c2 == '"') || (c1 == '\'' && c2 == '\'')) {
+                    value = value.substring(1, len-1);
+                }
+            }
+
             String operatorStr = getOperatorStr(map, column, likeOption);
 
-            logger.debug("condition:" + key + " " + operatorStr + " " + value);
+            logger.debug("condition:" + key + " " + operatorStr + " \"" + value + "\"");
             ConditionOperator operator = getOperator(operatorStr);
             //类型处理
             Class clazz;

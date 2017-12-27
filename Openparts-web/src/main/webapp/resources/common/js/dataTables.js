@@ -360,14 +360,22 @@
                         value = "";
                     }
                 }
-                // alert(key+" "+type+" "+likeOption);
-                if ((type && (type == "text" || type == "search") && likeOption == "true")) { // 如果是用户手动输入项，需要在前后各加一个百分号
+
+                if ((type && (type == "text" || type == "search") && likeOption == "true")) {
                     if (value && value != "") {
-                        value = "%" + value + "%";
+                        var c1 = value.substr(0, 1);
+                        var c2 = value.substr(-1);
+                        if ( !(((c1 == '"') && (c2 == '"')) || ((c1 == "'") && (c2 == "'"))) ) {
+                            value = "%" + value + "%";
+                        }
                     }
                 }
-                if(!type&&likeOption=="true"&&value){
-                    value="%"+value+"%";
+                if (!type&&likeOption=="true"&&value) {
+                    var c1 = value.substr(0, 1);
+                    var c2 = value.substr(-1);
+                    if ( !(((c1 == '"') && (c2 == '"')) || ((c1 == "'") && (c2 == "'"))) ) {
+                        value="%"+value+"%";
+                    }
                 }
                 if (isExist) {
                     map.value += "," + value;
