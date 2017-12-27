@@ -14,6 +14,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.imgscalr.Scalr;
+import com.cnpc.framework.utils.SpringContextUtil;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -23,16 +24,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.Adler32;
+import com.openparts.base.dao.impl.MongodbDaoClient;
+import com.cnpc.framework.utils.CompressEncoding;
 
-public class GridFSClient extends MongoDBClient {
+public class GridFSClient {
+
+    private MongodbDaoClient mongodbDaoClient = null;
 
     private GridFS _gridFS = null;
     private Object lock = new Object();
     protected static final String[] IMAGE_FORMAT = { "jpg", "jpeg", "png" };
-
-    GridFSClient(MongoDBDriver mongoDBDriver, String databaseName) {
-        super(mongoDBDriver, databaseName);
-    }
 
     public GridFS getInstance() {
         if (_gridFS != null) {
@@ -42,23 +43,24 @@ public class GridFSClient extends MongoDBClient {
             if (_gridFS != null) {
                 return _gridFS;
             }
-            _gridFS = new GridFS(mongoDBDriver.getDB(this.databaseName));
+
+            if (mongodbDaoClient == null) {
+                mongodbDaoClient = (MongodbDaoClient)SpringContextUtil.getBean("mongodbDaoClient");
+            }
+
+            _gridFS = new GridFS(mongodbDaoClient.getDB());
             return _gridFS;
         }
-
-    }
-
-    public void close() {
-        mongoDBDriver.close();
     }
 
     /**
      *
      * @param inputStream
-     *            文件流
+     *          文件流
      * @param format
-     *            文件格式，“pdf”，“png”等，不包含后缀符号“.”
+     *          文件格式，“pdf”，“png”等，不包含后缀符号“.”
      * @return
+     *          filename, _Id in mongodb
      */
     public String saveFile(InputStream inputStream, String format, String uid) {
         try {
@@ -108,14 +110,20 @@ public class GridFSClient extends MongoDBClient {
     }
 
     private String randomFileName() {
-        return RandomStringUtils.random(32, true, true).toLowerCase();
+        return CompressEncoding.CompressNumber(System.currentTimeMillis(),6) + "-" + RandomStringUtils.random(32, true, true).toLowerCase();
     }
 
+    /**
+     *
+     */
     public void delete(String filename) {
         GridFS gridFS = getInstance();
         gridFS.remove(filename);
     }
 
+    /**
+     *
+     */
     public InputStream getFile(String filename) {
         GridFS gridFS = getInstance();
         GridFSDBFile _current = gridFS.findOne(filename);
@@ -125,8 +133,11 @@ public class GridFSClient extends MongoDBClient {
         return _current.getInputStream();
     }
 
+    /**
+     *
+     */
     public InputStream getImage(String filename, String path) throws Exception {
-        // 获取最大边,等比缩放
+
         if (ImageSizeEnum.valueOfPath(path) == null) {
             return null;
         }
@@ -138,8 +149,7 @@ public class GridFSClient extends MongoDBClient {
         }
 
         int size = ImageSizeEnum.valueOfPath(path).size;
-
-        int max = (Integer) _current.get("max");// 图片的实际尺寸
+        int max = (Integer) _current.get("max");
 
         InputStream result = null;
         // 裁剪
@@ -149,7 +159,7 @@ public class GridFSClient extends MongoDBClient {
 
             inputStream.close();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            BufferedImage thumbnail = Scalr.resize(image, size);// 保留最大尺寸
+            BufferedImage thumbnail = Scalr.resize(image, size);
             String format = (String) _current.get("format");
             ImageIO.write(thumbnail, format, bos);
             result = new ByteArrayInputStream(bos.toByteArray());
@@ -259,7 +269,7 @@ public class GridFSClient extends MongoDBClient {
         }
 
         // 第一步：图片格式
-        List<String> formats = new ArrayList<String>();//
+        List<String> formats = new ArrayList<String>();
         ImageInputStream imageInputStream = ImageIO.createImageInputStream(new ByteArrayInputStream(bos.toByteArray()));
         imageInputStream.mark();
         try {
@@ -285,8 +295,9 @@ public class GridFSClient extends MongoDBClient {
             return null;
         }
 
-        String md5 = DigestUtils.md5Hex(bos.toByteArray());// 求原始图片的MD5，和crc
-        System.out.println("md5:" + md5);
+        // 求原始图片的MD5，和crc
+        String md5 = DigestUtils.md5Hex(bos.toByteArray());
+
         imageInputStream.reset();
 
         BufferedImage image = ImageIO.read(imageInputStream);
@@ -300,7 +311,7 @@ public class GridFSClient extends MongoDBClient {
             max = ImageSizeEnum.PIXELS_MAX.size;
         }
         String format = formats.get(0);
-        BufferedImage thumbnail = Scalr.resize(image, max);// 保留最大尺寸
+        BufferedImage thumbnail = Scalr.resize(image, max);     // 保留最大尺寸
         ImageIO.write(thumbnail, format, bos);
 
         return new BundleEntry(new ByteArrayInputStream(bos.toByteArray()), md5, crc.getValue(), format, max);
@@ -327,14 +338,7 @@ public class GridFSClient extends MongoDBClient {
         MongoDBDriver mongoDBDriver = null;
 
         try {
-            List<MongoDBCredential> credentials = new ArrayList<MongoDBCredential>();
-            MongoDBCredential credential = new MongoDBCredential("whatsmars-common", "whatsmars", "passwordiscommon");
-            credentials.add(credential);
-
-            MongoDBConfig mongoDBConfig = new MongoDBConfig("61.171.123.234:27017", credentials);
-
-            mongoDBDriver = new MongoDBDriver(mongoDBConfig);
-            GridFSClient client = new GridFSClient(mongoDBDriver, "whatsmars-common");
+            GridFSClient client = new GridFSClient();
 
             testUpload(client);
             // testClear(client.getInstance());

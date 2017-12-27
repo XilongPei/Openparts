@@ -61,10 +61,17 @@ public class MongoDBDriver {
         return mongo;
     }
 
+    /**
+     * com.mongodb.client.MongoDatabase
+     */
     public MongoDatabase getDatabase(String dbName) {
         return mongo.getDatabase(dbName);
     }
 
+    /**
+     * com.mongodb.DB
+     * a logical database on a server
+     */
     public DB getDB(String dbName) {
         return mongo.getDB(dbName);
     }

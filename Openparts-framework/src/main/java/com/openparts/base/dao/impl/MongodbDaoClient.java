@@ -1,11 +1,12 @@
 package com.openparts.base.dao.impl;
 
+import com.mongodb.DB;
+import com.mongodb.client.MongoDatabase;
 import com.openparts.utils.mongodb.GridFSClient;
 import com.openparts.utils.mongodb.MongoDBClient;
 import com.openparts.utils.mongodb.MongoDBConfig;
 import com.openparts.utils.mongodb.MongoDBCredential;
 import com.openparts.utils.mongodb.MongoDBDriver;
-import com.mongodb.client.MongoDatabase;
 import org.springframework.beans.factory.InitializingBean;
 import com.cnpc.framework.utils.StrUtil;
 import java.util.ArrayList;
@@ -40,8 +41,12 @@ public class MongodbDaoClient extends MongoDBClient implements InitializingBean 
     }
 
 
-    MongoDatabase getDatabase() {
+    public MongoDatabase getDatabase() {
         return mongoDBDriver.getDatabase(dbname);
+    }
+
+    public DB getDB() {
+        return mongoDBDriver.getDB(dbname);
     }
 
     public void setDbname(String dbname) {

@@ -17,7 +17,6 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * reference:
  *
@@ -32,6 +31,7 @@ public class MongodbDaoImpl implements MongodbDao {
 
     public void createCollection(String collectionName) {
         MongoDatabase db = mongodbDaoClient.getDatabase();
+        db.createCollection(collectionName);
     }
 
     public MongoCollection<Document> getCollection(String collectionName) {
@@ -103,7 +103,7 @@ public class MongodbDaoImpl implements MongodbDao {
         } finally {
             cursor.close();
         }
-        
+
         return jsons;
     }
 
