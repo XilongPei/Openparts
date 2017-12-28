@@ -34,7 +34,23 @@ public class GridFSClient {
 
     private GridFS _gridFS = null;
     private Object lock = new Object();
+    private String bucket = null;
     protected static final String[] IMAGE_FORMAT = { "jpg", "jpeg", "png" };
+
+    /**
+     * Creates a GridFS instance for the default bucket "fs" in the given database.
+     */
+    GridFSClient() {
+        this.bucket = null;
+    }
+
+    /**
+     * Creates a GridFS instance for the specified bucket in the given database.
+     */
+    GridFSClient(String bucket) {
+        this.bucket = bucket;
+    }
+
 
     public GridFS getInstance() {
         if (_gridFS != null) {
@@ -49,7 +65,12 @@ public class GridFSClient {
                 mongodbDaoClient = (MongodbDaoClient)SpringContextUtil.getBean("mongodbDaoClient");
             }
 
-            _gridFS = new GridFS(mongodbDaoClient.getDB());
+            if (StrUtil.isBlank(bucket)) {
+                _gridFS = new GridFS(mongodbDaoClient.getDB());
+            } else {
+                _gridFS = new GridFS(mongodbDaoClient.getDB(), bucket);
+            }
+
             return _gridFS;
         }
     }
