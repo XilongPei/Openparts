@@ -5,10 +5,11 @@
       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
     <bean id="mongodbBean" class="com.openparts.base.dao.impl.MongodbDaoClient">
-        <property name="dbname" value="${mongodb.filesystem.dbname}"/>
-        <property name="username" value="${mongodb.filesystem.username}"/>
-        <property name="password" value="${mongodb.filesystem.password}"/>
-        <property name="addresses" value="${mongodb.filesystem.addresses}"/>
+        <property name="adminDbName" value="${mongodb.adminDbName}"/>
+        <property name="dbName" value="${mongodb.dbName}"/>
+        <property name="username" value="${mongodb.username}"/>
+        <property name="password" value="${mongodb.password}"/>
+        <property name="addresses" value="${mongodb.addresses}"/>
     </bean>
 
 </beans>

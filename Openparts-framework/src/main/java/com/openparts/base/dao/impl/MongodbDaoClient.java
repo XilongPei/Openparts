@@ -3,7 +3,6 @@ package com.openparts.base.dao.impl;
 import com.mongodb.DB;
 import com.mongodb.client.MongoDatabase;
 import com.openparts.utils.mongodb.GridFSClient;
-import com.openparts.utils.mongodb.MongoDBClient;
 import com.openparts.utils.mongodb.MongoDBConfig;
 import com.openparts.utils.mongodb.MongoDBCredential;
 import com.openparts.utils.mongodb.MongoDBDriver;
@@ -12,49 +11,57 @@ import com.cnpc.framework.utils.StrUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MongodbDaoClient extends MongoDBClient implements InitializingBean {
+public class MongodbDaoClient implements InitializingBean {
 
-    private String dbname = null;
+    // database 鉴权时，用户帐号所属的数据库
+    private String adminDbName = null;
+
+    // 用户数据所属的数据库
+    private String dbName = null;
+
+    private MongoDBDriver mongoDBDriver = null;
     private String username = null;
     private String password = null;
     private String addresses = null;
 
-    public MongodbDaoClient() {
-    	super(null, null);
-    }
-
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        if (StrUtil.isBlank(dbname))
+        if (StrUtil.isBlank(adminDbName))
             return;
 
-    	databaseName = dbname;
-
         List<MongoDBCredential> credentials = new ArrayList<MongoDBCredential>();
-        MongoDBCredential credential = new MongoDBCredential(dbname, username, password);
+        MongoDBCredential credential = new MongoDBCredential(adminDbName, username, password);
         credentials.add(credential);
 
         MongoDBConfig mongoDBConfig = new MongoDBConfig(addresses, credentials);
 
-        this.mongoDBDriver = new MongoDBDriver(mongoDBConfig);
+        mongoDBDriver = new MongoDBDriver(mongoDBConfig);
     }
 
 
     public MongoDatabase getDatabase() {
-        return mongoDBDriver.getDatabase(dbname);
+        return mongoDBDriver.getDatabase(dbName);
     }
 
     public DB getDB() {
-        return mongoDBDriver.getDB(dbname);
+        return mongoDBDriver.getDB(dbName);
     }
 
-    public void setDbname(String dbname) {
-        this.dbname = dbname;
+    public void setAdminDbName(String adminDbName) {
+        this.adminDbName = adminDbName;
     }
 
-    public String getDbname() {
-        return dbname;
+    public String getAdminDbName() {
+        return adminDbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getDbName() {
+        return dbName;
     }
 
     public void setUsername(String username) {
