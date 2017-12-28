@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.zip.Adler32;
 import com.openparts.base.dao.impl.MongodbDaoClient;
 import com.cnpc.framework.utils.CompressEncoding;
+import com.cnpc.framework.utils.StrUtil;
 
 public class GridFSClient {
 
@@ -62,12 +63,15 @@ public class GridFSClient {
      * @return
      *          filename, _Id in mongodb
      */
-    public String saveFile(InputStream inputStream, String format, String uid) {
+    public String saveFile(InputStream inputStream, String filename, String format, String uid) {
         try {
             GridFS gridFS = getInstance();
 
-            // 随机生成文件名称，多次重试
-            String filename = this.randomFileName();
+            if (StrUtil.isBlank(filename)) {
+                // 随机生成文件名称，多次重试
+                filename = this.randomFileName();
+            }
+
             // 如果有文件重复，则重新生成filename
             while (true) {
                 GridFSDBFile _current = gridFS.findOne(filename);
