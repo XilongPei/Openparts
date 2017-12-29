@@ -14,10 +14,14 @@ class ElasticsearchClient {
     private RestHighLevelClient client;
 
     ElasticsearchClient() {
+/*
+        PropertiesUtil.getValue("elasticsearch.server.num");
+
         client = new RestHighLevelClient(
             RestClient.builder(
                 new HttpHost("localhost", 9200, "http"),
                 new HttpHost("localhost", 9201, "http")));
+*/
     }
 
     public void close() {

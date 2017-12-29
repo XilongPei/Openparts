@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
+    default-lazy-init="false" default-autowire="byName">
+
+    <bean id="elasticSearchHttpHost" class="org.apache.http.HttpHost">
+        <constructor-arg index="0" type="java.lang.String">
+            <value>${elasticSearch.host}</value>
+        </constructor-arg>
+        <constructor-arg index="1" type="int">
+            <value>${elasticSearch.port}</value>
+        </constructor-arg>
+        <constructor-arg index="2" type="java.lang.String" >
+            <value>${elasticSearch.schema}</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="restClientBuilder" class="org.elasticsearch.client.RestClientBuilder">
+        <constructor-arg ref="elasticSearchHttpHost">
+        </constructor-arg>
+    </bean>
+
+    <bean id="restClient" class="org.elasticsearch.client.RestClient"
+         factory-bean="restClientBuilder" factory-method="builder" scope="prototype" />
+
+</beans>

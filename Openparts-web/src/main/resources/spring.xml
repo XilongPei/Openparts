@@ -34,4 +34,5 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
     <import resource="classpath:spring-mongodb.xml"/>
 
+    <import resource="classpath:spring-elasticsearch.xml"/>
 </beans>
