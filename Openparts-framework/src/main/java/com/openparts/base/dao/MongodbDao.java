@@ -1,5 +1,11 @@
 package com.openparts.base.dao;
 
+/**
+ * 这里只是一些辅助函数，更复杂的功能直接操作: MongoCollection<Document> , 文档参见:
+ * http://api.mongodb.com/java/current/com/mongodb/client/MongoCollection.html
+ *
+ */
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.BooleanCodec;
 import com.openparts.base.dao.MongodbDao;
@@ -18,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.bson.conversions.Bson;
 
 public interface MongodbDao {
 
@@ -30,4 +37,8 @@ public interface MongodbDao {
     boolean collectionInsertManyJson(MongoCollection<Document> collection, String[] json);
 
     String[] listAllJsons(MongoCollection<Document> collection);
+
+    String firstOneJson(MongoCollection<Document> collection);
+
+    String findOneJson(MongoCollection<Document> collection, Bson filter);
 }

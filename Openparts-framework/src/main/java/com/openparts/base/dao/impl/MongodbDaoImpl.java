@@ -13,9 +13,11 @@ import com.mongodb.MongoException;
 import com.mongodb.MongoBulkWriteException;
 import com.mongodb.DBObject;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import static com.mongodb.client.model.Filters.*;
 
 /**
  * reference:
@@ -105,6 +107,20 @@ public class MongodbDaoImpl implements MongodbDao {
         }
 
         return jsons;
+    }
+
+    public String firstOneJson(MongoCollection<Document> collection) {
+
+        String json = collection.find().first().toJson();
+
+        return json;
+    }
+
+    public String findOneJson(MongoCollection<Document> collection, Bson filter) {
+
+        String json = collection.find(filter).first().toJson();
+
+        return json;
     }
 
     /**
