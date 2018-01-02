@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-/**
- * Author: qing
- * Date: 14-10-12
- */
 @Service
 public class FileServiceImpl implements FileService {
 
@@ -28,7 +24,7 @@ public class FileServiceImpl implements FileService {
     public Result uploadFile(InputStream inputStream, String format,String uid) {
         Result result = new Result();
         try {
-            String filename = gridFSClient.saveFile(inputStream,format,uid);
+            String filename = gridFSClient.saveFile(inputStream, null, format, uid);
             result.addModel("filename",filename);
             result.setSuccess(true);
         } catch (Exception e) {
