@@ -370,7 +370,7 @@ public class LoginController {
                     return map;
                 } else {
                     //generate access_token
-                    AccessToken access_token = new AccessToken();
+                    AccessToken access_token = new AccessToken(user.getId());
                     String key = RedisConstant.ACCESS_TOKEN_PRE + access_token.getKey();
                     redisDao.add(key, CommonConstants.ACCESS_TOKEN_LIFE_SECONDS, access_token.getValue());
 

@@ -56,7 +56,7 @@ public class RedisConstant {
     /**
      * access_token
      */
-    public static final String ACCESS_TOKEN_PRE = "access_token:";
+    public static final String ACCESS_TOKEN_PRE = "TKN:";
 
     /**
      * 组装key
