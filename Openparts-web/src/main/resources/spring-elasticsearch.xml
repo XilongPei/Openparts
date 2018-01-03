@@ -17,6 +17,6 @@
     </bean>
 
     <bean id="restClient" class="org.elasticsearch.client.RestClient"
-         factory-bean="restClientBuilder" factory-method="builder" scope="prototype" />
+         factory-bean="restClientBuilder" factory-method="builder" scope="singleton" />
 
 </beans>
