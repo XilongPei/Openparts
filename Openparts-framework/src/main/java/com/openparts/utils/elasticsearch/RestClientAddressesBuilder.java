@@ -6,16 +6,17 @@ import org.elasticsearch.client.RestClientBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-class RestClientAddressesBuilder {
+public class RestClientAddressesBuilder {
+
+    static RestClientBuilder restClientBuilder;
 
     /**
-     * Returns a new {@link RestClientBuilder} to help with {@link RestClient} creation.
      * Creates a new builder instance and sets the hosts that the client will send requests to.
      *
      * @param addresses  	the hostname (IP or DNS name) : port (the port number)
      * @param scheme		the name of the scheme.
      */
-    public static RestClientBuilder builder(final String addresses, final String scheme) {
+    public RestClientAddressesBuilder(final String addresses, final String scheme) {
 
         String[] sources = addresses.split(";");
         HttpHost[] httpHosts = new HttpHost[sources.length];
@@ -28,6 +29,13 @@ class RestClientAddressesBuilder {
             httpHosts[i++] = new HttpHost(hp[0], Integer.valueOf(hp[1]), scheme);
         }
 
-        return RestClient.builder(httpHosts);
+        restClientBuilder = RestClient.builder(httpHosts);
+    }
+
+    /**
+     * Returns a RestClientBuilder
+     */
+    public RestClientBuilder builder() {
+        return restClientBuilder;
     }
 }

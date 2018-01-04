@@ -16,6 +16,7 @@ import org.elasticsearch.search.sort.*;
 import org.apache.http.HttpHost;
 import org.springframework.stereotype.Service;
 import com.openparts.utils.elasticsearch.ESClientContainer;
+import com.openparts.utils.elasticsearch.RestClientAddressesBuilder;
 import com.cnpc.framework.base.service.impl.BaseServiceImpl;
 import com.openparts.base.service.ElasticSearchService;
 import javax.annotation.Resource;
@@ -27,14 +28,14 @@ import com.cnpc.framework.utils.StrUtil;
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
 
     @Resource
-    private RestClientBuilder restClientBuilder;
+    private RestClientAddressesBuilder restClientAddressesBuilder;
 
     public RestHighLevelClient initialize() {
 
         // https://www.elastic.co/guide/en/elasticsearch/client/java-rest/master/java-rest-low-usage-initialization.html
         // restClientBuilder.setMaxRetryTimeoutMillis(10000);
 
-    	RestHighLevelClient restHighLevelClient = new RestHighLevelClient(restClientBuilder);
+    	RestHighLevelClient restHighLevelClient = new RestHighLevelClient(restClientAddressesBuilder.builder());
         ESClientContainer.putRestHighLevelClient(restHighLevelClient);
 
         return restHighLevelClient;

@@ -7,7 +7,7 @@
     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd"
     default-lazy-init="false" default-autowire="byName">
 
-    <bean id="restClientBuilder" class="org.elasticsearch.client.RestClientAddressesBuilder">
+    <bean id="restClientBuilder" class="com.openparts.utils.elasticsearch.RestClientAddressesBuilder">
         <constructor-arg index="0" type="java.lang.String">
             <value>${elasticSearch.addresses}</value>
         </constructor-arg>
@@ -15,8 +15,5 @@
             <value>${elasticSearch.scheme}</value>
         </constructor-arg>
     </bean>
-
-    <bean id="restClient" class="org.elasticsearch.client.RestClient"
-         factory-bean="restClientBuilder" factory-method="builder" scope="singleton" />
 
 </beans>
