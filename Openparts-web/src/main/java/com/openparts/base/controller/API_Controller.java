@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import com.openparts.common.OP_Errors;
+
+import com.openparts.utils.mongodb.GridFSClient;
 
 @Controller
 public class API_Controller {
@@ -27,7 +28,17 @@ public class API_Controller {
                 String access_token;
 
                 break;
+            case "test":
+                String[] args = null;
+
+                try {
+                    GridFSClient.main(args);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                break;
         }
-    	return OP_Errors.SUCCESS.toString();
+        return OP_Errors.SUCCESS.toString();
     }
 }

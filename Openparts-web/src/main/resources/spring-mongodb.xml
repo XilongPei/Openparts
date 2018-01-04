@@ -4,7 +4,7 @@
       http://www.springframework.org/schema/beans
       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-    <bean id="mongodbBean" class="com.openparts.base.dao.impl.MongodbDaoClient">
+    <bean id="mongodbDaoClient" class="com.openparts.base.dao.impl.MongodbDaoClient">
         <property name="adminDbName" value="${mongodb.adminDbName}"/>
         <property name="dbName" value="${mongodb.dbName}"/>
         <property name="username" value="${mongodb.username}"/>

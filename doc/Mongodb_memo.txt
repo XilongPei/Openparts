@@ -1,0 +1,77 @@
+---------------------
+https://docs.mongodb.com/manual/reference/method/db.createUser/
+
+Studio 3T for MongoDB
+NoSQLBooster https://nosqlbooster.com/
+---------------------
+db.createUser(
+    {
+        user: "elastos1",
+        pwd: "Elastos182",
+        roles: [
+            {
+                role: "userAdminAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "readWriteAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "dbAdminAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "clusterAdmin",
+                db: "admin"
+            },
+            {
+                role: "clusterMonitor",
+                db: "admin"
+            }
+        ]
+    }
+)
+
+---------------------
+db.updateUser(
+    "elastos",
+    {
+        roles: [
+            {
+                role: "userAdminAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "readWriteAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "dbAdminAnyDatabase",
+                db: "admin"
+            },
+            {
+                role: "clusterAdmin",
+                db: "admin"
+            },
+            {
+                role: "clusterMonitor",
+                db: "admin"
+            }
+        ],
+        pwd: "Elastos182"
+    }
+)
+
+---------------------
+use admin
+db.auth("elastos", "Elastos182")
+db.getUsers()
+
+---------------------
+mongostat --username=elastos --password=Elastos182  --authenticationDatabase=admin
+
+---------------------
+
+
+

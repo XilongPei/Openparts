@@ -307,7 +307,7 @@ public class GridFSClient {
                 }
             }
         } catch (Exception ex) {
-            //
+            return null;
         }
 
         // 如果格式不合法，则直接返回
@@ -389,7 +389,10 @@ public class GridFSClient {
     }
 
     protected static void testUpload(GridFSClient client) throws Exception {
+
         FileInputStream inputStream = new FileInputStream(new File("/data/tmp/222222222.jpg"));
+
+        client.saveFile(inputStream, "filename", "jpg", "1");
 
         try {
             String filename = client.saveImage(inputStream, null);
