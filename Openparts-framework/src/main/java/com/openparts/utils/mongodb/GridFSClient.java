@@ -358,7 +358,7 @@ public class GridFSClient {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void testMain() throws Exception {
 
         MongoDBDriver mongoDBDriver = null;
 
