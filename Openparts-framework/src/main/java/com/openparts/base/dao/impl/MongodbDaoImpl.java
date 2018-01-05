@@ -3,6 +3,7 @@ package com.openparts.base.dao.impl;
 import com.alibaba.fastjson.JSON;
 import com.openparts.base.dao.MongodbDao;
 import com.cnpc.framework.utils.StrUtil;
+import com.cnpc.framework.utils.SpringContextUtil;
 import org.springframework.stereotype.Service;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
@@ -134,4 +135,27 @@ public class MongodbDaoImpl implements MongodbDao {
                 System.out.println(dbs.next());
             }
     */
+
+    /*
+     * curl -d "className=com.openparts.base.dao.impl.MongodbDaoImpl&methodName=testMain" -X POST http://localhost:8081/Openparts-web/api/test
+     */
+    public static void testMain() {
+        MongodbDaoImpl mongodbDaoImpl = new MongodbDaoImpl();
+        if (mongodbDaoImpl.mongodbDaoClient == null) {
+            mongodbDaoImpl.mongodbDaoClient = (MongodbDaoClient)SpringContextUtil.getBean("mongodbDaoClient");
+        }
+
+        //mongodbDaoImpl.createCollection("test");
+        MongoCollection<Document> collection = mongodbDaoImpl.getCollection("test");
+
+        String json = "{\"a\": 3}";
+        mongodbDaoImpl.collectionInsertOneJson(collection, json);
+
+        String[] jsons = new String[3];
+        jsons[0] = "{\"name\": \"Tongji\"}";
+        jsons[1] = "{\"name\": \"Shanghai\"}";
+        jsons[2] = "{\"name\": \"China\"}";
+        mongodbDaoImpl.collectionInsertManyJson(collection, jsons);
+    }
+
 }

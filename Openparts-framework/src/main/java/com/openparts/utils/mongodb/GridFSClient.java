@@ -27,8 +27,12 @@ import java.util.zip.Adler32;
 import com.openparts.base.dao.impl.MongodbDaoClient;
 import com.cnpc.framework.utils.CompressEncoding;
 import com.cnpc.framework.utils.StrUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GridFSClient {
+
+    private static Logger logger = LoggerFactory.getLogger(GridFSClient.class);
 
     private MongodbDaoClient mongodbDaoClient = null;
 
@@ -202,11 +206,12 @@ public class GridFSClient {
      * @return
      * @throws Exception
      */
-    public String saveImage(InputStream inputStream, String uid) throws Exception {
+    public String saveImage(InputStream inputStream, String uid) {
 
         BundleEntry bundleEntry = this.drain(inputStream);
         if (bundleEntry == null) {
-            throw new RuntimeException("file isn't a image!");
+            logger.debug("file isn't a image!");
+            return null;
         }
 
         ByteArrayInputStream bis = bundleEntry.inputStream;
@@ -272,7 +277,7 @@ public class GridFSClient {
      * @return
      * @throws Exception
      */
-    protected BundleEntry drain(InputStream inputStream) throws Exception {
+    protected BundleEntry drain(InputStream inputStream) {
         //
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         // 计算源文件的md5、crc，以防止图片的重复上传
@@ -286,58 +291,56 @@ public class GridFSClient {
                 bos.write(_c);
                 crc.update(_c);
             }
-
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            inputStream.close();
+            logger.debug("RuntimeException(e)");
         }
 
         // 第一步：图片格式
         List<String> formats = new ArrayList<String>();
-        ImageInputStream imageInputStream = ImageIO.createImageInputStream(new ByteArrayInputStream(bos.toByteArray()));
-        imageInputStream.mark();
+        BufferedImage image;
+        String md5;
+        int max;
+        String format;
+
         try {
+            ImageInputStream imageInputStream = ImageIO.createImageInputStream(new ByteArrayInputStream(bos.toByteArray()));
+            imageInputStream.mark();
+
             Iterator<ImageReader> it = ImageIO.getImageReaders(imageInputStream);
             while (it.hasNext()) {
                 ImageReader reader = it.next();
-                String format = reader.getFormatName().toLowerCase();
+                format = reader.getFormatName().toLowerCase();
                 if (ArrayUtils.contains(IMAGE_FORMAT, format)) {
                     formats.add(format);
                 }
             }
+
+            // 如果格式不合法，则直接返回
+            if (formats.isEmpty()) {
+                return null;
+            }
+
+            // 求原始图片的MD5，和crc
+            md5 = DigestUtils.md5Hex(bos.toByteArray());
+
+            imageInputStream.reset();
+
+            image = ImageIO.read(imageInputStream);
+
+            // 获取最大边,等比缩放
+            max = Math.max(image.getHeight(), image.getWidth());
+
+            bos = new ByteArrayOutputStream();
+            // 如果尺寸超过最大值，则resize
+            if (max > ImageSizeEnum.PIXELS_MAX.size) {
+                max = ImageSizeEnum.PIXELS_MAX.size;
+            }
+            format = formats.get(0);
+            BufferedImage thumbnail = Scalr.resize(image, max);     // 保留最大尺寸
+            ImageIO.write(thumbnail, format, bos);
         } catch (Exception ex) {
             return null;
         }
-
-        // 如果格式不合法，则直接返回
-        if (formats.isEmpty()) {
-            try {
-                imageInputStream.close();
-            } catch (Exception e) {
-                //
-            }
-            return null;
-        }
-
-        // 求原始图片的MD5，和crc
-        String md5 = DigestUtils.md5Hex(bos.toByteArray());
-
-        imageInputStream.reset();
-
-        BufferedImage image = ImageIO.read(imageInputStream);
-
-        // 获取最大边,等比缩放
-        int max = Math.max(image.getHeight(), image.getWidth());
-
-        bos = new ByteArrayOutputStream();
-        // 如果尺寸超过最大值，则resize
-        if (max > ImageSizeEnum.PIXELS_MAX.size) {
-            max = ImageSizeEnum.PIXELS_MAX.size;
-        }
-        String format = formats.get(0);
-        BufferedImage thumbnail = Scalr.resize(image, max);     // 保留最大尺寸
-        ImageIO.write(thumbnail, format, bos);
 
         return new BundleEntry(new ByteArrayInputStream(bos.toByteArray()), md5, crc.getValue(), format, max);
     }
@@ -358,7 +361,7 @@ public class GridFSClient {
         }
     }
 
-    public static void testMain() throws Exception {
+    public static void testMain() {
 
         MongoDBDriver mongoDBDriver = null;
 
@@ -392,10 +395,15 @@ public class GridFSClient {
 
         FileInputStream inputStream = new FileInputStream(new File("/data/tmp/222222222.jpg"));
 
-        client.saveFile(inputStream, "filename", "jpg", "1");
+//        client.saveFile(inputStream, "filename", "jpg", "1");
 
         try {
             String filename = client.saveImage(inputStream, null);
+            if (filename == null) {
+                System.out.println("saveImage error!");
+                return;
+            }
+
             System.out.println(filename);
             String source = filename.substring(0, filename.lastIndexOf("."));
             System.out.println(source);
