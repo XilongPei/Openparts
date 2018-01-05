@@ -108,23 +108,21 @@ public class GridFSClient {
             }
 
             GridFSInputFile file = gridFS.createFile(inputStream, filename);
+
             if (format != null) {
                 file.put("format", format);
             }
+
             if (uid != null) {
                 file.put("uid", uid);
             }
             file.put("contentType", "application/octet-stream");
             file.save();
+
             return concat(filename, format);
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                inputStream.close();
-            } catch (Exception ex) {
-                //
-            }
+            return null;
         }
     }
 
@@ -278,8 +276,9 @@ public class GridFSClient {
      * @throws Exception
      */
     protected BundleEntry drain(InputStream inputStream) {
-        //
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
         // 计算源文件的md5、crc，以防止图片的重复上传
         Adler32 crc = new Adler32();
         try {
@@ -361,6 +360,9 @@ public class GridFSClient {
         }
     }
 
+    /*
+     * curl -d "className=com.openparts.utils.mongodb.GridFSClient&methodName=testMain" -X POST http://localhost:8081/Openparts-web/api/test
+     */
     public static void testMain() {
 
         MongoDBDriver mongoDBDriver = null;
@@ -395,7 +397,7 @@ public class GridFSClient {
 
         FileInputStream inputStream = new FileInputStream(new File("/data/tmp/222222222.jpg"));
 
-//        client.saveFile(inputStream, "filename", "jpg", "1");
+        client.saveFile(inputStream, "filename", "jpg", "1");
 
         try {
             String filename = client.saveImage(inputStream, null);
