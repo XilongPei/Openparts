@@ -114,7 +114,7 @@ public class GridFSClient {
             if (uid != null) {
                 file.put("uid", uid);
             }
-            file.put("content-type", "application/octet-stream");
+            file.put("contentType", "application/octet-stream");
             file.save();
             return concat(filename, format);
         } catch (Exception e) {
