@@ -12,6 +12,7 @@ import com.mongodb.MongoWriteException;
 import com.mongodb.MongoWriteConcernException;
 import com.mongodb.MongoException;
 import com.mongodb.MongoBulkWriteException;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -19,6 +20,9 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import static com.mongodb.client.model.Filters.*;
+import org.bson.types.ObjectId;
+import com.cnpc.framework.constant.RedisConstant;
+import com.google.gson.Gson;
 
 /**
  * reference:
@@ -122,6 +126,64 @@ public class MongodbDaoImpl implements MongodbDao {
         String json = collection.find(filter).first().toJson();
 
         return json;
+    }
+
+    public boolean beanToMongodb(MongoCollection<Document> collection, String className, Object object) {
+
+        if (collection == null) {
+            collection = getCollection(RedisConstant.NOSQL_TABLE_PRE + className);
+        }
+
+        String json =  new Gson().toJson(object);
+        Document document = Document.parse(json);
+
+        /*
+            _id Field
+            If the document does not specify an _id field, then mongod will add the _id field and assign
+            a unique ObjectId for the document before inserting. Most drivers create an ObjectId and
+            insert the _id field, but the mongod will create and populate the _id if the driver or
+            application does not.
+
+            If the document contains an _id field, the _id value must be unique within the collection
+            to avoid duplicate key error.
+        */
+        String idStr = document.get("id").toString();
+        if (idStr != null) {
+            document.remove("id");
+            document.put("_id", idStr);
+        }
+
+        try {
+            collection.insertOne(document);
+        } catch (MongoWriteException e) {
+            // the write failed due some other failure specific to the insert command
+            return false;
+        } catch (MongoWriteConcernException e) {
+            // the write failed due being unable to fulfil the write concern
+            return false;
+        } catch (MongoException e) {
+            // the write failed due some other failure
+            return false;
+        }
+
+        return true;
+    }
+
+    public <T> T beanFromMongodb(MongoCollection<Document> collection, Class<T> classOfT, String id) {
+
+        if (collection == null) {
+            collection = getCollection(RedisConstant.NOSQL_TABLE_PRE + classOfT.getName());
+        }
+
+        Document document = collection.find(eq("_id", id)).first();
+        String idStr = document.get("_id").toString();
+        document.remove("_id");
+        document.put("id", idStr);
+
+        String jsonInString = document.toString();
+
+        Gson gson = new Gson();
+        return gson.fromJson(jsonInString, classOfT);
     }
 
     /**

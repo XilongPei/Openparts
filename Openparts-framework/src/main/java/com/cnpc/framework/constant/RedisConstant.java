@@ -43,6 +43,7 @@ public class RedisConstant {
      * 组织机构缓存前缀
      */
     public static final String ORG_PRE="org:";
+
     /**
      * 消息缓存前缀
      */
@@ -57,6 +58,11 @@ public class RedisConstant {
      * access_token
      */
     public static final String ACCESS_TOKEN_PRE = "TKN:";
+
+    /**
+     * access_token
+     */
+    public static final String NOSQL_TABLE_PRE = "TBL_";
 
     /**
      * 组装key

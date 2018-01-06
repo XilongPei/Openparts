@@ -41,4 +41,8 @@ public interface MongodbDao {
     String firstOneJson(MongoCollection<Document> collection);
 
     String findOneJson(MongoCollection<Document> collection, Bson filter);
+
+    boolean beanToMongodb(MongoCollection<Document> collection, String className, Object object);
+
+    <T> T beanFromMongodb(MongoCollection<Document> collection, Class<T> classOfT, String id);
 }
