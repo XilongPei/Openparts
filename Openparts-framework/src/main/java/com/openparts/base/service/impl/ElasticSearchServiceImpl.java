@@ -1,5 +1,6 @@
 package com.openparts.base.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.client.RestClient;
@@ -13,6 +14,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.*;
+import org.elasticsearch.search.SearchHit;
 import org.apache.http.HttpHost;
 import org.springframework.stereotype.Service;
 import com.openparts.utils.elasticsearch.ESClientContainer;
@@ -23,6 +25,10 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import com.cnpc.framework.utils.StrUtil;
+import com.cnpc.framework.constant.RedisConstant;
+import com.cnpc.framework.base.entity.BaseEntity;
+import com.openparts.base.entity.OP_BaseEntity;
+import com.cnpc.framework.utils.AccessToken;
 
 @Service("elasticSearchService")
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
@@ -45,7 +51,7 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
      * String fields: "user message"
      * String keywords: "kimchy elasticsearch"
      */
-    public String queryGeneralRequest(String fields, String keywords, String scopeField, String startScope, String endScope,
+    public SearchResponse queryGeneralRequest(String fields, String keywords, String scopeField, String startScope, String endScope,
             int start, int size) {
 
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
@@ -130,25 +136,23 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
         SearchResponse response = null;
         try {
             response = client.search(searchRequest);
-            System.out.println(response);
-            client.close();
+            //System.out.println(response);
         } catch (IOException e) {
             // Auto-generated catch block
             e.printStackTrace();
         }
 
-        return response.toString();
+        return response;
     }
 
     // 同步获取操作结果
-    public IndexResponse postRequest(String index, String type, String id, String jsonSource)
-            throws IOException {
+    public IndexResponse postRequest(String index, String type, String id, String jsonSource) throws IOException {
+
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
 
         IndexRequest request = new IndexRequest(index, type, id);
         request.source(jsonSource, XContentType.JSON);
         IndexResponse response = client.index(request);
-        client.close();
 
         return response;
     }
@@ -177,20 +181,71 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
             @Override
             public void onFailure(Exception e) {
                 e.printStackTrace();
-                RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
-                try {
-                    client.close();
-                } catch (IOException ex) {
-                    // Auto-generated catch block
-                    ex.printStackTrace();
-                }
             }
         });
 
         return null;
     }
 
-    public static void main(String[] args) {
+    /**
+     *
+     */
+    public IndexResponse beanToES(String index, String type, String id, Object object) throws IOException {
+
+        RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
+        String jsonSource =  JSON.toJSONString(object);
+
+        if (type == null) {
+            type = RedisConstant.NOSQL_TABLE_PRE + object.getClass().getName();
+        }
+
+        if (id == null) {
+            if (object instanceof BaseEntity) {
+                BaseEntity baseEntity = (BaseEntity)object;
+                id = baseEntity.getId();
+            }
+            else if (object instanceof OP_BaseEntity) {
+                OP_BaseEntity oP_BaseEntity = (OP_BaseEntity)object;
+                id = oP_BaseEntity.getId().toString();
+            }
+            else {
+                AccessToken accessToken= new AccessToken(null);
+                id = accessToken.getKey();
+            }
+
+        }
+
+        IndexRequest request = new IndexRequest(index, type, id);
+        request.source(jsonSource, XContentType.JSON);
+        IndexResponse response = client.index(request);
+
+        return response;
+    }
+
+    /**
+     *
+     */
+    public <T> T beanFromES(String index, String type, String id, Class<T> classOfT) throws IOException {
+
+        RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
+
+        if (type == null) {
+            type = RedisConstant.NOSQL_TABLE_PRE + classOfT.getName();
+        }
+
+        SearchResponse sr = queryGeneralRequest("id", id, null, null, null, 0, 1);
+
+        SearchHit[] results = sr.getHits().getHits();
+        String sourceAsString = results[0].getSourceAsString();
+        if (sourceAsString != null) {
+            return JSON.parseObject(sourceAsString, classOfT);
+        }
+
+        return null;
+
+    }
+
+    public static void testMain() {
         String jsonString = "{" + "\"user\":\"kimchy\"," + "\"postDate\":\"2013-01-30\","
                 + "\"message\":\"trying out Elasticsearch\"" + "}";
 

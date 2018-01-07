@@ -22,7 +22,6 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.*;
 import org.bson.types.ObjectId;
 import com.cnpc.framework.constant.RedisConstant;
-import com.google.gson.Gson;
 
 /**
  * reference:
@@ -134,7 +133,7 @@ public class MongodbDaoImpl implements MongodbDao {
             collection = getCollection(RedisConstant.NOSQL_TABLE_PRE + className);
         }
 
-        String json =  new Gson().toJson(object);
+        String json =  JSON.toJSONString(object);
         Document document = Document.parse(json);
 
         /*
@@ -182,8 +181,7 @@ public class MongodbDaoImpl implements MongodbDao {
 
         String jsonInString = document.toString();
 
-        Gson gson = new Gson();
-        return gson.fromJson(jsonInString, classOfT);
+        return JSON.parseObject(jsonInString, classOfT);
     }
 
     /**

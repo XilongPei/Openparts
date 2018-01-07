@@ -1,10 +1,9 @@
 package com.openparts.base.service;
 
 import com.cnpc.framework.base.service.BaseService;
-
 import java.io.IOException;
-
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
 
 public interface ElasticSearchService extends BaseService {
 
@@ -14,7 +13,7 @@ public interface ElasticSearchService extends BaseService {
      * String fields: "user message"
      * String keywords: "kimchy elasticsearch"
      */
-    public String queryGeneralRequest(String fields, String keywords, String scopeField, String startDate, String endDate,
+    public SearchResponse queryGeneralRequest(String fields, String keywords, String scopeField, String startDate, String endDate,
             int start, int size);
 
     /**
@@ -33,4 +32,8 @@ public interface ElasticSearchService extends BaseService {
     IndexResponse postRequest(String index, String type, String id, String jsonSource) throws IOException;
 
     IndexResponse postRquestAsync(String index, String type, String id, String jsonSource) throws IOException;
+
+    IndexResponse beanToES(String index, String type, String id, Object object) throws IOException;
+
+    <T> T beanFromES(String index, String type, String id, Class<T> classOfT) throws IOException;
 }

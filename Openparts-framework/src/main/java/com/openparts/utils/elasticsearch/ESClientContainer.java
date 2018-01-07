@@ -23,6 +23,16 @@ public class ESClientContainer {
     }
 
     public static void clear(){
+        RestHighLevelClient restHighLevelClient = clientContainer.get();
+
+        if (restHighLevelClient != null) {
+            try {
+                restHighLevelClient.close();
+            } catch (Exception e) {
+                //
+            }
+        }
+
         clientContainer.remove();
     }
 }
