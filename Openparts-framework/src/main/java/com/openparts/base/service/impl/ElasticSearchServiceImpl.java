@@ -29,6 +29,7 @@ import com.cnpc.framework.constant.RedisConstant;
 import com.cnpc.framework.base.entity.BaseEntity;
 import com.openparts.base.entity.OP_BaseEntity;
 import com.cnpc.framework.utils.AccessToken;
+import com.cnpc.framework.utils.SpringContextUtil;
 
 @Service("elasticSearchService")
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
@@ -40,6 +41,10 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
 
         // https://www.elastic.co/guide/en/elasticsearch/client/java-rest/master/java-rest-low-usage-initialization.html
         // restClientBuilder.setMaxRetryTimeoutMillis(10000);
+
+        if (restClientAddressesBuilder == null) {
+            restClientAddressesBuilder = (RestClientAddressesBuilder)SpringContextUtil.getBean("restClientAddressesBuilder");
+        }
 
     	RestHighLevelClient restHighLevelClient = new RestHighLevelClient(restClientAddressesBuilder.builder());
         ESClientContainer.putRestHighLevelClient(restHighLevelClient);
