@@ -30,6 +30,7 @@ import com.cnpc.framework.base.entity.BaseEntity;
 import com.openparts.base.entity.OP_BaseEntity;
 import com.cnpc.framework.utils.AccessToken;
 import com.cnpc.framework.utils.SpringContextUtil;
+import com.cnpc.framework.utils.PropertiesUtil;
 
 @Service("elasticSearchService")
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
@@ -200,6 +201,9 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
         String jsonSource =  JSON.toJSONString(object);
 
+        if (index == null) {
+            index = PropertiesUtil.getValue("elasticSearch.indexName");
+        }
         if (type == null) {
             type = RedisConstant.NOSQL_TABLE_PRE + object.getClass().getName();
         }
@@ -208,12 +212,10 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
             if (object instanceof BaseEntity) {
                 BaseEntity baseEntity = (BaseEntity)object;
                 id = baseEntity.getId();
-            }
-            else if (object instanceof OP_BaseEntity) {
+            } else if (object instanceof OP_BaseEntity) {
                 OP_BaseEntity oP_BaseEntity = (OP_BaseEntity)object;
                 id = oP_BaseEntity.getId().toString();
-            }
-            else {
+            } else {
                 AccessToken accessToken= new AccessToken(null);
                 id = accessToken.getKey();
             }
@@ -233,14 +235,60 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
     public <T> T beanFromES(String index, String type, String id, Class<T> classOfT) throws IOException {
 
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
+        if (index == null) {
+            index = PropertiesUtil.getValue("elasticSearch.indexName");
+        }
         if (type == null) {
             type = RedisConstant.NOSQL_TABLE_PRE + classOfT.getName();
         }
 
-        SearchResponse sr = queryGeneralRequest("id", id, null, null, null, 0, 1);
+        /*
+            curl -XGET 'localhost:9200/_search?pretty' -H 'Content-Type: application/json' -d'
+            {
+                "query": {
+                    "ids" : {
+                        "type" : "my_type",
+                        "values" : ["1", "4", "100"]
+                    }
+                }
+            }
+            '
 
-        SearchHit[] results = sr.getHits().getHits();
+            GET /_search
+            {
+                "query": {
+                    "ids" : {
+                        "type" : "my_type",
+                        "values" : ["1", "4", "100"]
+                    }
+                }
+            }
+         */
+
+        String[] types = new String[1];
+        String[] ids = new String[1];
+        types[0] = type;
+        ids[0] = id;
+
+        sourceBuilder.query(new IdsQueryBuilder().types(types).addIds(ids));
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices(index);
+        searchRequest.types(type);
+        searchRequest.source(sourceBuilder);
+
+        SearchResponse response = null;
+        try {
+            response = client.search(searchRequest);
+            //System.out.println(response);
+        } catch (IOException e) {
+            // Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        SearchHit[] results = response.getHits().getHits();
         String sourceAsString = results[0].getSourceAsString();
         if (sourceAsString != null) {
             return JSON.parseObject(sourceAsString, classOfT);
