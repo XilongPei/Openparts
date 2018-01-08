@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.Adler32;
-import com.openparts.base.dao.impl.MongodbDaoClient;
+import com.openparts.base.service.impl.MongodbDaoClient;
 import com.cnpc.framework.utils.CompressEncoding;
 import com.cnpc.framework.utils.StrUtil;
 import org.slf4j.Logger;
