@@ -1,4 +1,4 @@
-package com.openparts.base.dao.impl;
+package com.openparts.base.service.impl;
 
 import com.mongodb.DB;
 import com.mongodb.client.MongoDatabase;

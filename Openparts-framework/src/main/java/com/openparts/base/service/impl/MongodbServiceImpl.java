@@ -1,7 +1,7 @@
-package com.openparts.base.dao.impl;
+package com.openparts.base.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.openparts.base.dao.MongodbDao;
+import com.openparts.base.service.MongodbService;
 import com.cnpc.framework.utils.StrUtil;
 import com.cnpc.framework.utils.SpringContextUtil;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,7 @@ import java.util.List;
 import static com.mongodb.client.model.Filters.*;
 import org.bson.types.ObjectId;
 import com.cnpc.framework.constant.RedisConstant;
+import com.openparts.base.service.impl.MongodbDaoClient;
 
 /**
  * reference:
@@ -29,8 +30,8 @@ import com.cnpc.framework.constant.RedisConstant;
  * http://api.mongodb.com/java/current/com/mongodb/client/MongoCollection.html
  */
 
-@Service("mongodbDao")
-public class MongodbDaoImpl implements MongodbDao {
+@Service("mongodbService")
+public class MongodbServiceImpl implements MongodbService {
 
     @Resource
     private MongodbDaoClient mongodbDaoClient;
@@ -129,6 +130,9 @@ public class MongodbDaoImpl implements MongodbDao {
 
     public boolean beanToMongodb(MongoCollection<Document> collection, String className, Object object) {
 
+        if (className == null) {
+            className = object.getClass().getName();
+        }
         if (collection == null) {
             collection = getCollection(RedisConstant.NOSQL_TABLE_PRE + className);
         }
@@ -200,22 +204,22 @@ public class MongodbDaoImpl implements MongodbDao {
      * curl -d "className=com.openparts.base.dao.impl.MongodbDaoImpl&methodName=testMain" -X POST http://localhost:8081/Openparts-web/api/test
      */
     public static void testMain() {
-        MongodbDaoImpl mongodbDaoImpl = new MongodbDaoImpl();
-        if (mongodbDaoImpl.mongodbDaoClient == null) {
-            mongodbDaoImpl.mongodbDaoClient = (MongodbDaoClient)SpringContextUtil.getBean("mongodbDaoClient");
+        MongodbServiceImpl mongodbServiceImpl = new MongodbServiceImpl();
+        if (mongodbServiceImpl.mongodbDaoClient == null) {
+            mongodbServiceImpl.mongodbDaoClient = (MongodbDaoClient)SpringContextUtil.getBean("mongodbDaoClient");
         }
 
-        //mongodbDaoImpl.createCollection("test");
-        MongoCollection<Document> collection = mongodbDaoImpl.getCollection("test");
+        //mongodbServiceImpl.createCollection("test");
+        MongoCollection<Document> collection = mongodbServiceImpl.getCollection("test");
 
         String json = "{\"a\": 3}";
-        mongodbDaoImpl.collectionInsertOneJson(collection, json);
+        mongodbServiceImpl.collectionInsertOneJson(collection, json);
 
         String[] jsons = new String[3];
         jsons[0] = "{\"name\": \"Tongji\"}";
         jsons[1] = "{\"name\": \"Shanghai\"}";
         jsons[2] = "{\"name\": \"China\"}";
-        mongodbDaoImpl.collectionInsertManyJson(collection, jsons);
+        mongodbServiceImpl.collectionInsertManyJson(collection, jsons);
     }
 
 }
