@@ -11,7 +11,11 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.*;
 import org.elasticsearch.search.SearchHit;
@@ -31,9 +35,19 @@ import com.openparts.base.entity.OP_BaseEntity;
 import com.cnpc.framework.utils.AccessToken;
 import com.cnpc.framework.utils.SpringContextUtil;
 import com.cnpc.framework.utils.PropertiesUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.exception.ExceptionUtils;
+import com.openparts.common.utils.ElasticSearchUtils;
+
+/**
+ * https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
+ */
 
 @Service("elasticSearchService")
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
+
+    private static Logger logger = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
 
     @Resource
     private RestClientAddressesBuilder restClientAddressesBuilder;
@@ -144,27 +158,32 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
             response = client.search(searchRequest);
             //System.out.println(response);
         } catch (IOException e) {
-            // Auto-generated catch block
-            e.printStackTrace();
+            logger.debug(ExceptionUtils.getStackTrace(e));
         }
 
         return response;
     }
 
     // 同步获取操作结果
-    public IndexResponse postRequest(String index, String type, String id, String jsonSource) throws IOException {
+    public IndexResponse postRequest(String index, String type, String id, String jsonSource) {
 
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
 
         IndexRequest request = new IndexRequest(index, type, id);
         request.source(jsonSource, XContentType.JSON);
-        IndexResponse response = client.index(request);
+
+        IndexResponse response = null;
+        try {
+            response = client.index(request);
+        } catch (IOException e) {
+            logger.debug(ExceptionUtils.getStackTrace(e));
+        }
 
         return response;
     }
 
     // 异步获取操作结果
-    public IndexResponse postRquestAsync(String index, String type, String id, String jsonSource) throws IOException {
+    public IndexResponse postRquestAsync(String index, String type, String id, String jsonSource) {
 
         IndexRequest request = new IndexRequest(index, type, id);
         request.source(jsonSource, XContentType.JSON);
@@ -179,8 +198,7 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
                 try {
                     client.close();
                 } catch (IOException e) {
-                    // Auto-generated catch block
-                    e.printStackTrace();
+                    logger.debug(ExceptionUtils.getStackTrace(e));
                 }
             }
 
@@ -196,7 +214,7 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
     /**
      *
      */
-    public IndexResponse beanToES(String index, String type, String id, Object object) throws IOException {
+    public IndexResponse beanToES(String index, String type, String id, Object object) {
 
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
         String jsonSource =  JSON.toJSONString(object);
@@ -224,7 +242,13 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
 
         IndexRequest request = new IndexRequest(index, type, id);
         request.source(jsonSource, XContentType.JSON);
-        IndexResponse response = client.index(request);
+
+        IndexResponse response = null;
+        try {
+            response = client.index(request);
+        } catch (IOException e) {
+            logger.debug(ExceptionUtils.getStackTrace(e));
+        }
 
         return response;
     }
@@ -232,7 +256,7 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
     /**
      *
      */
-    public <T> T beanFromES(String index, String type, String id, Class<T> classOfT) throws IOException {
+    public <T> T beanFromES(String index, String type, String id, Class<T> classOfT) {
 
         RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -284,8 +308,8 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
             response = client.search(searchRequest);
             //System.out.println(response);
         } catch (IOException e) {
-            // Auto-generated catch block
-            e.printStackTrace();
+            logger.debug(ExceptionUtils.getStackTrace(e));
+            return null;
         }
 
         SearchHit[] results = response.getHits().getHits();
@@ -295,7 +319,23 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
         }
 
         return null;
+    }
 
+    /**
+     *
+     */
+    public DeleteResponse deleteRequest(String index, String type, String id) {
+        RestHighLevelClient client = ESClientContainer.getRestHighLevelClient();
+
+        DeleteRequest deleteRequest = new DeleteRequest(index, type, id);
+        DeleteResponse response = null;
+        try {
+            response = client.delete(deleteRequest);
+        } catch (IOException e) {
+            logger.debug(ExceptionUtils.getStackTrace(e));
+        }
+
+        return response;
     }
 
     public static void testMain() {
@@ -304,12 +344,9 @@ public class ElasticSearchServiceImpl extends BaseServiceImpl implements Elastic
 
         ElasticSearchServiceImpl service = new ElasticSearchServiceImpl();
 
-        try {
-        	service.postRequest("posts", "doc", "1", jsonString);
-            // postRquestAsync("posts", "doc", "1", jsonString);
-        } catch (IOException e) {
-            // Auto-generated catch block
-            e.printStackTrace();
-        }
+    	IndexResponse response = service.postRequest("posts", "doc", "1", jsonString);
+        // postRquestAsync("posts", "doc", "1", jsonString);
+
+        System.out.println(ElasticSearchUtils.getStatusIndexResponse(response));
     }
 }

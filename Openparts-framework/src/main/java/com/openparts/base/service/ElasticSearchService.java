@@ -29,11 +29,11 @@ public interface ElasticSearchService extends BaseService {
      *    System.err.println("Index creation failed.");
      * }
     */
-    IndexResponse postRequest(String index, String type, String id, String jsonSource) throws IOException;
+    IndexResponse postRequest(String index, String type, String id, String jsonSource);
 
-    IndexResponse postRquestAsync(String index, String type, String id, String jsonSource) throws IOException;
+    IndexResponse postRquestAsync(String index, String type, String id, String jsonSource);
 
-    IndexResponse beanToES(String index, String type, String id, Object object) throws IOException;
+    IndexResponse beanToES(String index, String type, String id, Object object);
 
-    <T> T beanFromES(String index, String type, String id, Class<T> classOfT) throws IOException;
+    <T> T beanFromES(String index, String type, String id, Class<T> classOfT);
 }
