@@ -44,4 +44,8 @@ public interface MongodbService {
     boolean beanToMongodb(MongoCollection<Document> collection, String className, Object object);
 
     <T> T beanFromMongodb(MongoCollection<Document> collection, Class<T> classOfT, String id);
+
+    long beanDeleteMongodb(MongoCollection<Document> collection, Object object);
+
+    long deleteByIdMongodb(MongoCollection<Document> collection, String id);
 }
