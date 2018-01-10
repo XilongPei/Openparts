@@ -1,4 +1,11 @@
 ---------------------
+Programer Hints:
+
+class GridFSClient
+interface MongodbService @Service("mongodbService")
+
+=====================
+---------------------
 https://docs.mongodb.com/manual/reference/method/db.createUser/
 
 Studio 3T for MongoDB
