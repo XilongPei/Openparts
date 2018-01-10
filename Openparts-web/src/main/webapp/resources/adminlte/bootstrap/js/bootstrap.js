@@ -1166,12 +1166,23 @@ if (typeof jQuery === 'undefined') {
         return;
     //获取可视窗口的高度
     var clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight: document.documentElement.clientHeight;  
-    //得到dialog的高度  
+    //得到dialog的高度
     var dialogHeight = $modal_dialog.height();
-    //计算出距离顶部的高度  
-    var m_top =clientHeight - dialogHeight<0?0:(clientHeight - dialogHeight)/2;  
-    if(dialogHeight>0) 
-    $modal_dialog.css({'margin': m_top + 'px auto'});  
+    //计算出距离顶部的高度
+    var m_top =clientHeight - dialogHeight<0?0:(clientHeight - dialogHeight)/2;
+    if(dialogHeight>0) {
+        $modal_dialog.css({'margin': m_top + 'px auto'});
+    }else{
+        var interval = setInterval(function () {
+            var dialogHeight1 = $modal_dialog.height();
+            if (dialogHeight1>0) {
+                //计算出距离顶部的高度
+                var m_top1 =clientHeight - dialogHeight1<0?0:(clientHeight - dialogHeight1)/2;
+                $modal_dialog.css({'margin': m_top1 + 'px auto'});
+                clearInterval(interval);
+            }
+        }, 100);
+    }
   }
 
   Modal.prototype.resetAdjustments = function () {
