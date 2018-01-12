@@ -1,6 +1,5 @@
 package com.cnpc.framework.base.pojo;
 
-
 import com.cnpc.framework.base.dao.RedisDao;
 import com.cnpc.framework.base.entity.BaseEntity;
 import com.cnpc.framework.constant.RedisConstant;
@@ -13,7 +12,7 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.SerializationUtils;
-
+import com.cnpc.framework.utils.UuidIdentifierGenerator;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -39,7 +38,8 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     @Override
     protected Serializable doCreate(Session session) {
-        Serializable sessionId = this.generateSessionId(session);
+        //Serializable sessionId = this.generateSessionId(session);
+        Serializable sessionId = UuidIdentifierGenerator.randomShortUUID();
         this.assignSessionId(session, sessionId);
         this.saveSession(session);
         return sessionId;
@@ -86,7 +86,6 @@ public class RedisSessionDao extends AbstractSessionDAO {
         }
 
     }
-
 
     public String getUserId(Session session) {
         SimplePrincipalCollection pricipal = (SimplePrincipalCollection) session.getAttribute("org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY");

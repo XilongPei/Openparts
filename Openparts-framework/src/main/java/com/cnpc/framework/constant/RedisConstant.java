@@ -8,12 +8,12 @@ public class RedisConstant {
     /**
      * shiro-redis的session对象前缀
      */
-    public static final String SHIRO_REDIS_SESSION_PRE = "shiro_session:";
+    public static final String SHIRO_REDIS_SESSION_PRE = "$:";
 
     /**
      * 存放uid的对象前缀
      */
-    public static final String SHIRO_SESSION_PRE = "shiro_sessionid:";
+    public static final String SHIRO_SESSION_PRE = "$id:";
 
     /**
      * 存放uid当前状态状态的前缀 uid
