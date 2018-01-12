@@ -1,4 +1,5 @@
 package com.cnpc.framework.utils;
+
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import java.io.Serializable;
@@ -15,6 +16,10 @@ public class UuidIdentifierGenerator implements IdentifierGenerator {
 
     @Override
     public Serializable generate(SessionImplementor s, Object obj) {
+        return randomShortUUID();
+    }
+
+    public static String randomShortUUID() {
         long number1, number2;
 
         UUID uuid = UUID.randomUUID();

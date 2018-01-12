@@ -5,7 +5,7 @@ import com.cnpc.framework.utils.CompressEncoding;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
+import com.cnpc.framework.utils.UuidIdentifierGenerator;
 
 /**
  * Represents an Openparts access token and its expiration information.
@@ -18,11 +18,7 @@ public class AccessToken implements Serializable {
 	private final String value;
 
 	public AccessToken(String str) {
-        // UUID是由一个十六进制形式的数字组成,表现出来的形式例如
-        // 550E8400-E29B-11D4-A716-446655440000
-        String s = UUID.randomUUID().toString();
-
-		this.key = CompressEncoding.CompressNumber(System.currentTimeMillis(),6) + "-" + s.replaceAll("-", "");
+		this.key = CompressEncoding.CompressNumber(System.currentTimeMillis(),6) + "-" + UuidIdentifierGenerator.randomShortUUID();
         this.value = str;
 	}
 

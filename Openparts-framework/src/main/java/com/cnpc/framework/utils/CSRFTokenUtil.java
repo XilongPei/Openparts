@@ -1,13 +1,11 @@
 package com.cnpc.framework.utils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.UUID;
+import com.cnpc.framework.utils.UuidIdentifierGenerator;
 
 public class CSRFTokenUtil {
 
     public static String generate(HttpServletRequest request) {
-
-        return UUID.randomUUID().toString();
+        return UuidIdentifierGenerator.randomShortUUID();
     }
-
 }
