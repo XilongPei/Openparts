@@ -31,8 +31,7 @@
         <property name="sessionManager" ref="webSessionManager"/>
     </bean>
     <!--redis管理session-->
-    <bean id="webSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-    <!--<bean id="webSessionManager" class="com.cnpc.framework.filter.MyWebSessionManager">-->
+    <bean id="webSessionManager" class="com.cnpc.framework.utils.CacheDefaultWebSessionManager">
         <property name="sessionDAO" ref="redisSessionDao"/>
         <property name="deleteInvalidSessions" value="true"/>
         <property name="globalSessionTimeout" value="${shiro.session.timeout}"/>

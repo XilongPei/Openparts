@@ -4,6 +4,7 @@ import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.id.IdentifierGenerator;
 import java.io.Serializable;
 import java.util.UUID;
+import org.apache.commons.lang.math.RandomUtils;
 
 /**
  *
@@ -21,26 +22,29 @@ public class UuidIdentifierGenerator implements IdentifierGenerator {
 
     public static String randomShortUUID() {
         long number1, number2;
+        int intRandom = RandomUtils.nextInt(16);
 
         UUID uuid = UUID.randomUUID();
         number1 = uuid.getMostSignificantBits();
         number2 = uuid.getLeastSignificantBits();
 
-        char[] buf = new char[64];
-        int charPos = 64;
+        char[] buf = new char[32];
+        int charPos = 32;
         long mask = (1 << 6) - 1;
         int i;
 
-        for (i = 0;  i < (64+5)/6; i++) {
-            buf[--charPos] = digits[(int) (number1 & mask)];
+        for (i = 0;  i < 64/6; i++) {
+            buf[--charPos] = digits[(int)(number1 & mask)];
             number1 >>>= 6;
         }
+        buf[--charPos] = digits[(int)(number1 & mask) | ((intRandom & 0x3) << 4)];
 
-        for (i = 0;  i < (64+5)/6; i++) {
-            buf[--charPos] = digits[(int) (number2 & mask)];
+        for (i = 0;  i < 64/6; i++) {
+            buf[--charPos] = digits[(int)(number2 & mask)];
             number2 >>>= 6;
         }
+        buf[--charPos] = digits[(int)(number2 & mask) | ((intRandom & 0xC) << 2)];
 
-        return new String(buf, charPos, (64 - charPos));
+        return new String(buf, charPos, (32 - charPos));
     }
 }
