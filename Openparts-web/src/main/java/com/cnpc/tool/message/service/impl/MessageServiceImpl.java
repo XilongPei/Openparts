@@ -31,7 +31,7 @@ import java.util.*;
 @Service("messageService")
 public class MessageServiceImpl extends BaseServiceImpl implements MessageService {
 
-    private static Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
 
 
     public List<MessageGroup> getMessageGroupByUserId(String userId) {

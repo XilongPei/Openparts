@@ -17,12 +17,16 @@ import com.cnpc.framework.annotation.RefreshCSRFToken;
 import com.cnpc.framework.annotation.VerifyCSRFToken;
 import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.service.DictService;
+import com.openparts.base.service.MongodbService;
+import com.openparts.base.service.ElasticSearchService;
 
 @Controller
 @RequestMapping("/dict_manager")
 public class DictManagerController {
 
     private DictService dictService = (DictService)SpringContextUtil.getBean("dictService");
+    private MongodbService mongodbService = (MongodbService)SpringContextUtil.getBean("mongodbService");
+    private ElasticSearchService elasticSearchService = (ElasticSearchService)SpringContextUtil.getBean("elasticSearchService");
 
     @RequestMapping(value="/list",method = RequestMethod.GET)
     public String list() {
@@ -63,10 +67,30 @@ public class DictManagerController {
         if(StrUtil.isEmpty(dict.getId())){
             dictService.save(dict);
         }
-        else{
+        else {
             dict.setUpdateDateTime(new Date());
             dictService.update(dict);
         }
+
+        if (mongodbService == null) {
+            mongodbService = (MongodbService)SpringContextUtil.getBean("mongodbService");
+        }
+
+        mongodbService.beanToMongodb(null, null, dict);
+
+
+        if (elasticSearchService == null) {
+            elasticSearchService = (ElasticSearchService)SpringContextUtil.getBean("elasticSearchService");
+        }
+
+        try {
+            String str =  "";
+            elasticSearchService.beanToES("index_test", null, null, dict);
+            System.out.println(str);
+        } catch (Exception e) {
+            //
+        }
+
         return new Result(true);
     }
 

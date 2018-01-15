@@ -16,7 +16,7 @@ public class QueryDefinition {
 
     public static final String DEFAULT_CONFIG_LOCATION = "query/*.xml";
 
-    static final Logger logger = Logger.getLogger(QueryDefinition.class);
+    private static final Logger logger = Logger.getLogger(QueryDefinition.class);
 
     private static QueryDefinition instance = new QueryDefinition();
 

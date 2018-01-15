@@ -23,7 +23,7 @@ public class Generator extends BaseEntity {
     @Column(name="code")
     private String code;
 
-    @Header(name="性别")
+    @Header(name="性别",dataSource="sex",codeField="code")
     @Column(name="gender")
     private String gender;
 

@@ -29,7 +29,8 @@ import java.util.Map;
 @RequestMapping(value = "/job")
 public class JobController {
 
-    private static Logger logger= LoggerFactory.getLogger(JobController.class);
+    private static final Logger logger = LoggerFactory.getLogger(JobController.class);
+
     @Resource
     public JobService jobService;
 

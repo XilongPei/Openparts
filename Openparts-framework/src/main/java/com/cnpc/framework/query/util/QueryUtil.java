@@ -26,7 +26,7 @@ import java.util.*;
  */
 public class QueryUtil {
 
-    private static final Logger logger= LoggerFactory.getLogger(QueryUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(QueryUtil.class);
 
     /**
      * 根据类名获取类

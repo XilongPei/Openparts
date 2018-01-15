@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController {
 
-    Logger logger = Logger.getLogger(MainController.class);
+    private static final Logger logger = Logger.getLogger(MainController.class);
 
     @RequestMapping(method = RequestMethod.GET, value = "/")
     public String index(HttpServletRequest request) {

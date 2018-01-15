@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ElasticSearchUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(ElasticSearchUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(ElasticSearchUtils.class);
 
     /**
      * CREATED(201),

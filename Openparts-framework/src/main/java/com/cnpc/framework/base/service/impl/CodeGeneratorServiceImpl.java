@@ -17,7 +17,8 @@ import java.util.Map;
  */
 @Service("codeGeneratorService")
 public class CodeGeneratorServiceImpl extends BaseServiceImpl implements CodeGeneratorService {
-    private static final Logger logger= LoggerFactory.getLogger(CodeGeneratorServiceImpl.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(CodeGeneratorServiceImpl.class);
 
     public String getLevelCode(String className, String pId) {
 

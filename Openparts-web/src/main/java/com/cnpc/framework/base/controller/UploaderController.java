@@ -35,7 +35,7 @@ import java.util.*;
 @RequestMapping("/file")
 public class UploaderController {
 
-    private static Logger logger= LoggerFactory.getLogger(UploaderController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UploaderController.class);
 
     //previewFileIconSettings
     public static Map fileIconMap=new HashMap();

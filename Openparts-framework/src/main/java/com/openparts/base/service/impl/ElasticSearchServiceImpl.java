@@ -47,7 +47,7 @@ import com.openparts.common.utils.ElasticSearchUtils;
 @Service("elasticSearchService")
 public class ElasticSearchServiceImpl extends BaseServiceImpl implements ElasticSearchService {
 
-    private static Logger logger = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ElasticSearchServiceImpl.class);
 
     @Resource
     private RestClientAddressesBuilder restClientAddressesBuilder;

@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class RedisCache<K, V> implements Cache<K, V> {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger("RedisCache<K, V>");
 
     /**
      * The wrapped Jedis instance.

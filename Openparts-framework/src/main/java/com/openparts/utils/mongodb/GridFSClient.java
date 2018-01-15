@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 public class GridFSClient {
 
-    private static Logger logger = LoggerFactory.getLogger(GridFSClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(GridFSClient.class);
 
     private MongodbDaoClient mongodbDaoClient = null;
 

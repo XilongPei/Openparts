@@ -21,7 +21,8 @@ import javax.annotation.Resource;
 
 @Service("userRoleService")
 public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleService {
-    private static final Logger logger= LoggerFactory.getLogger(UserRoleServiceImpl.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
 
     @Resource
     private UserService userService;

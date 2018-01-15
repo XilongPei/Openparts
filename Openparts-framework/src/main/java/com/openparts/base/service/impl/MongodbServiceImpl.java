@@ -39,7 +39,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 @Service("mongodbService")
 public class MongodbServiceImpl implements MongodbService {
 
-    private static Logger logger = LoggerFactory.getLogger(MongodbServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MongodbServiceImpl.class);
 
     @Resource
     private MongodbDaoClient mongodbDaoClient;

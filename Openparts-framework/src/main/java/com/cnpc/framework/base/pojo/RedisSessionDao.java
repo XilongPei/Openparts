@@ -29,7 +29,7 @@ import java.util.Set;
 //@Service("redisSessionDao")
 public class RedisSessionDao extends AbstractSessionDAO {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisSessionDao.class);
+    private static final Logger logger = LoggerFactory.getLogger(RedisSessionDao.class);
 
     private long expire;
 
