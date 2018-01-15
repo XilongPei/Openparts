@@ -451,7 +451,7 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <!-- 加入页面的的脚本 -->
 <script>
    //加载菜单
-   ajaxPost(basePath+"/function/all",null,function(data){
+   ajaxPost(basePath+"/function/getlist",null,function(data){
 	  var $li,$menu_f_ul;
 	  $.each(data,function(index,item){
 		  if(item.levelCode.length==6){
