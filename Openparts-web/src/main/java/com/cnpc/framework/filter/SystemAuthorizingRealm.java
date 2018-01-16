@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.openparts.common.CommonConstants;
 import javax.annotation.Resource;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * @author 系统安全认证实现类
@@ -35,6 +36,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 
     @Resource
     private FunctionService functionService;
+
+    // reference class: org.apache.shiro.authz.permission.WildcardPermission
+	protected static final char PART_DIVIDER_TOKEN = ':';
 
     /**
      * 用户认证
@@ -92,9 +96,18 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
         // Set<String> functionCodes = functionService.getAllFunctionCode();
         Set<String> functionCodes = functionService.getFunctionCodeSet(roleCodes, userId);
 
+        Set<String> permissionStrings = new HashSet<>();
+        for (String functioncode : functionCodes) {
+        	//
+        	// functionCode style: user/add/addone
+        	// org.apache.shiro.authz.permission.WildcardPermission style: user:add:addone
+        	//
+            permissionStrings.add(functioncode.replace('/', PART_DIVIDER_TOKEN));
+        }
+
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.setRoles(roleCodes);
-        authorizationInfo.setStringPermissions(functionCodes);
+        authorizationInfo.setStringPermissions(permissionStrings);
         return authorizationInfo;
     }
 }
