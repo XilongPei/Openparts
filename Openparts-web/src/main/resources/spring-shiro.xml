@@ -72,6 +72,8 @@
         <property name="filters">
             <map>
                 <entry key="logout" value-ref="systemLogoutFilter"/>
+                <entry key="anyRoles" value-ref="anyRolesAuthorizationFilter"/>
+                <entry key="anyPerms" value-ref="anyPermissionsAuthorizationFilter"/>
             </map>
         </property>
         <property name="filterChainDefinitionMap" ref="filterChainDefinitionClass" />
@@ -105,7 +107,7 @@
                 /oauth/**=anon
                 /resources/**=anon
                 /wechat/callback=anon
-                /druid/**=authc,roles[ADMIN]
+                /druid/**=authc,anyPerms["DEMO"]
                 /**=authc
             </value>
         </property>
@@ -114,6 +116,8 @@
     <bean id="systemLogoutFilter" class="com.cnpc.framework.filter.SystemLogoutFilter">
         <property name="redirectUrl" value="/login"/>
     </bean>
+    <bean id="anyRolesAuthorizationFilter" class="com.cnpc.framework.filter.AnyRolesAuthorizationFilter"/>
+    <bean id="anyPermissionsAuthorizationFilter" class="com.cnpc.framework.filter.AnyPermissionsAuthorizationFilter"/>
 
     <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
