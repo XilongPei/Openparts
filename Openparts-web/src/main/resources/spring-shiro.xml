@@ -77,6 +77,23 @@
         <property name="filterChainDefinitionMap" ref="filterChainDefinitionClass" />
     </bean>
 
+    <!--
+        /admin/** = authc, roles[administrator]
+        /rest/** = authc, rest
+        /remoting/rpc/** = authc, perms["remote:invoke"]
+
+        Shiro内置的FilterChain
+        Filter      Name Class
+        anon        org.apache.shiro.web.filter.authc.AnonymousFilter
+        authc       org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+        authcBasic  org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+        perms       org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
+        port        org.apache.shiro.web.filter.authz.PortFilter
+        rest        org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
+        roles       org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
+        ssl         org.apache.shiro.web.filter.authz.SslFilter
+        user        org.apache.shiro.web.filter.authc.UserFilter
+      -->
     <bean id="filterChainDefinitionClass" class="com.cnpc.framework.filter.ShirofilterChainDefinitions" scope="singleton">
         <property name="filterChainDefinitions">
             <value>
@@ -88,6 +105,7 @@
                 /oauth/**=anon
                 /resources/**=anon
                 /wechat/callback=anon
+                /druid/**=authc,roles[ADMIN]
                 /**=authc
             </value>
         </property>

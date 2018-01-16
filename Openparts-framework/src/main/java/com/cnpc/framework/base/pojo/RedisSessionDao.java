@@ -52,9 +52,10 @@ public class RedisSessionDao extends AbstractSessionDAO {
             return null;
         }
 
-        logger.debug("Read Redis.SessionId=" + new String(getKey(RedisConstant.SHIRO_REDIS_SESSION_PRE, sessionId.toString())));
+        String str = getKey(RedisConstant.SHIRO_REDIS_SESSION_PRE, sessionId.toString());
+        logger.debug("Read Redis.SessionId=[" + str + "]");
 
-        Session session = (Session) SerializationUtils.deserialize(redisDao.getByte(getKey(RedisConstant.SHIRO_REDIS_SESSION_PRE, sessionId.toString())));
+        Session session = (Session)SerializationUtils.deserialize(redisDao.getByte(str));
         return session;
     }
 
