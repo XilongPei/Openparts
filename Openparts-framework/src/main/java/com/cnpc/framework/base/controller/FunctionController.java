@@ -5,15 +5,14 @@ import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.pojo.TreeNode;
 import com.cnpc.framework.base.service.FunctionService;
 import com.cnpc.framework.utils.StrUtil;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/function")
@@ -39,6 +38,14 @@ public class FunctionController {
         return functionService.find(hql.toString());
     }
 
+    @RequestMapping(value = "/list/{roleId}", method = RequestMethod.POST)
+    @ResponseBody
+    public List<String> getFunctionIdsByRoleItd(@PathVariable("roleId") String roleId) {
+        String hql = "select functionId from RoleFunction where roleId=:roleId";
+        Map<String, Object> param = new HashMap<>();
+        param.put("roleId", roleId);
+        return functionService.find(hql, param);
+    }
 
     /**
      * getTreeData 构造bootstrap-treeview格式数据
@@ -86,16 +93,10 @@ public class FunctionController {
         }
     }
 
-
     //TODO 功能集合将从session中获取
-    @RequestMapping(value="/navigation")
+    @RequestMapping(value = "/navigation")
     @ResponseBody
-    public List<Function> navigation(String pageUrl){
-        return  functionService.getAll();
+    public List<Function> navigation(String pageUrl) {
+        return functionService.getAll();
     }
-
-
-
-
-
 }

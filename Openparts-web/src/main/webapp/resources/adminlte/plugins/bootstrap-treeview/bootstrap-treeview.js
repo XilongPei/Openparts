@@ -142,7 +142,10 @@
 
 			// Search methods
 			search: $.proxy(this.search, this),
-			clearSearch: $.proxy(this.clearSearch, this)
+			clearSearch: $.proxy(this.clearSearch, this),
+
+			// extend by billjiang
+			findNodes: $.proxy(this.findNodes, this)
 		};
 	};
 
