@@ -9,6 +9,7 @@ import com.cnpc.framework.base.service.FunctionService;
 import com.cnpc.framework.base.service.RoleService;
 import com.cnpc.framework.base.service.UserRoleService;
 import com.cnpc.framework.base.service.UserService;
+import com.cnpc.framework.base.service.impl.UserRoleServiceImpl;
 import com.cnpc.framework.oauth.common.CustomOAuthService;
 import com.cnpc.framework.oauth.entity.OAuthUser;
 import com.cnpc.framework.oauth.service.OAuthServices;
@@ -415,7 +416,7 @@ public class LoginController {
     public List<Function> getUserFunctions() {
         User user = SecurityUtil.getUser();
         Set<String> roles = roleService.getRoleCodeSet(user.getId());
-        if ("1".equals(user.getIsSuperAdmin())) {
+        if (UserRoleServiceImpl.isSuperAdmin(roles)) {
             return  functionService.getAll();
         }
 

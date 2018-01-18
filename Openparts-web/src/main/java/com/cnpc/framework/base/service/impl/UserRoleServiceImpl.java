@@ -1,7 +1,5 @@
 package com.cnpc.framework.base.service.impl;
 
-import java.util.List;
-
 import com.cnpc.framework.base.dao.RedisDao;
 import com.cnpc.framework.base.entity.Role;
 import com.cnpc.framework.base.entity.User;
@@ -12,12 +10,12 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
 import com.cnpc.framework.base.entity.UserRole;
 import com.cnpc.framework.base.pojo.Result;
 import com.cnpc.framework.base.service.UserRoleService;
-
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Set;
 
 @Service("userRoleService")
 public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleService {
@@ -40,7 +38,7 @@ public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleServ
     }
 
     @Override
-    public void deleteAuthInRedis(String userId){
+    public void deleteAuthInRedis(String userId) {
         userService.deleteAuthInRedis(userId);
     }
 
@@ -51,15 +49,18 @@ public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleServ
         if (role == null) {
             //System.out.println("系统管理需要配置名称为COMMON的角色，并未该角色分配权限");
             logger.error("系统管理需要配置名称为COMMON的角色，并未该角色分配权限");
-        }
-        else {
-            UserRole userRole=new UserRole();
-            User user=this.get(User.class,userId);
+        } else {
+            UserRole userRole = new UserRole();
+            User user = this.get(User.class,userId);
             userRole.setUser(user);
             userRole.setRoleId(role.getId());
             userRole.setDeleted(0);
             this.save(userRole);
         }
+    }
 
+    public static boolean isSuperAdmin(Set<String> roles) {
+        //return roles.contains("SUPERADMIN");
+        return true;
     }
 }
