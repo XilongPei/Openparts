@@ -41,7 +41,6 @@ public class QueryUtil {
             objClass = Class.forName(className);
         }
         return objClass;
-
     }
 
     /**
@@ -172,7 +171,6 @@ public class QueryUtil {
         return map;
     }
 
-
     /**
      * 获取排序配置,使用ID替换key 解决排序问题
      *
@@ -275,7 +273,6 @@ public class QueryUtil {
         return true;
     }
 
-
     /**
      * 不需要注入值的情况
      *
@@ -307,7 +304,6 @@ public class QueryUtil {
         return JSonHelper.getValue(clazz, value);
     }
 
-
     /**
      * 处理between的注入值
      *
@@ -336,7 +332,6 @@ public class QueryUtil {
         return list;
     }
 
-
     /**
      * 处理in not_in的注入值
      *
@@ -355,7 +350,6 @@ public class QueryUtil {
         }
         return list.isEmpty() ? null : list;
     }
-
 
     /**
      * 日期查询的处理
@@ -545,7 +539,6 @@ public class QueryUtil {
         return filter;
     }
 
-
     /**
      * 处理变量条件@#
      *
@@ -559,10 +552,31 @@ public class QueryUtil {
         String sql = sqlBuilder.toString();
         if (sql.contains("@" + key + "#")) {
             if (value instanceof java.lang.String) {
-                if (column.getIsQuote()) {
-                    sql = sql.replaceAll("@" + key + "#", "'" + value + "'");
+
+                String sqlQuery = (String)value;
+                if (sqlQuery.indexOf('{') < 0) {
+                    if (column.getIsQuote()) {
+                        sql = sql.replaceAll("@" + key + "#", "'" + value + "'");
+                    } else {
+                        sql = sql.replaceAll("@" + key + "#", value.toString());
+                    }
                 } else {
-                    sql = sql.replaceAll("@" + key + "#", value.toString());
+
+                    //
+                    // org.hibernate.loader.custom.sql.SQLQueryParser
+                    //      when (String)sqlQuery contains single '{'
+                    //      throw new QueryException( "Unmatched braces for alias path", sqlQuery );
+                    // ASCII char(123) = '{'
+                    // concat('TaAQ1',char(123),'w2IBT', char(123),'BQlNbgsXO6U');
+                    //
+                    sqlQuery = sqlQuery.replace("{", "',char(123),'");
+                    sqlQuery = "concat('" + sqlQuery + "')";
+
+                    if (column.getIsQuote()) {
+                        sql = sql.replaceAll("@" + key + "#", sqlQuery);
+                    } else {
+                        sql = sql.replaceAll("@" + key + "#", value.toString());
+                    }
                 }
             } else if (value instanceof java.lang.Integer) {
                 sql = sql.replaceAll("@" + key + "#", value.toString());
@@ -698,6 +712,4 @@ public class QueryUtil {
 
         return criteria;
     }
-
-
 }
