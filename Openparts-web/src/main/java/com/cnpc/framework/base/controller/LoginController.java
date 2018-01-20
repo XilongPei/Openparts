@@ -79,7 +79,6 @@ public class LoginController {
             if (subject.isAuthenticated()) {
                 String userId = subject.getPrincipal().toString();
                 Set<String> roles = roleService.getRoleCodeSet(userId);
-                Set<String> functions = functionService.getFunctionCodeSet(roles, userId);
                 //---------调用realm doGetAuthorizationInfo----------
                 boolean isPermitted = subject.isPermitted("user");
                 if (!roles.isEmpty()) {

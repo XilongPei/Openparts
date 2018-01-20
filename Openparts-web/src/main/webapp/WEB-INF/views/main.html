@@ -43,7 +43,7 @@
   <link rel="stylesheet" href="${basePath}/resources/adminlte/dist/css/skins/_all-skins.css">
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse fixed">
+<body class="hold-transition skin-blue sidebar-mini fixed">
 <a name="main"></a>
 <div class="wrapper">
 
@@ -450,43 +450,75 @@ var basePath="${basePath}";//给外部js文件传递路径参数
 <script type="text/javascript" src="${basePath}/resources/common/js/base-org.js"></script>
 <!-- 加入页面的的脚本 -->
 <script>
-   //加载菜单
-   ajaxPost(basePath+"/function/getlist",null,function(data){
-	  var $li,$menu_f_ul;
-	  $.each(data,function(index,item){
-		  if(item.levelCode.length==6){
-			  $li=$('<li class="treeview"></li>');
-			  var $menu_f=$('<a href="#">\n'+
-					           '<i class="'+item.icon+'"></i> <span>'+item.name+'</span>\n'+
-                                ' <span class="pull-right-container">\n'+
-					           '<i class="fa fa-angle-left pull-right"></i>\n'+
-				            '</span></a>');
-			  $li.append($menu_f);
-			  $menu_f_ul=$('<ul class="treeview-menu"></ul>');
-			  $li.append($menu_f_ul);
-			  $("ul.sidebar-menu").append($li);
-		  }
-		  else if(item.levelCode.length==12){
-			  $menu_s=$('<li><a href="#" data-url="${basePath}'+item.url+'"><i class="'+item.icon+'"></i>'+item.name+'</a></li>');
-			  $menu_f_ul.append($menu_s);
-		  }
-	  });
-   });
+    //加载菜单
+    var menuData;
+    ajaxPost(basePath+"/function/getlist",null,function(data){
+        var $li,$menu_f_ul,$menu_s,$li_s,$menu_s_ul;
+        menuData=data;
+        $.each(data,function(index,item){
+            if(item.levelCode.length==6){
+                $li=$('<li class="treeview"></li>');
+                var $menu_f=$('<a href="#">\n'+
+                    '<i class="'+item.icon+'"></i> <span>'+item.name+'</span>\n'+
+                    ' <span class="pull-right-container">\n'+
+                    '<i class="fa fa-angle-left pull-right"></i>\n'+
+                    '</span></a>');
+                $li.append($menu_f);
+                $menu_f_ul=$('<ul class="treeview-menu"></ul>');
+                $li.append($menu_f_ul);
+                $("ul.sidebar-menu").append($li);
+            }
+            else if(item.levelCode.length==12){
+                if(hasChildMenu(item.id)){
+                    $li_s=$('<li class="treeview"></li>');
+                    $menu_s=$('<a href="#">\n'+
+                        '<i class="'+item.icon+'"></i> <span>'+item.name+'</span>\n'+
+                        ' <span class="pull-right-container">\n'+
+                        '<i class="fa fa-angle-left pull-right"></i>\n'+
+                        '</span></a>');
+                    $li_s.append($menu_s);
+                    $menu_s_ul=$('<ul class="treeview-menu"></ul>');
+                    $li_s.append($menu_s_ul);
+                    $menu_f_ul.append($li_s);
+                }else {
+                    $menu_s = $('<li><a href="#" data-url="${basePath}' + item.url + '"><i class="' + item.icon + '"></i>' + item.name + '</a></li>');
+                    $menu_f_ul.append($menu_s);
+                }
+            }
+            else if(item.levelCode.length==18){
+                $menu_t = $('<li><a href="#" data-url="${basePath}' + item.url + '"><i class="' + item.icon + '"></i>' + item.name + '</a></li>');
+                $menu_s_ul.append($menu_t);
+            }
+        });
 
-   $(function(){
-	   //首页默认加载
-       loadPage("${basePath}/homePage");
-       //loadPage("${basePath}/activiti/task/todo/list");
-       //loadPage("${basePath}/activiti/delegate/list");
-	   //loadPage("${basePath}/markdown/preview?id=402880e958ecdff60158ed0c62ba0001")
-	   $("a[data-url]").click(function(evt){
-		   loadPage($(this).data("url"));
-		   $("ul.treeview-menu li").removeClass("active");
-		   $(this).parent().addClass("active");
-	   });
+    });
 
-       updateMsgCount();
-   });
+    //判断当前二级菜单是否有包含三级菜单
+    function hasChildMenu(parentId){
+        if(!menuData)
+            return false;
+        for(var i=0;i<menuData.length;i++){
+            var item=menuData[i];
+            if(item.parentId==parentId){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    $(function(){
+        //首页默认加载
+        loadPage("${basePath}/homePage");
+        //loadPage("${basePath}/activiti/task/todo/list");
+        //loadPage("${basePath}/activiti/delegate/list");
+        //loadPage("${basePath}/markdown/preview?id=402880e958ecdff60158ed0c62ba0001")
+        $("a[data-url]").click(function(evt){
+            loadPage($(this).data("url"));
+            $("ul.treeview-menu li").removeClass("active");
+            $(this).parent().addClass("active");
+        });
+        updateMsgCount();
+    });
 
    function updateMsgCount(){
        ajaxPost(basePath+"/message/navbarnumber",null,function (map) {
