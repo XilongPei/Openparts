@@ -60,6 +60,13 @@ public class OrgController {
     @ResponseBody
     public Org get(@PathVariable("id") String id) {
         Org org = orgService.get(Org.class, id);
+
+        // Org tree cached by Redis not sync with database
+        if (org == null) {
+            orgService.deleteCacheByKey(RedisConstant.ORG_PRE + "tree");
+            return null;
+        }
+
         if (!StrUtil.isEmpty(org.getParentId())) {
             org.setParentName(orgService.get(Org.class, org.getParentId()).getName());
         } else {
