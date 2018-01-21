@@ -16,6 +16,12 @@ public class RoleServiceImpl extends BaseServiceImpl implements RoleService {
         String hql = "from UserRole where roleId='" + id + "'";
         if (this.find(hql).isEmpty()) {
             Role role = this.get(Role.class, id);
+
+            String code = role.getCode();
+            if ("COMMON".equals(code) || "SUPERADMIN".equals(code)) {
+                return new Result(false, "SUPERADMIN和COMMON是内置角色，不能删除");
+            }
+
             this.delete(role);
             return new Result(true);
         }
