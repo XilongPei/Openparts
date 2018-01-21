@@ -7,7 +7,8 @@ import java.util.UUID;
 import org.apache.commons.lang.math.RandomUtils;
 
 /**
- *
+ * The highest bit of the generated UUID is reserved, it means the first letter A-Z is reserved.
+ * This design is for UUID could be manually edited.
  */
 public class UuidIdentifierGenerator implements IdentifierGenerator {
     final static char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
@@ -22,7 +23,7 @@ public class UuidIdentifierGenerator implements IdentifierGenerator {
 
     public static String randomShortUUID() {
         long number1, number2;
-        int intRandom = RandomUtils.nextInt(16);
+        int intRandom = RandomUtils.nextInt(8);
 
         UUID uuid = UUID.randomUUID();
         number1 = uuid.getMostSignificantBits();
@@ -43,7 +44,7 @@ public class UuidIdentifierGenerator implements IdentifierGenerator {
             buf[--charPos] = digits[(int)(number2 & mask)];
             number2 >>>= 6;
         }
-        buf[--charPos] = digits[(int)(number2 & mask) | ((intRandom & 0xC) << 2)];
+        buf[--charPos] = digits[(int)(number2 & mask) | ((intRandom & 0x4) << 2)];
 
         return new String(buf, charPos, (32 - charPos));
     }
