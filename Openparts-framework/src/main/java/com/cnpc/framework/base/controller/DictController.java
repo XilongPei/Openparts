@@ -81,12 +81,10 @@ public class DictController {
             dictService.deleteCacheByKey(RedisConstant.DICT_PRE + parent.getCode());
 
             dict.setDictCode(dictService.getDictCodeByID(dict.getParentId()));
-        }
-        else {
+        } else {
             dictService.updateChildrenDictCode(dict.getCode(), dict.getId());
         }
 
-        dict.setUpdateDateTime(new Date());
         dictService.saveOrUpdate(dict);
 
         dictService.deleteCacheByKey(RedisConstant.DICT_PRE+"tree");

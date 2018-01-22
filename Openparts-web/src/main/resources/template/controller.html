@@ -98,10 +98,8 @@ public class ${javaPrefix}Controller {
              ${ld};
                 </#list>
             </#if>
-            ${htmlPrefix}_old.setUpdateDateTime(new Date());
             <#if javaTypes?contains("service")>${htmlPrefix}Service<#else>baseService</#if>.update(${htmlPrefix}_old);
             <#else>
-            ${htmlPrefix}.setUpdateDateTime(new Date());
             <#if javaTypes?contains("service")>${htmlPrefix}Service<#else>baseService</#if>.update(${htmlPrefix});
             </#if>
         }

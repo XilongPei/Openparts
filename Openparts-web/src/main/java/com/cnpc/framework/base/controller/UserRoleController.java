@@ -22,20 +22,16 @@ import com.cnpc.framework.base.service.UserRoleService;
 @RequestMapping(value = "/userrole")
 public class UserRoleController {
 
-
     @Resource
     private UserRoleService userRoleService;
 
-
-
     /**
      * 用户选择
-     * 
+     *
      * @return
      */
     @RequestMapping(method = RequestMethod.GET, value = "/select")
     private String select(String roleId, HttpServletRequest request) {
-
         request.setAttribute("roleId", roleId);
         return "base/auth/userrole_select";
     }
@@ -43,7 +39,6 @@ public class UserRoleController {
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     public UserRole get(String id) {
-
         UserRole ur = userRoleService.get(UserRole.class, id);
         return ur;
     }
@@ -51,10 +46,8 @@ public class UserRoleController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Result save(String urlist) {
-
         List<UserRole> urs = JSON.parseArray(urlist, UserRole.class);
         for (UserRole ur : urs) {
-            ur.setUpdateDateTime(new Date());
             //清除redis缓存
            userRoleService.deleteAuthInRedis(ur.getUser().getId());
         }
@@ -65,12 +58,10 @@ public class UserRoleController {
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseBody
     public Result delete(String ids) {
-
         try {
             return userRoleService.delete(ids);
         } catch (Exception e) {
             return new Result(false, "已经被其他数据引用，不可删除");
         }
     }
-
 }

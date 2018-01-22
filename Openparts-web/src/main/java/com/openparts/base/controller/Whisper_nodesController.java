@@ -65,7 +65,6 @@ public class Whisper_nodesController {
             baseService.save(whisper_nodes);
         }
         else{
-            whisper_nodes.setUpdateDateTime(new Date());
             baseService.update(whisper_nodes);
         }
         return new Result(true);

@@ -54,7 +54,7 @@ public class UserRoleServiceImpl extends BaseServiceImpl implements UserRoleServ
             User user = this.get(User.class,userId);
             userRole.setUser(user);
             userRole.setRoleId(role.getId());
-            userRole.setDeleted(0);
+            userRole.setDeleted('0');
             this.save(userRole);
         }
     }

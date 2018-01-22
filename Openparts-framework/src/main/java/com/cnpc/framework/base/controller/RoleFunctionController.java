@@ -113,11 +113,10 @@ public class RoleFunctionController {
     @RequestMapping(value="/ff/save",method = RequestMethod.POST)
     @ResponseBody
     public Result save_ff(FunctionFilter ff){
-        if(StrUtil.isEmpty(ff.getId()))
+        if (StrUtil.isEmpty(ff.getId())) {
             roleFunctionService.save(ff);
-        else {
+        } else {
             roleFunctionService.update(ff);
-            ff.setCreateDateTime(new Date());
         }
         return new Result();
     }

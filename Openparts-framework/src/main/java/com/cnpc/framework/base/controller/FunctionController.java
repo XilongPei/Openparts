@@ -75,7 +75,6 @@ public class FunctionController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Result save(Function function) {
-        function.setUpdateDateTime(new Date());
         functionService.saveOrUpdate(function);
         return new Result(true);
     }

@@ -306,9 +306,7 @@ public class CodeGeneratorController {
                     function.setFunctype("1");
                     //function.setUrl("/" + setting.getBusinessPackage() + "/" + setting.getHtmlPrefix() + "/list");
                     function.setUrl("/" + setting.getHtmlPrefix() + "/list");
-                    function.setDeleted(1);
-                    function.setCreateDateTime(new Date());
-                    function.setUpdateDateTime(new Date());
+                    function.setDeleted('1');
                     function.setName(setting.getModelName() + "管理");
                     function.setIcon("fa fa-edit");
                     function.setRemark("本功能菜单为代码生成器生成，时间：" + DateUtil.format(new Date(), DateUtil.formatStr_yyyyMMddHHmmss));

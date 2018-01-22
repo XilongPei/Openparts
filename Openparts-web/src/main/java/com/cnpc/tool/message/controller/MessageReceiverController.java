@@ -120,7 +120,7 @@ public class MessageReceiverController {
     @ResponseBody
     public Result delete(@PathVariable("id") String id) {
         MessageReceiver message = this.get(id);
-        message.setDeleted(1);
+        message.setDeleted('1');
         messageService.update(message);
         messageService.deleteCacheForMsgCount();
         return new Result();
@@ -158,7 +158,7 @@ public class MessageReceiverController {
     @ResponseBody
     public Result restore(@PathVariable("id") String id) {
         MessageReceiver message = this.get(id);
-        message.setDeleted(0);
+        message.setDeleted('0');
         messageService.update(message);
         messageService.deleteCacheForMsgCount();
         return new Result();

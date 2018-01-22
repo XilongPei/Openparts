@@ -91,8 +91,6 @@ public class OrgController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Result save(Org org) {
-
-        org.setUpdateDateTime(new Date());
         orgService.saveOrUpdate(org);
         if (!StrUtil.isEmpty(org.getParentId())) {
             Org parent = orgService.get(Org.class, org.getParentId());

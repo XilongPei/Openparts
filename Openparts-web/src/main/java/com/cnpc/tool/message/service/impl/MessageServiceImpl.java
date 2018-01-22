@@ -79,7 +79,6 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
         } else {
             groupId = group.getId();
             MessageGroup group_old = this.get(MessageGroup.class, groupId);
-            group_old.setUpdateDateTime(new Date());
             group_old.setName(group.getName());
             group_old.setRemark(group.getRemark());
             group_old.setSort(group.getSort());
@@ -94,9 +93,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             MessageGroupUser groupUser = new MessageGroupUser();
             groupUser.setGroupId(groupId);
             groupUser.setUserId(userId);
-            groupUser.setDeleted(0);
-            groupUser.setUpdateDateTime(new Date());
-            groupUser.setCreateDateTime(new Date());
+            groupUser.setDeleted('0');
             list.add(groupUser);
         }
         this.batchSave(list);
@@ -154,7 +151,6 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             }
         } else {
             //编辑草稿
-            message.setUpdateDateTime(new Date());
             if (MessageConstant.SEND_STATUS_DRAFT.equals(message.getMessageStatus())) {
                 this.update(message);
                 //草稿变发送
@@ -224,7 +220,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             receiver.setReadYet(MessageConstant.READ_NO);
             receiver.setMessage(message);
             receiver.setReceiveUserID(user.getId());
-            receiver.setDeleted(0);
+            receiver.setDeleted('0');
             receiver.setMessageFlag(message.getMessageFlag());
             receiver.setMessageType(message.getMessageType());
             if (receiver.getMessageType().indexOf(MessageConstant.TYPE_EMAIL) > -1)

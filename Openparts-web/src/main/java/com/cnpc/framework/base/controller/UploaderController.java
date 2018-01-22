@@ -258,10 +258,8 @@ public class UploaderController {
                     SysFile sysFile=new SysFile();
                     sysFile.setFileName(file.getOriginalFilename());
                     sysFile.setSavedName(savedName);
-                    sysFile.setCreateDateTime(new Date());
-                    sysFile.setUpdateDateTime(new Date());
                     sysFile.setCreateUserId(SecurityUtil.getUserId());
-                    sysFile.setDeleted(0);
+                    sysFile.setDeleted('0');
                     sysFile.setFileSize(file.getSize());
                     sysFile.setFilePath(uploaderPath+File.separator+savedName);
                     uploaderService.save(sysFile);

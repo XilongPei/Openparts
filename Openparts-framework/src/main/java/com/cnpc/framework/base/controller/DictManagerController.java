@@ -62,9 +62,7 @@ public class DictManagerController {
 
         if(StrUtil.isEmpty(dict.getId())){
             dictService.save(dict);
-        }
-        else{
-            dict.setUpdateDateTime(new Date());
+        } else {
             dictService.update(dict);
         }
         return new Result(true);

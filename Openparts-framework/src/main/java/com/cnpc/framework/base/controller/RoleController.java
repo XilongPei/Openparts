@@ -54,8 +54,6 @@ public class RoleController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody
     public Result save(Role role) {
-
-        role.setUpdateDateTime(new Date());
         roleService.saveOrUpdate(role);
         return new Result(true);
     }

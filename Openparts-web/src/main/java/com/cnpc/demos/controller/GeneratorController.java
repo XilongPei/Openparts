@@ -67,7 +67,6 @@ public class GeneratorController {
         else{
             Generator generator_old=baseService.get(Generator.class,generator.getId());
             BeanUtils.copyProperties(generator,generator_old, "email","remark");
-            generator_old.setUpdateDateTime(new Date());
             baseService.update(generator_old);
         }
         return new Result(true);

@@ -76,7 +76,6 @@ public class UploaderServiceImpl extends BaseServiceImpl implements UploaderServ
                 file.delete();
             avatar.setName(fileName);
             avatar.setSrc(filePath);
-            avatar.setUpdateDateTime(new Date());
             this.update(avatar);
         }
         // 新增图片
@@ -84,7 +83,6 @@ public class UploaderServiceImpl extends BaseServiceImpl implements UploaderServ
             avatar = new UserAvatar();
             avatar.setName(fileName);
             avatar.setSrc(filePath);
-            avatar.setCreateDateTime(new Date());
             avatar.setUserId(userId);
             avatar_id=this.save(avatar).toString();
         }

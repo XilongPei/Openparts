@@ -44,12 +44,10 @@ public class MarkDownController {
     public Result save(MarkDown obj) {
         obj.setUserId(SecurityUtil.getUserId());
         if (StrUtil.isEmpty(obj.getId())) {
-            obj.setCreateDateTime(new Date());
-            obj.setDeleted(0);
+            obj.setDeleted('0');
             baseService.save(obj);
         } else {
             MarkDown md = baseService.get(MarkDown.class, obj.getId());
-            md.setUpdateDateTime(new Date());
             md.setTitle(obj.getTitle());
             md.setKeywords(obj.getKeywords());
             md.setContent(obj.getContent());

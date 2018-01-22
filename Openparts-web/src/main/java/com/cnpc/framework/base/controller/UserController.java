@@ -101,9 +101,6 @@ public class UserController {
                 oldUser.setWhisperKey(keyPair.getPrivateKey());
             }
 
-            oldUser.setUpdateDateTime(new Date());
-
-
             userService.update(oldUser);
         }
         return new Result(true);
