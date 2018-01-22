@@ -65,10 +65,6 @@ public class User extends BaseEntity {
     @Column(name = "open_account", length = 5)
     private String openAccount;
 
-    @Header(name = "超级管理员")
-    @Column(name = "isSuperAdmin")
-    private String isSuperAdmin;
-
     @Header(name="部门ID")
     @Column(name="dept_id")
     private String deptId;
@@ -222,16 +218,6 @@ public class User extends BaseEntity {
     public void setOpenAccount(String openAccount) {
 
         this.openAccount = openAccount;
-    }
-
-    public String getIsSuperAdmin() {
-
-        return isSuperAdmin;
-    }
-
-    public void setIsSuperAdmin(String isSuperAdmin) {
-
-        this.isSuperAdmin = isSuperAdmin;
     }
 
     public String getWhisperId() {

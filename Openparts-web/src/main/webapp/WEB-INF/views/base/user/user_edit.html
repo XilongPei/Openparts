@@ -8,7 +8,6 @@
 	<form id="user-form" name="user-form" class="form-horizontal">
 		<input type="hidden" name="id">
 		<input type="hidden" name="version">
-		<input type="hidden" name="isSuperAdmin">
 		<input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
 		<input type="hidden" name="deleted">
 		<input type='hidden' value='${CSRFToken}' id='csrftoken'>
@@ -113,10 +112,10 @@
 							    userTable.reloadRowData(id);
 							}else{//新增
 								 //modals.info("数据保存成功");
-								 modals.hideWin(winId); 
-								 userTable.reloadData(); 
+								 modals.hideWin(winId);
+								 userTable.reloadData();
 							}
-						}				 
+						}
 					});
 				});
 			},
@@ -143,7 +142,7 @@
 						date : {
 							format : $(this).data("format"),
 							message : '请输入有效日期'
-						} 
+						}
 					}
 				},
 				loginName : {
@@ -161,21 +160,21 @@
 						emailAddress:{
 							message:'非法的邮件格式',
 						}
-				     
+
 					}
 				}
 			}
 		});
 		form.initComponent();
-		//回填id		
+		//回填id
 		if(id!="0"){
 			ajaxPost(basePath+"/user/get",{id:id},function(data){
 				form.initFormData(data);
 			})
-		} 
+		}
 	});
-	
-	
+
+
 	function resetForm(){
 		form.clearForm();
 		$("#user-form").data('bootstrapValidator').resetForm();
