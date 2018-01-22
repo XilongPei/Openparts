@@ -385,7 +385,6 @@ public class UploaderController {
             String[] fileIdArr = fileIds.split(",");
             DetachedCriteria criteria = DetachedCriteria.forClass(SysFile.class);
             criteria.add(Restrictions.in("id", fileIdArr));
-            criteria.addOrder(Order.asc("createDateTime"));
             fileList = uploaderService.findByCriteria(criteria);
         }
         return getPreivewSettings(fileList,request);

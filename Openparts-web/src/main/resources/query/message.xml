@@ -86,11 +86,10 @@
 
     <!--用户列表，选择消息接收人-->
     <query id="message_receiver_select_list" key="id" tableName="用户列表" className="com.cnpc.framework.base.entity.User"
-           pageSize="10"  widthType="px" order="updateDateTime desc">
+           pageSize="10"  widthType="px">
         <column key="isSelected" header="选择" fnRender="fnRenderSelectReceiver" />
         <column key="id" header="id" hidden="true" align="center" allowSort="false"/>
         <column key="rowIndex" header="序号" width="50" allowSort="false"/>
-        <column key="version" header="version" hidden="true"/>
         <column key="name" header="姓名" operator="like" width="100" allowSort="true" />
         <column key="sex" header="性别" operator="eq" width="150" allowSort="true" render="1=男,0=女" />
         <column key="email" header="邮箱" align="left" operator="eq" width="100"  />

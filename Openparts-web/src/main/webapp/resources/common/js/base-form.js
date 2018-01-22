@@ -30,7 +30,7 @@
     }
 
     //初始化
-    BaseForm.prototype.init = function () {
+    BaseForm.prototype.init = function() {
         //baseEntity
         this.initBaseEntity();
         // datepicker
@@ -45,36 +45,29 @@
     }
 
     //主要解决icheck 校验对勾错位的问题
-    BaseForm.prototype.initComponent = function () {
+    BaseForm.prototype.initComponent = function() {
         // icheck
         this.initICheck();
         //select2
         this.initSelect2();
     }
 
-    BaseForm.prototype.initSelect2 = function () {
+    BaseForm.prototype.initSelect2 = function() {
         $(this.select2Element).select2({
             minimumResultsForSearch: Infinity
         });
     }
 
-
     /**
      * 页面增加BaseEntity中的属性
      * 通过是否baseentity配置，baseentity 不配置或为true
      */
-    BaseForm.prototype.initBaseEntity = function () {
+    BaseForm.prototype.initBaseEntity = function() {
         if (this.options.baseEntity === false)
             return;
         var form = this.$element;
         if (form.find('[name="deleted"]').length == 0) {
             form.prepend("<input type='hidden' name='deleted' value='0'>");
-        }
-        if (form.find(':hidden[name="createDateTime"]').length == 0) {
-            form.prepend('<input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">');
-        }
-        if (form.find(':hidden[name="version"]').length == 0) {
-            form.prepend("<input type='hidden' name='version'>");
         }
         if (form.find(':hidden[name="id"]').length == 0) {
             form.prepend("<input type='hidden' id='id' name='id'>");
@@ -83,10 +76,10 @@
 
     /**
      */
-    BaseForm.prototype.initICheck = function () {
+    BaseForm.prototype.initICheck = function() {
         var form = this.$element;
         if (form.find('[data-flag="icheck"]').length > 0) {
-            form.find('[data-flag="icheck"]').each(function () {
+            form.find('[data-flag="icheck"]').each(function() {
                 var cls = $(this).attr("class") ? $(this).attr("class") : "square-green";
                 $(this).iCheck(
                     {
@@ -106,7 +99,7 @@
     /**
      * 初始化datepicker
      */
-    BaseForm.prototype.initDatePicker = function () {
+    BaseForm.prototype.initDatePicker = function() {
         var form = this.$element;
         if (form.find(this.datepickerElement).length > 0) {
             form.find(this.datepickerElement).datepicker({
@@ -126,7 +119,7 @@
     /**
      * 初始化datepicker
      */
-    BaseForm.prototype.initDateTimePicker = function () {
+    BaseForm.prototype.initDateTimePicker = function() {
         var form = this.$element;
         if (form.find(this.datetimepickerElement).length > 0) {
             form.find(this.datetimepickerElement).datetimepicker({
@@ -161,7 +154,7 @@
                         _this.buildAjaxDictSelect(this, code);
                 } else {
                     var that = this;
-                    $(this).click(function () {
+                    $(this).click(function() {
                         _this.buildAjaxDictSelect(that, code);
                     })
                 }
@@ -187,7 +180,7 @@
                         _this.buildAjaxUrlSelect(this, url);
                 } else {
                     var that = this;
-                    $(this).click(function () {
+                    $(this).click(function() {
                         _this.buildAjaxUrlSelect(that, url);
                     })
                 }
@@ -272,7 +265,7 @@
     /**
      * 获取表单数据
      */
-    BaseForm.prototype.getFormSimpleData = function () {
+    BaseForm.prototype.getFormSimpleData = function() {
         var datas = {};
         var form = this.$element;
         if (form.length == 0)
@@ -311,8 +304,6 @@
                 eval('datas.' + el_name + '="' + (is_ckbox ? (old_val ? (old_val + ',') : '') : '') + value + '"');
             }
         });
-        console.log("--------------------------------");
-        console.log(datas);
         return datas;
     }
 
@@ -386,7 +377,7 @@
     /**
      * 表单重置
      */
-    BaseForm.prototype.clearForm = function () {
+    BaseForm.prototype.clearForm = function() {
         if (this.$element.length > 0) {
             var form = this.$element;
             form.find(':input[name]:not(:radio)').val('');
@@ -410,7 +401,6 @@
             $("select.select2").select2("val", " ");
         }
     }
-
 
 })(jQuery, window, document);
 

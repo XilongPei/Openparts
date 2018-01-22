@@ -6,7 +6,6 @@
 		pageSize="10"  widthType="px" order="id asc">
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="name" header="姓名" operator="like" width="100" allowSort="true" />
 		<column key="deptId" header="所在部门" align="left" width="100" fnRender="fnRenderDept"/>
 		<column key="sex" header="性别" operator="eq" width="150" allowSort="true" render="1=男,0=女" />
@@ -22,7 +21,6 @@
 		pageSize="10"  widthType="px" order="sort asc" allowPaging="false">
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="name" header="名称" operator="like" width="100" allowSort="true" />
 		<column key="code" header="编码" operator="eq" width="100" allowSort="true"/>
 		<column key="deleted" header="是否可用" width="80" allowSort="true" render="1=禁用,0=可用" />
@@ -31,10 +29,9 @@
 
 	<!-- 角色用户列表  已经绑定该角色的用户 -->
     <query id="userRole_selected_list" key="id" tableName="角色用户列表（已绑定）" className="com.cnpc.framework.base.entity.UserRole"
-		pageSize="10"  widthType="px" order="updateDateTime desc" allowPaging="true">
+		pageSize="10"  widthType="px" allowPaging="true">
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="roleId"  header="roleId" operator="eq"  hidden="true"/>
 		<column key="user.name" header="用户名" operator="like" width="100" allowSort="true" />
 		<column key="user.loginName" header="登录名" operator="eq" width="100" allowSort="true"/>
@@ -53,7 +50,6 @@
 		</sql>
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="roleId"  header="roleId" operator="eq"  hidden="true"/>
 		<column key="name" header="功能名" operator="like" width="100" align="left" allowSort="true" />
 		<column key="code" header="功能编码" operator="eq" width="100" allowSort="true"/>
@@ -64,7 +60,6 @@
 	<query id="ff_list" key="id" tableName="功能数据权限列表"  pageSize="10"  widthType="px" order="sort asc" allowPaging="false" className="com.cnpc.framework.base.entity.FunctionFilter">
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="roleId" header="roleId" hidden="true" operator="eq"/>
 		<column key="functionId" header="functionId" hidden="true" operator="eq"/>
 		<column key="key" header="条件" operator="like" width="100" allowSort="true" />
@@ -85,18 +80,16 @@
 	    </sql>
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
 		<column key="id" header="id" hidden="true"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="name" header="用户名" operator="like" width="100" allowSort="true" />
 		<column key="login_name" header="登录名" operator="eq" width="100" allowSort="true"/>
 	</query>
 
 	<!--通用用户选择-->
 	<query id="user_select_list" key="id" tableName="用户选择" className="com.cnpc.framework.base.entity.User"
-		   pageSize="10"  widthType="px" order="updateDateTime desc">
+		   pageSize="10"  widthType="px">
 		<column key="isSelected" header="选择" fnRender="fnRenderSelectUser" />
 		<column key="id" header="id" hidden="true" align="center" allowSort="false"/>
 		<column key="rowIndex" header="序号" width="50" allowSort="false"/>
-		<column key="version" header="version" hidden="true"/>
 		<column key="name" header="姓名" operator="like" width="100" allowSort="true" />
 		<column key="sex" header="性别" operator="eq" width="150" allowSort="true" render="1=男,0=女" />
 		<column key="email" header="邮箱" align="left" operator="eq" width="100"  />

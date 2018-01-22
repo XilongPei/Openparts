@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="${basePath}/resources/common/libs/fileinput/css/fileinput.min.css">
 <form id="message_form" name="message_form" class="form-horizontal" enctype="multipart/form-data">
     <input type="hidden" name="id">
-    <input type="hidden" name="version">
     <input type="hidden" name="createDateTime" data-flag="date" data-format="yyyy-mm-dd hh:ii:ss">
     <input type="hidden" name="deleted" value="0">
     <input type='hidden' value="${CSRFToken}" id='csrftoken'>
@@ -119,7 +118,7 @@
                 $("#sendSubject").val("转发:"+data.sendSubject);
 
                 $("#receiverType,#receiverIds,#receiverUsers").val("");//用户
-               $("[name='id'],[name='version'],[name='createDateTime']").val("");
+                $("[name='id']").val("");
             })
         }
 
