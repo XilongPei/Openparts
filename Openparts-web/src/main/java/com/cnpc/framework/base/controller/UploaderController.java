@@ -259,7 +259,7 @@ public class UploaderController {
                     sysFile.setFileName(file.getOriginalFilename());
                     sysFile.setSavedName(savedName);
                     sysFile.setCreateUserId(SecurityUtil.getUserId());
-                    sysFile.setDeleted('0');
+                    sysFile.setDeleted(0);
                     sysFile.setFileSize(file.getSize());
                     sysFile.setFilePath(uploaderPath+File.separator+savedName);
                     uploaderService.save(sysFile);

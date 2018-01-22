@@ -48,7 +48,7 @@ public abstract class BaseEntity implements Serializable {
      * 删除标记(0启用，1禁用), in SQL: CHAR(1)
      */
     @Column(name = "deleted")
-    private char deleted;
+    private Integer deleted;
 
     public String getId() {
         return id;
@@ -58,11 +58,11 @@ public abstract class BaseEntity implements Serializable {
         this.id = id;
     }
 
-    public char getDeleted() {
+    public Integer getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(char deleted) {
+    public void setDeleted(Integer deleted) {
         this.deleted = deleted;
     }
 

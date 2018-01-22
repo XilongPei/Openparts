@@ -93,7 +93,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             MessageGroupUser groupUser = new MessageGroupUser();
             groupUser.setGroupId(groupId);
             groupUser.setUserId(userId);
-            groupUser.setDeleted('0');
+            groupUser.setDeleted(0);
             list.add(groupUser);
         }
         this.batchSave(list);
@@ -220,7 +220,7 @@ public class MessageServiceImpl extends BaseServiceImpl implements MessageServic
             receiver.setReadYet(MessageConstant.READ_NO);
             receiver.setMessage(message);
             receiver.setReceiveUserID(user.getId());
-            receiver.setDeleted('0');
+            receiver.setDeleted(0);
             receiver.setMessageFlag(message.getMessageFlag());
             receiver.setMessageType(message.getMessageType());
             if (receiver.getMessageType().indexOf(MessageConstant.TYPE_EMAIL) > -1)

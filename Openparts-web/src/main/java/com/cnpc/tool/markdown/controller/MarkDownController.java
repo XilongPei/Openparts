@@ -44,7 +44,7 @@ public class MarkDownController {
     public Result save(MarkDown obj) {
         obj.setUserId(SecurityUtil.getUserId());
         if (StrUtil.isEmpty(obj.getId())) {
-            obj.setDeleted('0');
+            obj.setDeleted(0);
             baseService.save(obj);
         } else {
             MarkDown md = baseService.get(MarkDown.class, obj.getId());
