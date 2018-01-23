@@ -32,6 +32,9 @@ public class NavbarServiceImpl extends BaseServiceImpl implements NavbarService 
     @Override
     public Map getNavbarNumber() {
         Map<String, String> retMap = redisDao.get(RedisConstant.MESSAGE_PRE+"count:"+SecurityUtil.getUserId(),Map.class);
+        if (retMap == null) {
+            retMap = new HashMap<String, String>();
+        }
 
         retMap.put("msg_num", "128");
         retMap.put("msg_str", String.format(OpenpartsProperties.getValue("msg_str"), 128));
