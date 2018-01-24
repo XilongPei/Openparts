@@ -5,14 +5,12 @@ import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpSession;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
 import com.alibaba.fastjson.JSONObject;
 import com.cnpc.framework.annotation.RefreshCSRFToken;
 import com.cnpc.framework.annotation.VerifyCSRFToken;
@@ -20,6 +18,8 @@ import com.cnpc.framework.base.pojo.ResultCode;
 import com.cnpc.framework.constant.CodeConstant;
 import com.cnpc.framework.utils.CSRFTokenUtil;
 import com.cnpc.framework.utils.StrUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CSRFInterceptor 防止跨站请求伪造拦截器
@@ -28,10 +28,13 @@ import com.cnpc.framework.utils.StrUtil;
  */
 public class CSRFInterceptor extends HandlerInterceptorAdapter {
 
+    private static final Logger logger = LoggerFactory.getLogger(CSRFInterceptor.class);
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        System.out.println("---------->" + request.getRequestURI());
+        logger.debug(request.getRequestURI());
+
         //System.out.println(request.getHeader("X-Requested-With"));
         // 提交表单token 校验
         HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -73,10 +76,12 @@ public class CSRFInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
             throws Exception {
 
+        HttpSession session = request.getSession(false);
+
         // 第一次生成token
         if (modelAndView != null) {
-            if (request.getSession(false) == null || StrUtil.isEmpty((String) request.getSession(false).getAttribute("CSRFToken"))) {
-                request.getSession().setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
+            if (session == null || StrUtil.isEmpty((String)session.getAttribute("CSRFToken"))) {
+                session.setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
                 return;
             }
         }
@@ -88,7 +93,7 @@ public class CSRFInterceptor extends HandlerInterceptorAdapter {
         // 跳转到一个新页面 刷新token
         String xrq = request.getHeader("X-Requested-With");
         if (refreshAnnotation != null && refreshAnnotation.refresh() && StrUtil.isEmpty(xrq)) {
-            request.getSession().setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
+            session.setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
             return;
         }
 
@@ -97,7 +102,7 @@ public class CSRFInterceptor extends HandlerInterceptorAdapter {
         if (verifyAnnotation != null) {
             if (verifyAnnotation.verify()) {
                 if (StrUtil.isEmpty(xrq)) {
-                    request.getSession().setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
+                    session.setAttribute("CSRFToken", CSRFTokenUtil.generate(request));
                 } else {
                     //前端ERROR 处理
                     Map<String, String> map = new HashMap<String, String>();
@@ -112,7 +117,7 @@ public class CSRFInterceptor extends HandlerInterceptorAdapter {
 
     /**
      * 处理跨站请求伪造 针对需要登录后才能处理的请求,验证CSRFToken校验
-     * 
+     *
      * @param request
      */
     protected boolean verifyCSRFToken(HttpServletRequest request) {
@@ -124,7 +129,7 @@ public class CSRFInterceptor extends HandlerInterceptorAdapter {
             //if there is no csrftoken from web ,then no csrf check
             return true;
         }
-        String sessionCSRFToken = (String) request.getSession().getAttribute("CSRFToken");
+        String sessionCSRFToken = (String)request.getSession().getAttribute("CSRFToken");
         if (StrUtil.isEmpty(sessionCSRFToken)) {
             return false;
         }
