@@ -28,12 +28,18 @@ public class RedisConstant {
     /**
      * 存放用户权限的前缀
      */
-    public static final String PERMISSION_PRE = "permission:";
+    public static final String PERMISSION_PRE = "uperm:";
 
     /**
-     * 角色中的权限
+     * 存放Role权限的前缀
+     */
+    public static final String ROLE_PERMISSION_PRE = "rperm:";
+
+    /**
+     * 存放用户角色的前缀
      */
     public static final String ROLE_PRE = "role:";
+
     /**
      * 字典缓存前缀
      */

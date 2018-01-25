@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by billJiang on 2017/1/3. e-mail:jrn1012@petrochina.com.cn
@@ -91,5 +92,10 @@ public class RoleFunctionServiceImpl extends BaseServiceImpl implements RoleFunc
             redisDao.delete(RedisConstant.ROLE_PRE + userId);
             redisDao.delete(RedisConstant.PERMISSION_PRE + userId);
         }
+
+        // ^_^: the key in Redis is not: RedisConstant.ROLE_PERMISSION_PRE + roleId, it is
+        // RedisConstant.ROLE_PERMISSION_PRE + roleCode
+        Set<String> keys = redisDao.keys(RedisConstant.ROLE_PERMISSION_PRE + "*") ;
+        redisDao.delete(keys);
     }
 }

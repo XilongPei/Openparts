@@ -24,7 +24,7 @@ public interface RedisDao {
 
     void delete(final String key);
 
-    void delete(final List<String> keys);
+    void delete(final Set<String> keys);
 
     <T> boolean update(final String key, final T obj);
 

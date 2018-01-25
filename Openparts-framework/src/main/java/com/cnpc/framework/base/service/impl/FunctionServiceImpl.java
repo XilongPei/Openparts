@@ -90,7 +90,14 @@ public class FunctionServiceImpl extends BaseServiceImpl implements FunctionServ
 
     @Override
     public List<Function> getFunctionList(Set<String> roleCodes, String userId) {
-        String key = RedisConstant.PERMISSION_PRE + userId;
+        String key;
+
+        if (roleCodes.size() == 1) {
+            key = RedisConstant.ROLE_PERMISSION_PRE + (String)roleCodes.iterator().next();
+        } else {
+            key = RedisConstant.PERMISSION_PRE + userId;
+        }
+
         List<Function> functionList = redisDao.getList(key, Function.class);
         if (functionList == null) {
             String sql = "select rf.* from tbl_role_function rf left join tbl_role r on rf.roleId=r.id where r.code in (:roleCodes)";

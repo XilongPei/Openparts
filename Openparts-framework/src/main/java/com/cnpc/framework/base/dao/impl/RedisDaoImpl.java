@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Created by billJiang on 2017/4/10.
@@ -103,16 +103,15 @@ public class RedisDaoImpl implements RedisDao {
         return this.add(key, JSON.toJSONString(list));
     }
 
-
     @Override
     public void delete(final String key) {
-        List<String> list = new ArrayList<>();
-        list.add(key);
-        this.delete(list);
+        Set<String> set = new HashSet();
+        set.add(key);
+        this.delete(set);
     }
 
     @Override
-    public void delete(final List<String> keys) {
+    public void delete(final Set<String> keys) {
         redisTemplate.delete(keys);
     }
 
