@@ -21,6 +21,17 @@
      <!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
     <bean id="adminRealm" class="com.cnpc.framework.filter.SystemAuthorizingRealm"/>
 
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 30天 -->
+    </bean>
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
     <!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->
     <!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
     <!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
@@ -29,6 +40,7 @@
         <property name="cacheManager" ref="cacheManager"/>
         <!--将session托管给redis进行管理，便于搭建集群系统-->
         <property name="sessionManager" ref="webSessionManager"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
     <!--redis管理session-->
     <bean id="webSessionManager" class="com.cnpc.framework.utils.CacheDefaultWebSessionManager">
@@ -47,6 +59,8 @@
         <constructor-arg name="name" value="SHAREJSESSIONID"/>
         <!-- jsessionId的path为 / 用于多个系统共享jsessionId -->
         <property name="path" value="/"/>
+        <!--property name="httpOnly" value="true"/>
+        <property name="maxAge" value="-1"/ --> <!--maxAge=-1表示浏览器关闭时失效此Cookie；-->
     </bean>
 
     <bean id="redisSessionDao" class="com.cnpc.framework.base.pojo.RedisSessionDao">
@@ -87,14 +101,14 @@
         Shiro内置的FilterChain
         Filter      Name Class
         anon        org.apache.shiro.web.filter.authc.AnonymousFilter
-        authc       org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+        authc       org.apache.shiro.web.filter.authc.FormAuthenticationFilter 访问该地址用户必须身份验证通过（Subject. isAuthenticated()==true）。
         authcBasic  org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
         perms       org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
         port        org.apache.shiro.web.filter.authz.PortFilter
         rest        org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
         roles       org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
         ssl         org.apache.shiro.web.filter.authz.SslFilter
-        user        org.apache.shiro.web.filter.authc.UserFilter
+        user        org.apache.shiro.web.filter.authc.UserFilter 访问该地址的用户是身份验证通过或RememberMe登录的都可以。
       -->
     <bean id="filterChainDefinitionClass" class="com.cnpc.framework.filter.ShirofilterChainDefinitions" scope="singleton">
         <property name="filterChainDefinitions">

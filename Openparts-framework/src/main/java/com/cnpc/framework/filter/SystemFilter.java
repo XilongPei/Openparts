@@ -42,7 +42,7 @@ public class SystemFilter implements Filter {
 
         String basePath = request.getContextPath();
         Subject subject = SecurityUtils.getSubject();
-        boolean isauth = subject.isAuthenticated();
+        boolean isauth = (subject.isAuthenticated() || subject.isRemembered());
 
         request.setAttribute("basePath", basePath);
         request.setAttribute("isauth", isauth);

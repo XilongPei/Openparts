@@ -146,7 +146,7 @@ public class LoginController {
         model.addAttribute("oAuthServices", oAuthServices.getAllOAuthServices());
         //已经登录过，直接进入主页
         Subject subject = SecurityUtils.getSubject();
-        if (subject != null && subject.isAuthenticated()) {
+        if (subject != null && (subject.isAuthenticated() || subject.isRemembered())) {
             Object authorized = subject.getSession().getAttribute("isAuthorized");
             //boolean isAuthorized = Boolean.valueOf(subject.getSession().getAttribute("isAuthorized").toString());
             if (authorized != null && Boolean.valueOf(authorized.toString()))
@@ -158,10 +158,27 @@ public class LoginController {
             return LOGIN_PAGE;
         }
         String password = request.getParameter("password");
+        String rememberMe = request.getParameter("rememberMe");
+
         //密码加密+加盐
         password = EncryptUtil.getPassword(password, userName);
         UsernamePasswordToken token = new UsernamePasswordToken(userName, password);
-        token.setRememberMe(true);
+
+        if (StrUtil.isEmpty(rememberMe)) {
+            token.setRememberMe(false);
+        } else {
+            int i;
+            try {
+                i = Integer.parseInt(rememberMe);
+            } catch (Exception e) {
+                i = 0;
+            }
+            if (i != 0) {
+                token.setRememberMe(true);
+            } else {
+                token.setRememberMe(false);
+            }
+        }
 
         return tryLogin(subject, model, token);
     }
