@@ -1,6 +1,8 @@
 package com.cnpc.framework.base.dao;
 
-
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.SetOperations;
 import java.util.List;
 import java.util.Set;
 
@@ -62,4 +64,24 @@ public interface RedisDao {
     boolean flushDB();
 
     long dbSize();
+
+    //==========================================================================
+
+    /**
+     * HashOperations<String,String,Object> opsForHash;
+     * put, putAll, entries, ......
+     */
+    HashOperations getHashOperations();
+
+    /**
+     * ListOperations<String, Object> opsForList;
+     * rightPush, leftPop, ......
+     */
+    ListOperations getListOperations();
+
+    /**
+     * SetOperations<String, Object> opsForSet;
+     *
+     */
+    SetOperations getSetOperations();
 }

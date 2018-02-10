@@ -10,12 +10,16 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.SetOperations;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
 import java.util.HashSet;
+import java.util.ArrayList;
 
 /**
  * Created by billJiang on 2017/4/10.
@@ -48,7 +52,6 @@ public class RedisDaoImpl implements RedisDao {
         return redisTemplate.getStringSerializer();
     }
 
-
     @Override
     public <T> boolean add(final String key, final T obj) {
         return add(key, JSON.toJSONString(obj));
@@ -64,11 +67,8 @@ public class RedisDaoImpl implements RedisDao {
                 add(key,timeout,object);
                 return null;
             }
-
-
         });
     }
-
 
     @Override
     public void add(final String key, final long timeout,final byte[] object) {
@@ -82,7 +82,6 @@ public class RedisDaoImpl implements RedisDao {
             }
         });
     }
-
 
     @Override
     public boolean add(final String key, final String value) {
@@ -119,7 +118,6 @@ public class RedisDaoImpl implements RedisDao {
     public <T> boolean update(final String key, final T obj) {
         return this.update(key, JSON.toJSONString(obj));
     }
-
 
     @Override
     public boolean update(final String key, final String value) {
@@ -175,7 +173,6 @@ public class RedisDaoImpl implements RedisDao {
         return result;
     }
 
-
     @Override
     public <T> List<T> getList(final String key, final Class<T> clazz) {
         List<T> result = redisTemplate.execute(new RedisCallback<List<T>>() {
@@ -193,8 +190,6 @@ public class RedisDaoImpl implements RedisDao {
         });
         return result;
     }
-
-
 
     @Override
     public String get(final String key) {
@@ -246,7 +241,6 @@ public class RedisDaoImpl implements RedisDao {
         return result;
     }
 
-
     @Override
     public boolean set(final String key,final byte[] value){
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
@@ -282,5 +276,38 @@ public class RedisDaoImpl implements RedisDao {
         return result;
     }
 
-}
+    //==========================================================================
 
+    /**
+     * HashOperations<String,String,Object> opsForHash;
+     * put, putAll, entries, ......
+     */
+    @Override
+    public HashOperations getHashOperations() {
+        HashOperations hashOperations = redisTemplate.opsForHash();
+
+        return hashOperations;
+    }
+
+    /**
+     * ListOperations<String, Object> opsForList;
+     * rightPush, leftPop, ......
+     */
+    @Override
+    public ListOperations getListOperations() {
+        ListOperations listOperation = redisTemplate.opsForList();
+
+        return listOperation;
+    }
+
+    /**
+     * SetOperations<String, Object> opsForSet;
+     *
+     */
+    @Override
+    public SetOperations getSetOperations() {
+        SetOperations setOperation = redisTemplate.opsForSet();
+
+        return setOperation;
+    }
+}
