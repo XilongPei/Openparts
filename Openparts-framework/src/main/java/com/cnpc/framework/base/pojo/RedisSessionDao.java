@@ -88,6 +88,10 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
     }
 
+    /**
+     * 集成Shiro后当遇到404错误时会丢失session
+     * http://jinnianshilongnian.iteye.com/blog/1999182
+     */
     public String getUserId(Session session) {
         SimplePrincipalCollection pricipal = (SimplePrincipalCollection) session.getAttribute("org.apache.shiro.subject.support.DefaultSubjectContext_PRINCIPALS_SESSION_KEY");
         if (null != pricipal) {
