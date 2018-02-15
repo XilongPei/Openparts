@@ -229,7 +229,7 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public boolean exist(final String key){
+    public boolean exist(final String key) {
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
                     throws DataAccessException {
@@ -242,7 +242,7 @@ public class RedisDaoImpl implements RedisDao {
     }
 
     @Override
-    public boolean set(final String key,final byte[] value){
+    public boolean set(final String key,final byte[] value) {
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
                     throws DataAccessException {
@@ -255,7 +255,7 @@ public class RedisDaoImpl implements RedisDao {
         return result;
     }
 
-    public boolean flushDB(){
+    public boolean flushDB() {
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             public Boolean doInRedis(RedisConnection connection)
                     throws DataAccessException {
@@ -266,7 +266,7 @@ public class RedisDaoImpl implements RedisDao {
         return result;
     }
 
-    public long dbSize(){
+    public long dbSize() {
         long result = redisTemplate.execute(new RedisCallback<Long>() {
             public Long doInRedis(RedisConnection connection)
                     throws DataAccessException {

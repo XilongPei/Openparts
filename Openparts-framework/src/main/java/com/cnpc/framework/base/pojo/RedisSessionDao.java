@@ -114,16 +114,21 @@ public class RedisSessionDao extends AbstractSessionDAO {
         }
         //删除用户会话
         redisDao.delete(this.getKey(RedisConstant.SHIRO_REDIS_SESSION_PRE, session.getId().toString()));
+
+        String str = this.getKey(RedisConstant.SHIRO_SESSION_PRE, session.getId().toString());
         //获取缓存的用户会话对应的UID
-        String uid = redisDao.get(this.getKey(RedisConstant.SHIRO_SESSION_PRE, session.getId().toString()));
+        String uid = redisDao.get(str);
         //删除用户会话sessionid对应的uid
-        redisDao.delete(this.getKey(RedisConstant.SHIRO_SESSION_PRE, session.getId().toString()));
-        //删除在线uid
-        redisDao.getSetOperations().remove(RedisConstant.UID, uid);
-        //删除用户缓存的角色
-        redisDao.delete(this.getKey(RedisConstant.ROLE_PRE, uid));
-        //删除用户缓存的权限
-        redisDao.delete(this.getKey(RedisConstant.PERMISSION_PRE, uid));
+        redisDao.delete(str);
+
+        if (!StrUtil.isEmpty(uid)) {
+            //删除在线uid
+            redisDao.getSetOperations().remove(RedisConstant.UID, uid);
+            //删除用户缓存的角色
+            redisDao.delete(this.getKey(RedisConstant.ROLE_PRE, uid));
+            //删除用户缓存的权限
+            redisDao.delete(this.getKey(RedisConstant.PERMISSION_PRE, uid));
+        }
     }
 
     @Override
