@@ -18,7 +18,7 @@ public class RedisConstant {
     /**
      * 存放uid当前状态状态的前缀 uid
      */
-    public static final String UID_PRE = "uid:";
+    public static final String UID = "uid:online";
 
     /**
      * 存放用户信息uid
