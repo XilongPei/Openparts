@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.BoundListOperations;
+import org.springframework.data.redis.core.BoundSetOperations;
+import org.springframework.data.redis.core.BoundZSetOperations;
 import javax.annotation.Resource;
 import java.io.Serializable;
 import java.util.List;
@@ -289,15 +294,29 @@ public class RedisDaoImpl implements RedisDao {
         return hashOperations;
     }
 
+    @Override
+    public BoundHashOperations getBoundHashOperations(String certainKey) {
+        BoundHashOperations hashOperations = redisTemplate.boundHashOps(certainKey);
+
+        return hashOperations;
+    }
+
     /**
      * ListOperations<String, Object> opsForList;
      * rightPush, leftPop, ......
      */
     @Override
     public ListOperations getListOperations() {
-        ListOperations listOperation = redisTemplate.opsForList();
+        ListOperations listOperations = redisTemplate.opsForList();
 
-        return listOperation;
+        return listOperations;
+    }
+
+    @Override
+    public BoundListOperations getBoundListOperations(String certainKey) {
+        BoundListOperations listOperations = redisTemplate.boundListOps(certainKey);
+
+        return listOperations;
     }
 
     /**
@@ -306,8 +325,33 @@ public class RedisDaoImpl implements RedisDao {
      */
     @Override
     public SetOperations getSetOperations() {
-        SetOperations setOperation = redisTemplate.opsForSet();
+        SetOperations setOperations = redisTemplate.opsForSet();
 
-        return setOperation;
+        return setOperations;
+    }
+
+    @Override
+    public BoundSetOperations getBoundSetOperations(String certainKey) {
+        BoundSetOperations setOperations = redisTemplate.boundSetOps(certainKey);
+
+        return setOperations;
+    }
+
+    /**
+     * SetOperations<String, Object> opsForSet;
+     *
+     */
+    @Override
+    public ZSetOperations getZSetOperations() {
+        ZSetOperations zSetOperation = redisTemplate.opsForZSet();
+
+        return zSetOperation;
+    }
+
+    @Override
+    public BoundZSetOperations getBoundZSetOperations(String certainKey) {
+        BoundZSetOperations zsetOperations = redisTemplate.boundZSetOps(certainKey);
+
+        return zsetOperations;
     }
 }

@@ -3,6 +3,11 @@ package com.cnpc.framework.base.dao;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.BoundListOperations;
+import org.springframework.data.redis.core.BoundSetOperations;
+import org.springframework.data.redis.core.BoundZSetOperations;
 import java.util.List;
 import java.util.Set;
 
@@ -66,22 +71,37 @@ public interface RedisDao {
     long dbSize();
 
     //==========================================================================
+    //
+    // function like Bound...
+    // 对key的“bound”(绑定)便捷化操作API，可以通过bound封装指定的key，
+    // 然后进行一系列的操作而无须“显式”的再次指定Key，即BoundKeyOperations.
+
 
     /**
      * HashOperations<String,String,Object> opsForHash;
      * put, putAll, entries, ......
      */
     HashOperations getHashOperations();
+    BoundHashOperations getBoundHashOperations(String certainKey);
 
     /**
      * ListOperations<String, Object> opsForList;
      * rightPush, leftPop, ......
      */
     ListOperations getListOperations();
+    BoundListOperations getBoundListOperations(String certainKey);
 
     /**
      * SetOperations<String, Object> opsForSet;
      *
      */
     SetOperations getSetOperations();
+    BoundSetOperations getBoundSetOperations(String certainKey);
+
+    /**
+     * ZSetOperations<String, Object, Long> opsForZSet;
+     *
+     */
+    ZSetOperations getZSetOperations();
+    BoundZSetOperations getBoundZSetOperations(String certainKey);
 }

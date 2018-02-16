@@ -87,7 +87,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
                 redisDao.add(this.getKey(RedisConstant.SHIRO_SESSION_PRE, session.getId().toString()), timeout, uid.getBytes("UTF-8"));
 
                 //保存在线UID
-                redisDao.getSetOperations().add(RedisConstant.UID, uid);
+                redisDao.getZSetOperations().add(RedisConstant.UID, uid, System.currentTimeMillis());
 
             } catch (UnsupportedEncodingException ex) {
                 logger.error("getBytes error:" + ex.getMessage());
@@ -129,7 +129,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
 
         if (!StrUtil.isEmpty(uid)) {
             //删除在线uid
-            redisDao.getSetOperations().remove(RedisConstant.UID, uid);
+            redisDao.getZSetOperations().remove(RedisConstant.UID, uid);
             //删除用户缓存的角色
             redisDao.delete(this.getKey(RedisConstant.ROLE_PRE, uid));
             //删除用户缓存的权限
@@ -158,7 +158,7 @@ public class RedisSessionDao extends AbstractSessionDAO {
      * @return
      */
     public boolean isOnLine(String uid) {
-        return redisDao.getSetOperations().isMember(RedisConstant.UID, uid);
+        return (redisDao.getZSetOperations().rank(RedisConstant.UID, uid) >= 0);
     }
 
     public long getExpire() {
