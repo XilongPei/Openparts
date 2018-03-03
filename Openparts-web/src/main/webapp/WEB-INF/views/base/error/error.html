@@ -1,0 +1,68 @@
+<!--login_page_identity-->
+<!--以上文件注释不可去掉，校验文件首页用,详见base.js的jquery.fn.load-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Openparts | 错误</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!--icon-->
+    <link rel="shortcut icon" type="image/x-icon" href="${basePath}/resources/common/favicon.ico" media="screen"/>
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="${basePath}/resources/adminlte/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${basePath}/resources/common/libs/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="${basePath}/resources/common/libs/ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="${basePath}/resources/adminlte/dist/css/AdminLTE.min.css">
+    <!-- iCheck -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="${basePath}/resources/common/libs/html5shiv/html5shiv.min.js"></script>
+    <script src="${basePath}/resources/common/libs/respond/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition login-page">
+<div class="wrapper">
+    <div class="content-wrapper" style="margin-top: 10%;margin-right:130px;margin-left: 130px;">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                <i class="fa fa-bug text-red"></i>  系统错误
+            </h1>
+        </section>
+        <!-- Main content -->
+        <section class="content" >
+            <div class="error-page " style="width: 100%">
+                <h1 class="text-red text-center">${errorName!}</h1>
+                <div class="error-content text-left" style="padding-top:20px;">
+                    <h3><i class="fa fa-warning text-red"></i>${message!}</h3>
+                    <p>
+                        ${detail!}
+                    </p>
+                </div>
+                <div class="text-center" style="padding-top:20px;padding-bottom:40px;">
+                    <a href="${basePath}" class="btn btn-lg  btn-flat btn-facebook" style="width: 200px;">回到首页</a>
+                </div>
+                <!-- /.error-content -->
+            </div>
+            <!-- /.error-page -->
+        </section>
+        <!-- /.content -->
+    </div>
+</div>
+
+<!-- jQuery 2.2.3 -->
+<script src="${basePath}/resources/adminlte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+<!-- Bootstrap 3.3.6 -->
+<script src="${basePath}/resources/adminlte/bootstrap/js/bootstrap.min.js"></script>
+<!--login.js-->
+<script>
+
+</script>
+</body>
+</html>

@@ -191,4 +191,8 @@
         <session-timeout>240</session-timeout>
     </session-config>
 
+    <error-page>
+        <exception-type>org.springframework.data.redis.RedisConnectionFailureException</exception-type>
+        <location>/error/redis/connect</location>
+    </error-page>
 </web-app>

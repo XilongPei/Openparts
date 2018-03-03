@@ -165,4 +165,7 @@
             <bean class="com.cnpc.framework.interceptor.CSRFInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!--异常处理-->
+    <bean class="com.cnpc.framework.exception.CustomExceptionResolver"></bean>
 </beans>
