@@ -1314,7 +1314,6 @@ public class StrUtil {
             retStr = source.substring(0, source.indexOf(element));
         }
         return retStr;
-
     }
 
     /**
@@ -1348,4 +1347,21 @@ public class StrUtil {
         }
         return StrUtil.join(retArr);
     }
+
+    public static String trim(String str) {
+        return str == null ? "" : str;
+    }
+
+    public static String addSpace(String beforeStr){
+
+        return isNull(beforeStr) ? "" : "\b";
+
+    }
+
+    public static boolean isEqual(String str1, String str2) {
+        str1 = str1 == null ? "" : str1;
+        str2 = str2 == null ? "" : str2;
+        return str1.equals(str2) ? true : false;
+    }
 }
+
