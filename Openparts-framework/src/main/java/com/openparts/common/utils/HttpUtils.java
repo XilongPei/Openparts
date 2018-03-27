@@ -2,6 +2,7 @@ package com.openparts.common.utils;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -18,6 +19,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.ConnectionConfig;
@@ -28,6 +30,13 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.NoHttpResponseException;
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -326,19 +335,49 @@ public class HttpUtils {
         Registry<ConnectionSocketFactory> registry = registryBuilder.build();
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
 
+        // 请求重试处理
+        HttpRequestRetryHandler httpRequestRetryHandler = new HttpRequestRetryHandler() {
+            public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+                if (executionCount >= 5) {                          // 如果已经重试了5次，就放弃
+                    return false;
+                }
+                if (exception instanceof NoHttpResponseException) { // 如果服务器丢掉了连接，那么就重试
+                    return true;
+                }
+                if (exception instanceof SSLHandshakeException) {   // 不要重试SSL握手异常
+                    return false;
+                }
+                if (exception instanceof InterruptedIOException) {  // 超时
+                    return false;
+                }
+                if (exception instanceof UnknownHostException) {    // 目标服务器不可达
+                    return false;
+                }
+                if (exception instanceof ConnectTimeoutException) { // 连接被拒绝
+                    return false;
+                }
+                if (exception instanceof SSLException) {            // SSL握手异常
+                    return false;
+                }
+
+                HttpClientContext clientContext = HttpClientContext.adapt(context);
+                HttpRequest request = clientContext.getRequest();
+                // 如果请求是幂等的，就再次尝试
+                if (!(request instanceof HttpEntityEnclosingRequest)) {
+                    return true;
+                }
+                return false;
+            }
+        };
+
         return HttpClientBuilder.create()
-                .setMaxConnPerRoute(DEFAULT_MAX_PER_ROUTE)
-                .setMaxConnTotal(DEFAULT_MAX_TOTAL)
-                /*
-                .setRetryHandler((exception, executionCount, context) -> executionCount <= 3 && (exception instanceof NoHttpResponseException
-                                                                                             || exception instanceof ClientProtocolException
-                                                                                             || exception instanceof SocketTimeoutException
-                                                                                             || exception instanceof ConnectTimeoutException))
-                */
-                .setConnectionManager(connManager)
-                .setDefaultConnectionConfig(config)
-                .setDefaultRequestConfig(requestConfig)
-                .build();
+                                .setMaxConnPerRoute(DEFAULT_MAX_PER_ROUTE)
+                                .setMaxConnTotal(DEFAULT_MAX_TOTAL)
+                                .setRetryHandler(httpRequestRetryHandler)
+                                .setConnectionManager(connManager)
+                                .setDefaultConnectionConfig(config)
+                                .setDefaultRequestConfig(requestConfig)
+                                .build();
     }
 
     public static void main(String[] args) throws Exception {
