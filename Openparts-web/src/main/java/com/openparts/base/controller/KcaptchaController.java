@@ -2,28 +2,25 @@ package com.openparts.base.controller;
 
 import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.util.Config;
-import com.octo.captcha.service.CaptchaServiceException;
-import com.octo.captcha.service.image.ImageCaptchaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import com.google.code.kaptcha.Constants;
+import java.util.HashMap;
+import java.util.Map;
+import com.cnpc.framework.utils.StrUtil;
+import com.cnpc.framework.utils.SessionUtil;
 
 @Controller
 //@RequestMapping(value = "/getVerifyCodeImage", method = {RequestMethod.GET})
@@ -84,6 +81,26 @@ public class KcaptchaController {
             e.printStackTrace();
         }
         ImageIO.write(bi, CAPTCHA_IMAGE_FORMAT, out);
+    }
 
+    @RequestMapping(value = "/api/checkVerifyCode", method = RequestMethod.POST)
+    @ResponseBody
+    public Map checkVerifyCode(String captcha /*获取用户输入的验证码*/) {
+        Map<String, Boolean> map = new HashMap<String, Boolean>();
+
+        //从session中获取系统生成的验证码
+        String verifyCodeExpected = (String)SessionUtil.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
+
+        //captcha不存在，校验有效
+        if (verifyCodeExpected == null) {
+            map.put("valid", true);
+        } else {
+            if (!StrUtil.isEmpty(verifyCodeExpected) && verifyCodeExpected.equals(captcha)) {
+                map.put("valid", true);
+            } else {
+                map.put("valid", false);
+            }
+        }
+        return map;
     }
 }

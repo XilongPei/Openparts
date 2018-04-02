@@ -148,9 +148,19 @@
                         }
                     },
                     captcha:{
+                        threshold: 5,
                         validators: {
                             notEmpty: {
                                 message: '验证码不能为空'
+                            },
+                            remote: {
+                                url: "${basePath}/api/checkVerifyCode",
+                                data: function (validator) {
+                                    return {
+                                    };
+                                },
+                                message: '验证码错误！',
+                                delay:2000
                             }
                         }
                     }
