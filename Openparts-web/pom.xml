@@ -235,37 +235,17 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.axet</groupId>
+            <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>0.0.9</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.jhlabs</groupId>
-                    <artifactId>filters</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>2.3.2</version>
         </dependency>
         <!-- kaptcha依赖-->
         <dependency>
             <groupId>com.jhlabs</groupId>
-            <artifactId>imaging</artifactId>
-            <version>01012005</version>
+            <artifactId>filters</artifactId>
+            <version>2.0.235</version>
         </dependency>
-        <dependency>
-            <groupId>com.octo.captcha</groupId>
-            <artifactId>jcaptcha</artifactId>
-            <version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-collections</groupId>
-                    <artifactId>commons-collections</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>

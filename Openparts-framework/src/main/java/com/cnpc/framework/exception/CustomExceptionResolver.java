@@ -9,17 +9,23 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 统一异常处理
  *
- * @author billjiang 475572229@qq.com
- * @create 18-2-24
  */
 public class CustomExceptionResolver implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest,
                             HttpServletResponse httpServletResponse, Object o, Exception ex) {
         ModelAndView model = new ModelAndView();
+
+        String msg;
+        try {
+            msg = ex.getMessage().toString();
+        } catch (Exception e) {
+            msg = "";
+        }
+
         if (ex instanceof QueryException) {
             model.addObject("errorName", "查询异常");
-            model.addObject("message", ex.getMessage().toString());
+            model.addObject("message", msg);
             model.addObject("detail", ErrorConstant.ERROR_DETAIL);
         } else if (ex instanceof ClassCastException) {
             model.addObject("errorName", "404");
@@ -27,7 +33,7 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
             model.addObject("detail", ex.getMessage());
         } else {
             model.addObject("errorName", ex.getClass().getSimpleName());
-            model.addObject("message", ex.getMessage().toString());
+            model.addObject("message", msg);
             model.addObject("detail", ErrorConstant.ERROR_DETAIL);
         }
         model.setViewName("base/error/error");

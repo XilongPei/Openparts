@@ -5,10 +5,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="baidu_union_verify" content="804240c1607916fb8a8b98c6bcd2cfdb">
-    <meta name="keywords" content="AdminLTE,Openparts,AdminLTE框架">
-    <meta name="description" content="基于AdminLTE的快速开发框架,让web开发更简单">
-    <meta property="wb:webmaster" content="4f7a2b4a630250fe" />
     <title>Openparts | 登录</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -35,7 +31,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>Admin</b>EAP</a>
+        <a href="#">Openparts</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -49,6 +45,18 @@
             <div class="form-group has-feedback">
                 <input type="password" class="form-control" name="password" placeholder="请输入密码">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            </div>
+            <div class="form-group">
+                <div class="col-xs-4" style="padding:0px;">
+                    <input type="text" class="form-control" name="captcha" placeholder="请输入验证码">
+                </div>
+                <div class="col-xs-5" style="text-align:right;padding-right: 0px;">
+                    <img id="codeImg" src="${basePath}/api/getVerifyCodeImage" onclick="changeCaptcha()" class="img-responsive"
+                         style="height: 35px;">
+                </div>
+                <div class="col-xs-3" style="padding-top:10px;">
+                    <span><a href="#" onclick="changeCaptcha()">换一换</a></span>
+                </div>
             </div>
             <div class="row">
                 <div class="col-xs-6">
@@ -138,6 +146,13 @@
                                 message:'密码不能为空'
                             }
                         }
+                    },
+                    captcha:{
+                        validators: {
+                            notEmpty: {
+                                message: '验证码不能为空'
+                            }
+                        }
                     }
                 }
             });
@@ -152,7 +167,9 @@
             </#if>
         });
 
-
+        function changeCaptcha() {
+            $("#codeImg").attr("src", "${basePath}/api/getVerifyCodeImage");
+        }
 
         //使用本地缓存记住用户名密码
         function rememberMe(rm_flag){

@@ -61,11 +61,17 @@
                 <input type="text" class="form-control" name="mobile" id="mobile" placeholder="请输入手机号">
                 <span class="glyphicon glyphicon-iphone form-control-feedback"></span>
             </div>
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="verifycode" id="verifycode" placeholder="请输入验证码">
-                <span>
-                    <img alt="验证码" class="form-control-feedback" src="${basePath}/api/getVerifyCodeImage" id="captchaImg" style="cursor:pointer;width:180px;height:38px;" onclick="changeVerifyCode();">
-                </span>
+            <div class="row">
+                <div class="col-xs-4" style="padding:0px;">
+                    <input type="text" class="form-control" name="captcha" id="captcha" placeholder="请输入验证码">
+                </div>
+                <div class="col-xs-5" style="text-align:right;padding-right: 0px;">
+                    <img id="codeImg" src="${basePath}/api/getVerifyCodeImage" onclick="changeCaptcha()" class="img-responsive"
+                         style="height: 35px;">
+                </div>
+                <div class="col-xs-3" style="padding-top:10px;">
+                    <span><a href="#" onclick="changeCaptcha()">换一换</a></span>
+                </div>
             </div>
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" name="smscode" id="smscode" placeholder="请输入短信验证码">
@@ -199,16 +205,22 @@
                             message: '密码由数字字母下划线和.组成'
                         }
                     }
+                },
+                captcha:{
+                    validators: {
+                        notEmpty: {
+                            message: '验证码不能为空'
+                        }
+                    }
                 }
-
             }
         });
 
     });
 
-function changeVerifyCode() {
-    $('#captchaImg').hide().attr('src', '${basePath}/api/getVerifyCodeImage' + Math.floor(Math.random()*100) ).fadeIn();
-}
+    function changeCaptcha() {
+        $("#codeImg").attr("src", "${basePath}/api/getVerifyCodeImage");
+    }
 </script>
 </body>
 </html>
